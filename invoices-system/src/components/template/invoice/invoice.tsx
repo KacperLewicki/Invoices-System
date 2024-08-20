@@ -2,9 +2,10 @@
 
 import React from 'react';
 import "./invoice.css";
+import invoiceItems from '../invoiceItems/invoiceItems';
 
 const Invoice = (props: any) => {
-  
+
   return (
     <>
       <h1 className='h1_create_invoices'>Create Invoice manual</h1>
@@ -38,6 +39,8 @@ const Invoice = (props: any) => {
             <option>December</option>
           </select>
         </label>
+
+        {invoiceItems()}
 
         <h2 className='summaryh2'>Summary</h2>
 
