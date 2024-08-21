@@ -2,13 +2,12 @@
 
 import React from 'react';
 import "./invoice.css";
-import invoiceItems from '../invoiceItems/invoiceItems';
 
 const Invoice = (props: any) => {
 
   return (
     <>
-      <h1 className='h1_create_invoices'>Create Invoice manual</h1>
+      <h1 className='h1_invoice_title'>Create Invoice manual</h1>
 
       <form className='invoices_forms'>
 
@@ -40,9 +39,40 @@ const Invoice = (props: any) => {
           </select>
         </label>
 
-        {invoiceItems()}
 
-        <h2 className='summaryh2'>Summary</h2>
+        <h2 className='h2_invoice_section_title'>Create Items</h2>
+
+        <input name="nameItem" className='inputValue_invoices' type='text' placeholder='Item name' />
+        <input name="quantity" className='inputValue_invoices' type="number" placeholder='Quantity' />
+        <input name="vatItem" className='inputValue_invoices' type="number" placeholder='VAT' />
+        <input name="nettoItem" className='inputValue_invoices' type="number" placeholder='Netto' />
+        <input name="bruttoItem" className='inputValue_invoices' type="number" readOnly placeholder='Brutto' />
+        <input name="comment" className='inputValue_invoices' type='text' placeholder='comment' />
+
+        <button className='invoiceTableItemsButton' type='button'>Add Item</button>
+
+        <h2 className='h2_invoice_section_title'>Items</h2>
+
+        <table className='invoiceTableItems'>
+
+          <thead>
+
+            <tr>
+              <th>Name</th>
+              <th>Quantity</th>
+              <th>Vat</th>
+              <th>Netto</th>
+              <th>Brutto</th>
+              <th>Comment</th>
+            </tr>
+
+          </thead>
+          <tbody>
+          </tbody>
+
+        </table>
+
+        <h2 className='h2_invoice_section_title'>Summary</h2>
 
         <input className='inputValue_invoices' title='Summary Netto' type='Number' name='summaryNetto' placeholder='Netto' disabled />
         <input className='inputValue_invoices' title='Summary Vat' type='Number' name='summaryVat' placeholder='Vat' disabled />
@@ -60,7 +90,7 @@ const Invoice = (props: any) => {
           </select>
         </label>
 
-        <h2 className='detailsh2'>Details</h2>
+        <h2 className='h2_invoice_section_title'>Details</h2>
 
         <select className='inputValue_invoices' title='Document Status' name="documentStatus">
           <option hidden>Document Status</option>
