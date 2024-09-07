@@ -1,20 +1,14 @@
 "use client";
 
+import HomePage from '@/pages/home/home';
 import React from 'react';
-import Navigation from '@/components/navigation/navigation';
 
-export default function Page() {
+export default function MainPage() {
 
   return (
 
     <div>
-      
-      <Navigation />
-      
-      <div>
-
-      </div>
-    
+      <HomePage />
     </div>
 
   );

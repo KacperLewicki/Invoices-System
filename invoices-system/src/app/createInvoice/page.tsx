@@ -1,9 +1,9 @@
 "use client";
 
 import React from 'react';
-import Invoice from '@/components/template/invoice/invoice';
+import Invoice from '../../components/template/invoice/invoice';
 
-const CreateInvoicePage = () => {
+export default function CreateInvoicePage ()  {
  
   return (
     <div>
@@ -14,4 +14,3 @@ const CreateInvoicePage = () => {
   );
 };
 
-export default CreateInvoicePage;

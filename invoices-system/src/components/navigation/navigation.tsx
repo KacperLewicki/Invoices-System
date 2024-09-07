@@ -3,20 +3,25 @@
 import React from 'react';
 import Link from 'next/link';
 
-const Navigation = () => {
+export default function Navigation () {
 
   return (
 
     <nav>
       <ul>
+        
         <li>
-          <Link href="/createInvoice/createInvoicePage">Create Invoice Page</Link>
+          <Link href="/">Home</Link>
         </li>
+
+        <li>
+          <Link href="/createInvoice">Create Invoice Page</Link>
+        </li>
+        
       </ul>
     </nav>
 
   );
 };
 
-export default Navigation;
 
