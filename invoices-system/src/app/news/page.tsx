@@ -1,15 +1,15 @@
 "use client";
 
 import React from 'react';
-import Invoice from '../../components/template/invoice/invoice';
+import News from '../../pages/news/news';
 
 export default function CreateInvoicePage ()  {
  
   return (
     <div>
-
-        <Invoice />
-   
+      
+        <News />
+      
     </div>
   );
 };

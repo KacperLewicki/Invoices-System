@@ -12,10 +12,8 @@ export default function Navigation () {
         
         <li>
           <Link href="/">Home</Link>
-        </li>
-
-        <li>
-          <Link href="/createInvoice">Create Invoice Page</Link>
+          <Link href="/createInvoice">Create Invoice</Link>
+          <Link href="/news">News</Link>
         </li>
         
       </ul>
