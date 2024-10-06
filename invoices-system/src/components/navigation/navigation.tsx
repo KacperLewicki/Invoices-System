@@ -11,9 +11,10 @@ export default function Navigation () {
       <ul>
         
         <li>
-          <Link href="/">Home</Link>
-          <Link href="/createInvoice">Create Invoice</Link>
-          <Link href="/news">News</Link>
+          <Link href="/">Strona Główna</Link>
+          <Link href="/news">Powiadomienia</Link>
+          <Link href="/invoiceList">Lista Faktur</Link>
+          <Link href="/createInvoice">Stwórz Fakture</Link>
         </li>
         
       </ul>

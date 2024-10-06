@@ -6,8 +6,10 @@ const News = () => {
 
     <div>
 
-      <h1>News</h1>
-      <p>News content</p>
+      <h1>Powiadomienia - dotyczące faktur</h1>
+      <br />
+      <br />
+      <p>brak danych</p>
 
     </div>
   );

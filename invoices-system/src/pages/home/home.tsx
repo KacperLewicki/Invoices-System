@@ -6,9 +6,10 @@ export default function HomePage() {
 
     <div>
       
-      <h1>Home - Invocies System</h1>
-
-      <p>Welcome to the Invoices System</p>
+      <h1>Strona Główna - System Faktur</h1>
+      <br />    
+      <br />
+      <p>brak danych</p>
 
     </div>
 

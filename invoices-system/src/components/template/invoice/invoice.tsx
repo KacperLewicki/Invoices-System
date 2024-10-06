@@ -7,7 +7,7 @@ const Invoice = (props: any) => {
 
   return (
     <>
-      <h1 className='h1_invoice_title'>Create Invoice manual</h1>
+      <h1 className='h1_invoice_title'>Faktura NestBank</h1>
 
       <form className='invoices_forms'>
 
