@@ -1,7 +1,7 @@
 "use client";
 
 import React from 'react';
-import InvoiceListPage from '../../pages/invoiceList/invoiceLIstPage';
+import InvoiceListPage from '../../pages/invoiceList/invoiceListPage/invoiceLIstPage';
 
 export default function invoiceListPage ()  {
  
