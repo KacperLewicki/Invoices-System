@@ -1,42 +1,33 @@
 .invoices_forms {
-
   display: grid;
   grid-template-columns: repeat(3, 400px);
   grid-gap: 20px;
   justify-content: center;
   align-items: right;
   overflow: hidden;
-
 }
 
 .h1_invoice_title {
-
   color: #28496e;
   padding: 20px 0;
   text-align: center;
   margin-bottom: 30px;
-
 }
 
 .h2_invoice_section_title {
-
   grid-column: span 3;
   grid-row: span 3;
   color: rgb(128, 128, 204);
-
 }
 
 .inputValue_invoices {
-
   padding: 8px;
   border: 1px solid #0056b3;
   border-radius: 5px;
   font-size: 16px;
-
 }
 
 .invoiceTableItems {
-
   grid-column: span 3;
   grid-row: span 3;
   padding: 8px;
@@ -45,16 +36,13 @@
   border-radius: 5px;
 }
 
-
 .invoiceTableItems th,
 .invoiceTableItems td {
-
   padding: 8px;
   text-align: right;
   position: relative;
   color: white;
   text-align: center;
-
 }
 
 .invoiceTableItems td::after {
@@ -82,7 +70,6 @@
 }
 
 .invoiceCreateButton {
-
   grid-column: 2;
   grid-row: 27;
   width: fit-content;
@@ -98,11 +85,9 @@
   font-size: 16px;
   cursor: pointer;
   transition: background-color 0.3s ease;
-
 }
 
 .addNewFormButton {
-
   grid-column: 1/-1;
   grid-row: 1;
   background-color: #0056b3;
@@ -117,50 +102,77 @@
   font-size: 16px;
   cursor: pointer;
   transition: background-color 0.3s ease;
-
 }
 
 .invoiceTableItemsButton:hover {
-
   background-color: green;
-
 }
 
 .invoiceCreateButton:hover {
-
   background-color: green;
-
 }
 
 .addNewFormButton:hover {
-
   background-color: green;
-
 }
 
 input[type="date"]::before {
-
   color: #999999;
   content: attr(placeholder);
-
 }
 
 input[type="date"] {
-
   color: #ffffff;
-
 }
 
 input[type="date"]:focus,
 input[type="date"]:valid {
-
   color: #666666;
-
 }
 
 input[type="date"]:focus::before,
 input[type="date"]:valid::before {
-
   content: "" !important;
+}
 
+
+.invoiceTableItems tr {
+  position: relative;
+  transition: background-color 0.3s ease;
+}
+
+.delete-button-container {
+  display: none;
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  background-color: #0056b3; 
+  border-radius: 5px; 
+  padding: 5px; 
+  transition: right 0.3s ease, opacity 0.3s ease;
+}
+
+.invoiceTableItems tr:hover .delete-button-container {
+  display: block;
+  right: 0;
+  opacity: 1;
+}
+
+.delete-button {
+  background-color: red;
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  margin-left: 10px;
+  cursor: pointer;
+  border-radius: 5px;
+  font-size: 14px;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+  
+}
+
+.delete-button:hover {
+  background-color: darkred;
+  transform: scale(1.05);
 }

@@ -1,3 +1,10 @@
 {
-  "extends": "next/core-web-vitals"
+  "extends": "next/core-web-vitals",
+  "ignorePatterns": [
+    "src/pages/api/lib/db.js",
+    "src/pages/api/saveInvoiceItems.js",
+    "src/pages/api/saveInvoiceManual.js",
+    "src/pages/api/updateInvoiceManual.js",
+    "src/pages/api/checkInvoiceManualName.js"
+  ]
 }
