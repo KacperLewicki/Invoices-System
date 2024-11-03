@@ -32,9 +32,9 @@ interface ItemData {
   comment: string;
 }
 
-const checkInvoiceExists = async (invoiceNumber: string): Promise<boolean> => {
+const checkInvoiceExists = async (invoiceName: string): Promise<boolean> => {
 
-  const response = await fetch(`/api/checkInvoiceManualName?nameInvoice=${encodeURIComponent(invoiceNumber)}`);
+  const response = await fetch(`/api/checkInvoiceManualName?nameInvoice=${encodeURIComponent(invoiceName)}`);
 
   if (!response.ok) {
 

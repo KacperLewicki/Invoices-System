@@ -32,16 +32,16 @@ export default async function handler(req, res) {
 
     const getLastInvoiceQuery = 'SELECT nameInvoice FROM invoicemanual ORDER BY id DESC LIMIT 1';
     const lastInvoiceResult = await queryDb(getLastInvoiceQuery);
-    let lastInvoiceNumber = 0;
+    let lastInvoiceName = 0;
 
     if (lastInvoiceResult.length > 0) {
 
       const lastInvoice = lastInvoiceResult[0].nameInvoice;
-      const lastNumber = parseInt(lastInvoice.split('/').pop(), 10);
-      lastInvoiceNumber = isNaN(lastNumber) ? 0 : lastNumber;
+      const lastName = parseInt(lastInvoice.split('/').pop(), 10);
+      lastInvoiceName = isNaN(lastName) ? 0 : lastName;
     }
 
-    const newInvoiceNumber = lastInvoiceNumber + 1;
+    const newInvoiceNumber = lastInvoiceName + 1;
     const newInvoiceNumberStr = newInvoiceNumber.toString().padStart(4, '0');
     invoice.nameInvoice = `NB/24/${newInvoiceNumberStr}`;
 

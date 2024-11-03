@@ -13,6 +13,7 @@ import "./invoice.css";
 const Invoice: React.FC = () => {
 
   const [formData, setFormData] = useState<InvoiceData>({
+
     nameInvoice: '',
     dataInvoice: '',
     dataInvoiceSell: '',
@@ -25,10 +26,10 @@ const Invoice: React.FC = () => {
     summaryVat: 0,
     summaryBrutto: 0,
     ExchangeRate: 0,
-    paymentMethod: '',
+    paymentMethod: 'Bank Transfer',
     efectiveMonth: '',
     documentStatus: '',
-    currency: '',
+    currency: 'PLN',
     status: '',
     customerName: ''
   });
@@ -79,11 +80,11 @@ const Invoice: React.FC = () => {
 
     try {
 
-      const generatedInvoiceNumber = await saveInvoiceToDatabase(formattedData, items);
+      const generatedInvoiceName = await saveInvoiceToDatabase(formattedData, items);
 
-      setFormData({ ...formData, nameInvoice: generatedInvoiceNumber });
+      setFormData({ ...formData, nameInvoice: generatedInvoiceName });
 
-      alert(`Faktura ${generatedInvoiceNumber} została zapisana pomyślnie`);
+      alert(`Faktura ${generatedInvoiceName} została zapisana pomyślnie`);
 
     } catch (error) {
 
@@ -118,7 +119,7 @@ const Invoice: React.FC = () => {
     setItems([]);
 
     alert('Stworzono nowy formularz');
-  
+
   };
 
   const addItem = () => {
@@ -127,7 +128,7 @@ const Invoice: React.FC = () => {
 
     if (!nameItem || !quantity || !vatItem || !nettoItem) {
 
-      alert('Please fill in the required fields: Name, Quantity, VAT, and Netto.');
+      alert('Aby móc dodać przedmiot, należy wypełnić nastepuące pola: Nazwa przedmiotu, Ilość, VAT, Netto');
 
       return;
     }
@@ -166,7 +167,7 @@ const Invoice: React.FC = () => {
   };
 
   const deleteItem = (index: number) => {
-    
+
     const itemToDelete = items[index];
     const newItems = items.filter((_, i) => i !== index);
 
@@ -190,50 +191,54 @@ const Invoice: React.FC = () => {
       <form className='invoices_forms' onSubmit={handleSubmit}>
 
         <button type='button' onClick={handleNewForm} className='addNewFormButton'>Nowy Formularz</button>
-
-        <input className='inputValue_invoices' title='Name Invoice' name='nameInvoice' type='text' disabled placeholder='The fax number will be shown after sending' value={formData.nameInvoice} onChange={handleChange} />
-        <input className='inputValue_invoices' title='Data Invoice' name='dataInvoice' type="date" required placeholder='Issue date' value={formData.dataInvoice} onChange={handleChange} />
-        <input className='inputValue_invoices' title='Data Invocie Sell' name='dataInvoiceSell' type='date' placeholder='Sell-by date' required value={formData.dataInvoiceSell} onChange={handleChange} />
-        <input className='inputValue_invoices' title='Seller' name='seller' type="text" placeholder='Seller' value={formData.seller} onChange={handleChange} />
-        <input className='inputValue_invoices' title='Customer' name='customerName' type='text' placeholder='Customer' value={formData.customerName} onChange={handleChange} />
-        <textarea className='inputValue_invoices' title='Description' name='description' placeholder='description' value={formData.description} onChange={handleChange} />
+        <h2 className='h2_invoice_section_title'>Informacje podstawowe</h2>
+        <input className='inputValue_invoices' title='Numer faktury zostanie wygenerowany dopiero wtedy gdy wyślemy fakture' name='nameInvoice' type='text' disabled placeholder='Wygenerowany numer faktury' value={formData.nameInvoice} onChange={handleChange} />
+        <input className='inputValue_invoices' title='Data wydania' name='dataInvoice' type="date" required placeholder='Data wydania' value={formData.dataInvoice} onChange={handleChange} />
+        <input className='inputValue_invoices' title='Data wystawienia faktury' name='dataInvoiceSell' type='date' placeholder='Data wystawienia faktury' required value={formData.dataInvoiceSell} onChange={handleChange} />
+        <input className='inputValue_invoices' title='Sprzedawca' name='seller' type="text" placeholder='Sprzedawca' value={formData.seller} onChange={handleChange} />
+        <input className='inputValue_invoices' title='Klient' name='customerName' type='text' placeholder='Klient' value={formData.customerName} onChange={handleChange} />
+        <textarea className='inputValue_invoices' title='Opis' name='description' placeholder='Opis' value={formData.description} onChange={handleChange} />
         <label>
-          <select className='inputValue_invoices' title='Efective Month' name="efectiveMonth" value={formData.efectiveMonth} onChange={handleChange}>
-            <option hidden>Efective month</option>
-            <option>January</option>
-            <option>February</option>
-            <option>March</option>
-            <option>April</option>
-            <option>May</option>
-            <option>June</option>
-            <option>July</option>
-            <option>August</option>
-            <option>September</option>
-            <option>October</option>
-            <option>November</option>
-            <option>December</option>
+          <select className='inputValue_invoices' title='Obowiązujący miesiąc' name="efectiveMonth" value={formData.efectiveMonth} onChange={handleChange}>
+            <option hidden>Obowiązujący miesiąc</option>
+            <option>Styczeń</option>
+            <option>Luty</option>
+            <option>Marzec</option>
+            <option>Kwiecień</option>
+            <option>Maj</option>
+            <option>Czerwiec</option>
+            <option>Lipiec</option>
+            <option>Sierpień</option>
+            <option>Wrześień</option>
+            <option>Październik</option>
+            <option>Listopad</option>
+            <option>Grudzień</option>
           </select>
         </label>
 
-        <h2 className='h2_invoice_section_title'>Create Items</h2>
+        <h2 className='h2_invoice_section_title'>Dodaj przedmiot do faktury</h2>
 
-        <input name="nameItem" className='inputValue_invoices' type='text' placeholder='Item name' value={currentItem.nameItem} onChange={handleItemChange} />
-        <input name="quantity" className='inputValue_invoices' type="number" placeholder='Quantity' value={currentItem.quantity} onChange={handleItemChange} />
-        <input name="vatItem" className='inputValue_invoices' type="number" placeholder='VAT' value={currentItem.vatItem} onChange={handleItemChange} />
-        <input name="nettoItem" className='inputValue_invoices' type="number" placeholder='Netto' value={currentItem.nettoItem} onChange={handleItemChange} />
-        <input name="bruttoItem" className='inputValue_invoices' type="number" readOnly placeholder='Brutto' value={currentItem.bruttoItem} onChange={handleItemChange} />
-        <input name="comment" className='inputValue_invoices' type='text' placeholder='comment' value={currentItem.comment} onChange={handleItemChange} />
-        <button className='invoiceTableItemsButton' type='button' onClick={addItem}>Add Item</button>
-        <h2 className='h2_invoice_section_title'>Items</h2>
+        <input name="nameItem" title='Nazwa Przedmiotu' className='inputValue_invoices' type='text' placeholder='Nazwa Przedmiotu' value={currentItem.nameItem} onChange={handleItemChange} />
+        <input name="quantity" title='Ilość' className='inputValue_invoices' type="number" placeholder='Ilość' value={currentItem.quantity} onChange={handleItemChange}  />
+        <input name="vatItem" title='VAT' className='inputValue_invoices' type="number" placeholder='VAT' value={currentItem.vatItem} onChange={handleItemChange} />
+        <input name="nettoItem" title='Wartość Netto' className='inputValue_invoices' type="number" placeholder='Netto' value={currentItem.nettoItem} onChange={handleItemChange} />
+        <input name="bruttoItem" title='Wartość Brutto' className='inputValue_invoices' type="number" readOnly placeholder='Brutto' value={currentItem.bruttoItem} onChange={handleItemChange} />
+        <input name="comment" title='Komentarz do przedmiotu' className='inputValue_invoices' type='text' placeholder='Komentarz' value={currentItem.comment} onChange={handleItemChange} />
+        
+        {formData.nameInvoice ? null : (
+          <button className='invoiceTableItemsButton' type='button' onClick={addItem}>Dodaj Przedmiot</button>)}
+
+        <h2 className='h2_invoice_section_title'>Przedmioty dodane do faktury</h2>
+        
         <table className='invoiceTableItems'>
           <thead>
             <tr>
-              <th>Name</th>
-              <th>Quantity</th>
+              <th>Nazwa</th>
+              <th>Ilość</th>
               <th>Vat</th>
               <th>Netto</th>
               <th>Brutto</th>
-              <th>Comment</th>
+              <th>Komentarz</th>
             </tr>
           </thead>
           <tbody>
@@ -253,36 +258,37 @@ const Invoice: React.FC = () => {
           </tbody>
         </table>
 
-        <h2 className='h2_invoice_section_title'>Summary</h2>
+        <h2 className='h2_invoice_section_title'>Suma</h2>
 
-        <input className='inputValue_invoices' title='Summary Netto' type='Number' name='summaryNetto' placeholder='Netto' disabled value={formData.summaryNetto} onChange={handleChange} />
-        <input className='inputValue_invoices' title='Summary Vat' type='Number' name='summaryVat' placeholder='Vat' disabled value={formData.summaryVat} onChange={handleChange} />
-        <input className='inputValue_invoices' title='Summary Brutto' type='Number' name='summaryBrutto' placeholder='Total' disabled value={formData.summaryBrutto} onChange={handleChange} />
-        <input className='inputValue_invoices' title='Due Date' name='DueDate' type='date' placeholder='Due Date' required value={formData.DueDate} onChange={handleChange} />
-        <input className='inputValue_invoices' title='Payment Method' name='paymentMethod' placeholder='Payment Method' value={formData.paymentMethod} onChange={handleChange} />
-        <input className='inputValue_invoices' title='Exchange Rate' type='Number' name='ExchangeRate' placeholder='Exchange rate' value={formData.ExchangeRate} onChange={handleChange} />
+        <input className='inputValue_invoices' title='Suma Netto' type='Number' name='summaryNetto' placeholder='Netto' disabled value={formData.summaryNetto} onChange={handleChange} />
+        <input className='inputValue_invoices' title='Suma Vat' type='Number' name='summaryVat' placeholder='Vat' disabled value={formData.summaryVat} onChange={handleChange} />
+        <input className='inputValue_invoices' title='Suma Brutto' type='Number' name='summaryBrutto' placeholder='Total' disabled value={formData.summaryBrutto} onChange={handleChange} />
         <label>
-          <select className='inputValue_invoices' title='Currency' name="currency" value={formData.currency} onChange={handleChange}>
-            <option hidden>Select Currency</option>
+          <select className='inputValue_invoices' title='Waluta' name="currency" value={formData.currency} onChange={handleChange}>
+            <option hidden>Wybierz Walute</option>
             <option>PLN</option>
             <option>EUR</option>
             <option>USD</option>
           </select>
         </label>
 
-        <h2 className='h2_invoice_section_title'>Details</h2>
+        <h2 className='h2_invoice_section_title'>Szczegóły</h2>
 
-        <select className='inputValue_invoices' title='Document Status' name="documentStatus" value={formData.documentStatus} onChange={handleChange}>
-          <option hidden>Document Status</option>
-          <option>Issued</option>
-          <option>Paid</option>
-          <option>Partly Paid</option>
-          <option>Settled</option>
-          <option>Corrected</option>
+        <input className='inputValue_invoices' title='Termin wykonania' name='DueDate' type='date' placeholder='Termin wykonania' required value={formData.DueDate} onChange={handleChange} />
+        <input className='inputValue_invoices' title='Metoda płatności' name='paymentMethod' placeholder='Metoda płatności' value={formData.paymentMethod} onChange={handleChange} />
+        <input className='inputValue_invoices' title='Kurs' type='Number' name='ExchangeRate' placeholder='Kurs' value={formData.ExchangeRate} onChange={handleChange} />
+        
+        <select className='inputValue_invoices' title='Status dokumentu' name="documentStatus" value={formData.documentStatus} onChange={handleChange}>
+          <option hidden>Status dokumentu</option>
+          <option>Wydany</option>
+          <option>Opłacony</option>
+          <option>Częściowo opłacony</option>
+          <option>Ustalony</option>
+          <option>Poprawiony</option>
         </select>
-        <input className='inputValue_invoices' title='Payment  Term' name='PaymentTerm' type='date' placeholder='Payment term' required value={formData.PaymentTerm} onChange={handleChange} />
-        <textarea className='inputValue_invoices' title='Comments' name='comments' placeholder='Comments' value={formData.comments} onChange={handleChange} />
-        <button className='invoiceCreateButton' type='submit'> Send Invoice </button>
+        <input className='inputValue_invoices' title='Termin płatności' name='PaymentTerm' type='date' placeholder='Termin płatności' required value={formData.PaymentTerm} onChange={handleChange} />
+        <textarea className='inputValue_invoices' title='Uwagi' name='comments' placeholder='Uwagi' value={formData.comments} onChange={handleChange} />
+        <button className='invoiceCreateButton' type='submit'> Wyślij Fakture do weryfikacji </button>
       </form>
     </>
   );

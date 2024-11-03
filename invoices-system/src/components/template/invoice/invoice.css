@@ -18,6 +18,8 @@
   grid-column: span 3;
   grid-row: span 3;
   color: rgb(128, 128, 204);
+  font-size: 20px;
+  cursor: cell;
 }
 
 .inputValue_invoices {
@@ -71,7 +73,7 @@
 
 .invoiceCreateButton {
   grid-column: 2;
-  grid-row: 27;
+  grid-row: 30;
   width: fit-content;
   justify-self: center;
   align-items: center;
