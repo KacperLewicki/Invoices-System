@@ -23,7 +23,7 @@ const InvoiceListPage = () => {
     return (
 
         <div>
-            <h1>Lista Faktur użytkownika: Kapcer Lewicki</h1>
+            <h1>Lista Faktur użytkownika: </h1>
 
             <div className='buttonContainer'>
             <button className="buttonShowInvoiceUnderPage" onClick={showInvoice}>Stworzone Faktury</button>

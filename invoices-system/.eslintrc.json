@@ -5,6 +5,8 @@
     "src/pages/api/saveInvoiceItems.js",
     "src/pages/api/saveInvoiceManual.js",
     "src/pages/api/updateInvoiceManual.js",
-    "src/pages/api/checkInvoiceManualName.js"
+    "src/pages/api/checkInvoiceManualName.js",
+    "src/pages/api/dowolandInvoiceDataToInvoicePage.js",
+    "src/pages/api/dowolandDetailInvoice.js"
   ]
 }

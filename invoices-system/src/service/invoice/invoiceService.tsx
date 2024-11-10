@@ -39,6 +39,7 @@ const checkInvoiceExists = async (invoiceName: string): Promise<boolean> => {
   if (!response.ok) {
 
     console.error(`Nie udało się sprawdzić, czy faktura istnieje: Status ${response.status} - ${response.statusText}`);
+    
     throw new Error('Nie udało się sprawdzić, czy faktura istnieje');
   }
 
