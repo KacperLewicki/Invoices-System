@@ -5,17 +5,17 @@ interface InvoiceData {
   nameInvoice: string;
   dataInvoice: string;
   dataInvoiceSell: string;
-  DueDate: string;
-  PaymentTerm: string;
+  dueDate: string;
+  paymentTerm: string;
   comments: string;
   seller: string;
   description: string;
   summaryNetto: number;
   summaryVat: number;
   summaryBrutto: number;
-  ExchangeRate: number;
+  exchangeRate: number;
   paymentMethod: string;
-  efectiveMonth: string;
+  effectiveMonth: string;
   documentStatus: string;
   currency: string;
   status: string;
@@ -38,8 +38,8 @@ const checkInvoiceExists = async (invoiceName: string): Promise<boolean> => {
 
   if (!response.ok) {
 
-    console.error(`Nie udało się sprawdzić, czy faktura istnieje: Status ${response.status} - ${response.statusText}`);
-    
+    //console.error(`Nie udało się sprawdzić, czy faktura istnieje: Status ${response.status} - ${response.statusText}`);
+
     throw new Error('Nie udało się sprawdzić, czy faktura istnieje');
   }
 
@@ -55,6 +55,8 @@ const checkInvoiceExists = async (invoiceName: string): Promise<boolean> => {
 
 const saveInvoiceToDatabase = async (invoiceData: InvoiceData, itemsData: ItemData[]): Promise<string> => {
 
+  //console.log('Rozpoczęcie saveInvoiceToDatabase');
+
   const response = await fetch('/api/saveInvoiceManual', {
 
     method: 'POST',
@@ -67,7 +69,13 @@ const saveInvoiceToDatabase = async (invoiceData: InvoiceData, itemsData: ItemDa
     }),
   });
 
+  //console.log('Otrzymano odpowiedź z API');
+
   if (!response.ok) {
+
+    const errorText = await response.text();
+
+    //console.error(`Błąd podczas zapisywania faktury: ${errorText}`);
 
     throw new Error('Nie udało się zapisać faktury');
   }
@@ -84,8 +92,8 @@ const formatInvoiceDates = (invoiceData: InvoiceData): InvoiceData => {
     ...invoiceData,
     dataInvoice: moment(invoiceData.dataInvoice).format('YYYY-MM-DD'),
     dataInvoiceSell: moment(invoiceData.dataInvoiceSell).format('YYYY-MM-DD'),
-    DueDate: moment(invoiceData.DueDate).format('YYYY-MM-DD'),
-    PaymentTerm: moment(invoiceData.PaymentTerm).format('YYYY-MM-DD'),
+    dueDate: moment(invoiceData.dueDate).format('YYYY-MM-DD'),
+    paymentTerm: moment(invoiceData.paymentTerm).format('YYYY-MM-DD'),
 
   };
 };

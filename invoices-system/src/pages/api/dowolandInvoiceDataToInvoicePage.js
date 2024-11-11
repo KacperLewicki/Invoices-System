@@ -1,27 +1,31 @@
-import connection from './lib/db.js';
+import connection from './lib/db';
 
 export default async function handler(req, res) {
 
-    try {
-       
-        const [invoices] = await connection.query(`SELECT * FROM invoicemanual`);
-        
-        const invoiceData = await Promise.all(invoices.map(async (invoice) => {
-            
-            const [items] = await connection.query(
+  try {
 
-                `SELECT * FROM invoiceitem WHERE nameInvoice = ?`,
+    const [invoices] = await connection.query('SELECT * FROM invoicemanual');
 
-                [invoice.nameInvoice]
-            );
-            return { ...invoice, items };
-        }));
+    const invoiceData = await Promise.all(
 
-        res.status(200).json(invoiceData);
+      invoices.map(async (invoice) => {
 
-    } catch (error) {
+        const [items] = await connection.query(
 
-        console.error('Error fetching invoices:', error);
-        res.status(500).json({ error: error.message });
-    }
+          'SELECT * FROM invoiceitem WHERE nameInvoice = ?',
+
+          [invoice.nameInvoice]
+        );
+
+        return { ...invoice, items };
+      })
+    );
+
+    res.status(200).json(invoiceData);
+
+  } catch (error) {
+
+    console.error('Error fetching invoices:', error);
+    res.status(500).json({ error: error.message });
+  }
 }
