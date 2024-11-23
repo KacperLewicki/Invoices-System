@@ -29,7 +29,7 @@ const Invoice: React.FC = () => {
     exchangeRate: 0,
     paymentMethod: 'Bank Transfer',
     effectiveMonth: '',
-    documentStatus: '',
+    documentStatus: 'W trakcie akceptacji',
     currency: 'PLN',
     status: 'W trakcie akceptacji',
     customerName: ''
