@@ -35,7 +35,7 @@ export default async function handler(req, res) {
     if (lastInvoiceResult.length > 0 && lastInvoiceResult[0].nameInvoice) {
 
       const lastInvoice = lastInvoiceResult[0].nameInvoice;
-      const lastName = parseInt(lastInvoice.split('/').pop(), 10);
+      const lastName = parseInt(lastInvoice.split('/').pop(), 10); //zwracam ostatnią liczbę z nazwy faktury (split.pop() -> po "/" -> 4 ostatnie znaki)
       lastInvoiceName = isNaN(lastName) ? 0 : lastName;
     }
 
@@ -77,9 +77,9 @@ export default async function handler(req, res) {
 
     //console.log('Zapisywanie faktury');
 
-    const fields = Object.keys(validInvoiceFields);
-    const placeholders = fields.map(() => '?').join(', ');
-    const values = Object.values(validInvoiceFields);
+    const fields = Object.keys(validInvoiceFields); //pobieram kluczy z obiektu validInvoiceFields
+    const placeholders = fields.map(() => '?').join(', '); // stworzenie stringa z ? dla zapytania SQL
+    const values = Object.values(validInvoiceFields); //pobieram wartości z obiektu validInvoiceFields
 
     const saveInvoiceQuery = `INSERT INTO invoicemanual (${fields.join(', ')}) VALUES (${placeholders})`;
 

@@ -2,10 +2,10 @@
 
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { useInvoice } from '../../../hooks/invoiceContext';
 import "../../../globalCSS/globals.css";
 
 interface ItemData {
-
     id: number;
     nameItem: string;
     quantity: number;
@@ -16,7 +16,6 @@ interface ItemData {
 }
 
 interface InvoiceData {
-
     id: number;
     nameInvoice: string;
     dataInvoice: string;
@@ -37,16 +36,16 @@ interface InvoiceData {
     status: string;
     customerName: string;
     items: ItemData[];
-
 }
 
 const InvoiceUnderPage: React.FC = () => {
-
     const [invoices, setInvoices] = useState<InvoiceData[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
     const router = useRouter();
+    const { setSelectedInvoice } = useInvoice();
 
     useEffect(() => {
+
         const fetchInvoices = async () => {
 
             try {
@@ -56,41 +55,34 @@ const InvoiceUnderPage: React.FC = () => {
                 if (Array.isArray(data)) {
 
                     setInvoices(data);
-
                 } else {
 
                     console.error("Oczekiwana tablica, otrzymano:", data);
                     setInvoices([]);
                 }
-
             } catch (error) {
 
                 console.error('Błąd podczas pobierania faktur:', error);
                 setInvoices([]);
-
             } finally {
-
+                
                 setLoading(false);
             }
         };
 
         fetchInvoices();
-
     }, []);
 
     if (loading) {
-
         return <p className="text-center mt-10 text-lg text-gray-600">Ładowanie danych...</p>;
     }
 
     const handleRowClick = (invoice: InvoiceData) => {
-
-        router.push(`/invoiceList/invoiceDetail?invoice=${encodeURIComponent(JSON.stringify(invoice))}`);
-
+        setSelectedInvoice(invoice);
+        router.push(`/invoiceList/invoiceDetail`);
     };
 
     return (
-
         <div className="flex justify-center items-center bg-white p-6">
             <div className="w-full max-w-full shadow-lg rounded-lg border border-gray-200 overflow-x-auto">
                 <table className="w-full table-auto border-collapse">
@@ -122,7 +114,6 @@ const InvoiceUnderPage: React.FC = () => {
                                 <td className="px-4 py-4 text-sm border border-gray-200">{new Date(invoice.dataInvoiceSell).toLocaleDateString()}</td>
                                 <td className="px-4 py-4 text-sm border border-gray-200">{new Date(invoice.dueDate).toLocaleDateString()}</td>
                                 <td className="px-4 py-4 text-sm border border-gray-200">{invoice.effectiveMonth}</td>
-
                                 <td className="px-4 py-4 text-sm border border-gray-200 text-center">
                                     <span
                                         className={`px-3 py-1 inline-flex text-xs font-semibold rounded-full ${invoice.documentStatus === 'Opłacone'
