@@ -22,6 +22,9 @@ export default function Navigation() {
         <li>
           <Link href="/createInvoice" className="hover:bg-purple-500 px-3 py-2 rounded-md transition duration-200">Stwórz Fakturę</Link>
         </li>
+        <li>
+          <Link href="/administrator" className="hover:bg-purple-500 px-3 py-2 rounded-md transition duration-200">Administrator</Link>
+        </li>
       </ul>
     </nav>
   );
