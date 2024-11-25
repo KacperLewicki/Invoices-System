@@ -8,6 +8,10 @@
     "src/pages/api/updateInvoiceManual.js",
     "src/pages/api/checkInvoiceManualName.js",
     "src/pages/api/dowolandInvoiceDataToInvoicePage.js",
-    "src/pages/api/dowolandDetailInvoice.js"
+    "src/pages/api/dowolandDetailInvoice.js",
+    "src/pages/api/login.ts",
+    "src/pages/api/logout.ts",
+    "src/pages/api/changePassword.ts",
+    "src/pages/api/user.ts"
   ]
 }
