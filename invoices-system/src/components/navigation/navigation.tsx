@@ -17,10 +17,10 @@ export default function Navigation() {
 
   const initials = user
     ? user.name
-        .split(' ')
-        .map((n) => n[0])
-        .join('')
-        .toUpperCase()
+      .split(' ')
+      .map((n) => n[0])
+      .join('')
+      .toUpperCase()
     : '';
 
   const toggleMenu = () => {
@@ -53,7 +53,6 @@ export default function Navigation() {
           </li>
 
           {user && (
-            // Jeśli użytkownik jest zalogowany, wyświetl pozostałe linki
             <>
               <li>
                 <Link href="/news" className="hover:bg-purple-500 px-3 py-2 rounded-md transition duration-200">
@@ -79,7 +78,6 @@ export default function Navigation() {
           )}
         </ul>
 
-        {/* Jeśli użytkownik nie jest zalogowany, wyświetl przycisk "Zaloguj" po prawej stronie nawigacji */}
         {!user && pathname === '/' && (
           <div>
             <Link href="/login">
@@ -124,7 +122,6 @@ export default function Navigation() {
         )}
       </nav>
 
-      {/* Modale */}
       <AccountInfoModal
         isOpen={isAccountInfoOpen}
         onClose={() => setIsAccountInfoOpen(false)}
