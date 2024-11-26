@@ -35,7 +35,7 @@
     "**/*.tsx",
     ".next/types/**/*.ts",
     ".next/types/app/createInvoice/page.tsx"
-, "middleware.js"  ],
+, "src/middleware.ts"  ],
   "exclude": [
     "node_modules"
   ]
