@@ -79,6 +79,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     for (const [key, value] of Object.entries(validInvoiceFields)) {
 
       if (value === undefined || value === null) {
+        
         return res.status(400).send(`Pole ${key} jest wymagane.`);
       }
     }

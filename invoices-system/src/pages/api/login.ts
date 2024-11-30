@@ -3,7 +3,7 @@ import { SignJWT } from 'jose';
 import bcrypt from 'bcrypt';
 import pool from '../api/lib/db';
 
-const JWT_SECRET = new TextEncoder().encode('123456');
+const NEXT_PUBLIC_SECRET_KEY_ADMINISTRATOR = new TextEncoder().encode(process.env.NEXT_PUBLIC_SECRET_KEY_ADMINISTRATOR);
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
 
@@ -20,23 +20,18 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     return res.status(401).json({ message: 'Nieprawidłowe dane logowania' });
   }
-
   const user = rows[0];
-
   const isPasswordValid = await bcrypt.compare(password, user.password);
 
   if (!isPasswordValid) {
 
     return res.status(401).json({ message: 'Nieprawidłowe dane logowania' });
   }
-
-  // Generuje token JWT
   const token = await new SignJWT({ id: user.id })
     .setProtectedHeader({ alg: 'HS256' })
     .setExpirationTime('1h')
-    .sign(JWT_SECRET);
+    .sign(NEXT_PUBLIC_SECRET_KEY_ADMINISTRATOR);
 
-  // Ustawiam ciasteczko
   res.setHeader('Set-Cookie', `token=${token}; HttpOnly; Path=/; Max-Age=3600;`);
 
   return res.status(200).json({ message: 'Zalogowano pomyślnie' });

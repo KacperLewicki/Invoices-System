@@ -4,10 +4,11 @@ import React, { useState } from 'react';
 import Link from 'next/link';
 import AccountInfoModal from '../login/accountInfoModal';
 import SettingsModal from '../login/settingsModal';
-import { useAuth } from '../../components/context/autoContext';
+import { useAuth } from '../../hooks/context/autoContext';
 import { usePathname } from 'next/navigation';
 
-export default function Navigation() {
+const Navigation = () => {
+
   const { user, logout } = useAuth();
   const [showMenu, setShowMenu] = useState(false);
   const [isAccountInfoOpen, setIsAccountInfoOpen] = useState(false);
@@ -24,25 +25,30 @@ export default function Navigation() {
     : '';
 
   const toggleMenu = () => {
+
     setShowMenu(!showMenu);
   };
 
   const handleLogout = async () => {
+
     await logout();
     window.location.href = '/';
   };
 
   const openAccountInfo = () => {
+
     setShowMenu(false);
     setIsAccountInfoOpen(true);
   };
 
   const openSettings = () => {
+
     setShowMenu(false);
     setIsSettingsOpen(true);
   };
 
   return (
+    
     <>
       <nav className="flex justify-between items-center bg-purple-700 p-4 rounded-lg shadow-lg">
         <ul className="flex space-x-6 text-white font-semibold">
@@ -131,3 +137,5 @@ export default function Navigation() {
     </>
   );
 }
+
+export default Navigation;

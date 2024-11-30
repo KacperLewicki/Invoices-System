@@ -4,18 +4,22 @@ import React, { useState } from 'react';
 import Modal from './modal';
 
 interface ChangePasswordModalProps {
+
     isOpen: boolean;
     onClose: () => void;
 }
 
-export default function ChangePasswordModal({ isOpen, onClose }: ChangePasswordModalProps) {
+const ChangePasswordModal = ({ isOpen, onClose }: ChangePasswordModalProps) => {
+
     const [currentPassword, setCurrentPassword] = useState('');
     const [newPassword, setNewPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
     const [message, setMessage] = useState('');
 
     const handleChangePassword = async () => {
+
         if (newPassword !== confirmPassword) {
+
             setMessage('Nowe hasła nie są zgodne.');
             return;
         }
@@ -30,16 +34,19 @@ export default function ChangePasswordModal({ isOpen, onClose }: ChangePasswordM
         const data = await res.json();
 
         if (res.ok) {
+
             setMessage('Hasło zmienione pomyślnie.');
             setCurrentPassword('');
             setNewPassword('');
             setConfirmPassword('');
         } else {
+
             setMessage(data.message || 'Wystąpił błąd podczas zmiany hasła.');
         }
     };
 
     return (
+        
         <Modal isOpen={isOpen} onClose={onClose}>
             <h2 className="text-2xl mb-6 font-semibold text-center">Zmień Hasło</h2>
             {message && <p className="mb-4 text-center text-red-500">{message}</p>}
@@ -84,3 +91,5 @@ export default function ChangePasswordModal({ isOpen, onClose }: ChangePasswordM
         </Modal>
     );
 }
+
+export default ChangePasswordModal;

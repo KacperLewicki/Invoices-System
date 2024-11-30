@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
-import { useInvoice } from '../../../hooks/invoiceContext';
+import { useInvoice } from '../../../hooks/context/invoiceContext';
 
 const InvoiceDetailPage: React.FC = () => {
+
     const { selectedInvoice: invoice } = useInvoice();
     const [showComment, setShowComment] = useState(false);
 

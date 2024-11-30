@@ -29,7 +29,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
       const sqlInvoice = 'INSERT INTO invoicemanual SET ?';
 
-      const [resultInvoice]: any = await db.query(sqlInvoice, invoice);
+      await db.query(sqlInvoice, invoice);
 
       const invoiceName = invoice.nameInvoice;
       const values = items.map(item => [
@@ -48,8 +48,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       res.status(200).send('Invoice and items saved successfully');
 
     } catch (err: any) {
-
-      //console.error('Error:', err);
 
       res.status(500).send('Error saving invoice');
     }

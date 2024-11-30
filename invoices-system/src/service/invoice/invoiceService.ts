@@ -38,24 +38,19 @@ const checkInvoiceExists = async (invoiceName: string): Promise<boolean> => {
 
   if (!response.ok) {
 
-    //console.error(`Nie udało się sprawdzić, czy faktura istnieje: Status ${response.status} - ${response.statusText}`);
-
     throw new Error('Nie udało się sprawdzić, czy faktura istnieje');
   }
-
+  
   const data = await response.json();
 
   if (typeof data.exists !== 'boolean') {
 
     throw new Error('Nieprawidłowy format odpowiedzi');
   }
-
   return data.exists;
 };
 
 const saveInvoiceToDatabase = async (invoiceData: InvoiceData, itemsData: ItemData[]): Promise<string> => {
-
-  //console.log('Rozpoczęcie saveInvoiceToDatabase');
 
   const response = await fetch('/api/saveInvoiceManual', {
 
@@ -68,20 +63,13 @@ const saveInvoiceToDatabase = async (invoiceData: InvoiceData, itemsData: ItemDa
       items: itemsData,
     }),
   });
-
-  //console.log('Otrzymano odpowiedź z API');
-
   if (!response.ok) {
 
-    const errorText = await response.text();
-
-    //console.error(`Błąd podczas zapisywania faktury: ${errorText}`);
-
+    await response.text();
     throw new Error('Nie udało się zapisać faktury');
   }
 
   const responseData = await response.json();
-
   return responseData.nameInvoice;
 };
 
@@ -99,6 +87,7 @@ const formatInvoiceDates = (invoiceData: InvoiceData): InvoiceData => {
 };
 
 export {
+
   type InvoiceData,
   type ItemData,
   checkInvoiceExists,

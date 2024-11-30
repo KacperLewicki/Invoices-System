@@ -2,10 +2,11 @@
 
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { useInvoice } from '../../../hooks/invoiceContext';
+import { useInvoice } from '../../../hooks/context/invoiceContext';
 import "../../../globalCSS/globals.css";
 
 interface ItemData {
+
     id: number;
     nameItem: string;
     quantity: number;
@@ -16,6 +17,7 @@ interface ItemData {
 }
 
 interface InvoiceData {
+
     id: number;
     nameInvoice: string;
     dataInvoice: string;
@@ -39,6 +41,7 @@ interface InvoiceData {
 }
 
 const InvoiceUnderPage: React.FC = () => {
+
     const [invoices, setInvoices] = useState<InvoiceData[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
     const router = useRouter();
@@ -65,7 +68,7 @@ const InvoiceUnderPage: React.FC = () => {
                 console.error('Błąd podczas pobierania faktur:', error);
                 setInvoices([]);
             } finally {
-                
+
                 setLoading(false);
             }
         };
@@ -74,15 +77,18 @@ const InvoiceUnderPage: React.FC = () => {
     }, []);
 
     if (loading) {
+
         return <p className="text-center mt-10 text-lg text-gray-600">Ładowanie danych...</p>;
     }
 
     const handleRowClick = (invoice: InvoiceData) => {
+
         setSelectedInvoice(invoice);
         router.push(`/invoiceList/invoiceDetail`);
     };
 
     return (
+
         <div className="flex justify-center items-center bg-white p-6">
             <div className="w-full max-w-full shadow-lg rounded-lg border border-gray-200 overflow-x-auto">
                 <table className="w-full table-auto border-collapse">

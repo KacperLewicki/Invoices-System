@@ -1,6 +1,6 @@
 import React from 'react';
 
-export default function HomePage() {
+const HomePage: React.FC = () => {
 
   return (
 
@@ -15,3 +15,5 @@ export default function HomePage() {
 
   );
 }
+
+export default HomePage;
