@@ -3,12 +3,14 @@
 import React, { createContext, useState, useEffect, useContext } from 'react';
 
 export interface User {
+
   id: number;
   email: string;
   name: string;
 }
 
 interface AuthContextProps {
+
   user: User | null;
   loading: boolean;
   login: (email: string, password: string) => Promise<void>;
@@ -16,6 +18,7 @@ interface AuthContextProps {
 }
 
 const AuthContext = createContext<AuthContextProps>({
+
   user: null,
   loading: true,
   login: async () => {},
@@ -23,24 +26,31 @@ const AuthContext = createContext<AuthContextProps>({
 });
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
+
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
 
   const fetchUser = async () => {
+
     try {
+
       const res = await fetch('/api/user', {
         method: 'GET',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json'},
         credentials: 'include',
       });
 
       if (res.ok) {
+
         const data = await res.json();
         setUser(data.user);
+  
       } else {
+
         setUser(null);
       }
     } catch (error) {
+
       console.error('Błąd podczas pobierania danych użytkownika:', error);
       setUser(null);
     } finally {
@@ -53,6 +63,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   }, []);
 
   const login = async (email: string, password: string) => {
+
     const res = await fetch('/api/login', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -60,19 +71,23 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     });
 
     if (res.ok) {
+
       await fetchUser();
     } else {
+
       const data = await res.json();
       throw new Error(data.message);
     }
   };
 
   const logout = async () => {
+
     await fetch('/api/logout', { method: 'POST' });
     setUser(null);
   };
 
   return (
+    
     <AuthContext.Provider value={{ user, loading, login, logout }}>
       {children}
     </AuthContext.Provider>

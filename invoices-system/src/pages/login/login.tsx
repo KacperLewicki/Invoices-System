@@ -2,10 +2,11 @@
 
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { useAuth } from '../../components/context/autoContext';
+import { useAuth } from '../../hooks/context/autoContext';
 import { useSearchParams } from 'next/navigation';
 
-export default function LoginPage() {
+const LoginPage: React.FC = () => {
+
     const router = useRouter();
     const { login } = useAuth();
     const [email, setEmail] = useState('');
@@ -16,17 +17,22 @@ export default function LoginPage() {
     const [error, setError] = useState('');
 
     const handleSubmit = async (e: React.FormEvent) => {
+
         e.preventDefault();
 
         try {
+
             await login(email, password);
             router.push('/');
+
         } catch (err: any) {
+
             setError(err.message);
         }
     };
 
     return (
+
         <div className="flex items-center justify-center min-h-screen bg-purple-100">
             {message && <p className="text-red-500 mb-4">{message}</p>}
             <form onSubmit={handleSubmit} className="bg-white p-8 rounded shadow-md w-96">
@@ -73,3 +79,5 @@ export default function LoginPage() {
         </div>
     );
 }
+
+export default LoginPage;

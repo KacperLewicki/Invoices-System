@@ -4,17 +4,15 @@ import { NextApiRequest, NextApiResponse } from 'next';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse): Promise<void> {
   
-  if (req.method === 'GET') { // sprawdzam czy metoda jest GET
+  if (req.method === 'GET') {
 
-    const { nameInvoice } = req.query; // pobieram parametr nameInvoice z zapytania
+    const { nameInvoice } = req.query;
 
-    // Schemat walidacji za pomocą Joi
     const schema = Joi.object({
       nameInvoice: Joi.string().min(1).required(),
     });
 
-    const { error } = schema.validate({ nameInvoice }); // waliduję parametr nameInvoice
-
+    const { error } = schema.validate({ nameInvoice });
     if (error) {
 
       res.status(400).json({ error: 'Bad request' });
@@ -23,7 +21,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     try {
 
-      const query = 'SELECT COUNT(*) as count FROM invoicemanual WHERE nameInvoice = ?'; // Sprawdzam czy istnieje faktura o podanej nazwie
+      const query = 'SELECT COUNT(*) as count FROM invoicemanual WHERE nameInvoice = ?'; 
 
       const [result]: any[] = await db.query(query, [nameInvoice]);
 

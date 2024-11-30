@@ -5,22 +5,27 @@ import Modal from './modal';
 import ChangePasswordModal from './changePasswordModal';
 
 interface SettingsModalProps {
+
     isOpen: boolean;
     onClose: () => void;
 }
 
-export default function SettingsModal({ isOpen, onClose }: SettingsModalProps) {
+const SettingsModal = ({ isOpen, onClose }: SettingsModalProps) => {
+
     const [isChangePasswordOpen, setIsChangePasswordOpen] = useState(false);
 
     const openChangePassword = () => {
+
         setIsChangePasswordOpen(true);
     };
 
     const closeChangePassword = () => {
+
         setIsChangePasswordOpen(false);
     };
 
     return (
+        
         <>
             <Modal isOpen={isOpen} onClose={onClose}>
                 <h2 className="text-2xl mb-6 font-semibold text-center">Ustawienia</h2>
@@ -41,3 +46,4 @@ export default function SettingsModal({ isOpen, onClose }: SettingsModalProps) {
         </>
     );
 }
+export default SettingsModal;

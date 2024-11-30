@@ -2,16 +2,19 @@
 
 import React from 'react';
 import Modal from './modal';
-import { User } from '../../components/context/autoContext';
+import { User } from '../../hooks/context/autoContext';
 
 interface AccountInfoModalProps {
+
   isOpen: boolean;
   onClose: () => void;
   user: User | null;
 }
 
-export default function AccountInfoModal({ isOpen, onClose, user }: AccountInfoModalProps) {
+const  AccountInfoModal = ({ isOpen, onClose, user }: AccountInfoModalProps) => {
+
   return (
+    
     <Modal isOpen={isOpen} onClose={onClose}>
       <h2 className="text-xl mb-4">Informacje o koncie</h2>
       {user ? (
@@ -29,3 +32,4 @@ export default function AccountInfoModal({ isOpen, onClose, user }: AccountInfoM
     </Modal>
   );
 }
+export default AccountInfoModal;

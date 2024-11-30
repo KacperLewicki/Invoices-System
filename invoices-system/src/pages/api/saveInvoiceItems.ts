@@ -29,7 +29,6 @@ export default async function saveInvoiceItems(req: NextApiRequest, res: NextApi
     try {
 
       const itemsData: InvoiceItem[] = req.body;
-
       const values = itemsData.map(item => [
         item.nameInvoice,
         item.nameItem,
@@ -40,8 +39,7 @@ export default async function saveInvoiceItems(req: NextApiRequest, res: NextApi
         item.comment,
       ]);
 
-      const sql ='INSERT INTO invoiceitem (nameInvoice, nameItem, quantity, vatItem, nettoItem, bruttoItem, comment) VALUES ?';
-
+      const sql = 'INSERT INTO invoiceitem (nameInvoice, nameItem, quantity, vatItem, nettoItem, bruttoItem, comment) VALUES ?';
       await queryDb(sql, [values]);
 
       res.status(200).send('Invoice items saved successfully');
@@ -51,7 +49,7 @@ export default async function saveInvoiceItems(req: NextApiRequest, res: NextApi
       res.status(500).send('Error saving invoice items');
     }
   } else {
-    
+
     res.status(405).send('Method not allowed');
   }
 }
