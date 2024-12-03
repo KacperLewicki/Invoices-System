@@ -1,5 +1,5 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import pool from '../../pages/api/lib/db';
+import pool from './lib/db';
 import bcrypt from 'bcrypt';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
@@ -9,7 +9,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         const { name, email, password } = req.body;
         try {
 
-            const [existingUsers]: any = await pool.query('SELECT * FROM login WHERE email = ?', [email]); 
+            const [existingUsers]: any = await pool.query('SELECT * FROM login WHERE email = ?', [email]);
             if (existingUsers.length > 0) {
 
                 return res.status(400).json({ message: 'Użytkownik z tym emailem już istnieje' });

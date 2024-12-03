@@ -1,8 +1,8 @@
 'use client';
 
 import React, { useState } from 'react';
-import Modal from './modal';
-import ChangePasswordModal from './changePasswordModal';
+import Modal from '../modal/modal_popup';
+import ChangePassword from './changePassword';
 
 interface SettingsModalProps {
 
@@ -10,22 +10,16 @@ interface SettingsModalProps {
     onClose: () => void;
 }
 
-const SettingsModal = ({ isOpen, onClose }: SettingsModalProps) => {
+const Settings = ({ isOpen, onClose }: SettingsModalProps) => {
 
     const [isChangePasswordOpen, setIsChangePasswordOpen] = useState(false);
 
-    const openChangePassword = () => {
+    const openChangePassword = () => { setIsChangePasswordOpen(true) };
 
-        setIsChangePasswordOpen(true);
-    };
-
-    const closeChangePassword = () => {
-
-        setIsChangePasswordOpen(false);
-    };
+    const closeChangePassword = () => { setIsChangePasswordOpen(false) };
 
     return (
-        
+
         <>
             <Modal isOpen={isOpen} onClose={onClose}>
                 <h2 className="text-2xl mb-6 font-semibold text-center">Ustawienia</h2>
@@ -39,11 +33,11 @@ const SettingsModal = ({ isOpen, onClose }: SettingsModalProps) => {
                 </div>
             </Modal>
 
-            <ChangePasswordModal
+            <ChangePassword
                 isOpen={isChangePasswordOpen}
                 onClose={closeChangePassword}
             />
         </>
     );
 }
-export default SettingsModal;
+export default Settings;

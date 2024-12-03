@@ -1,13 +1,8 @@
 "use client";
 
 import React, { useState } from 'react';
-import {
-  InvoiceData,
-  ItemData,
-  checkInvoiceExists,
-  saveInvoiceToDatabase,
-  formatInvoiceDates
-} from '../../../service/invoice/invoiceService';
+import { checkInvoiceExists, saveInvoiceToDatabase, formatInvoiceDates } from '../../../service/invoice/invoiceService';
+import { InvoiceData, ItemData } from '../../../types/typesInvoice';
 
 import "../../../globalCSS/globals.css";
 
@@ -286,7 +281,7 @@ const Invoice: React.FC = () => {
               </select>
             </div>
           </div>
-       
+
           {!formData.nameInvoice && (
             <div className="col-span-full p-4 rounded-lg border border-gray-300 transition transform duration-300 hover:shadow-lg">
               <h2 className="text-xl font-semibold text-gray-700 hover:text-purple-700 transition duration-300">

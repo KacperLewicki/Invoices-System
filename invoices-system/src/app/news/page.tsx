@@ -1,16 +1,18 @@
 "use client";
 
-import React from 'react';
-import News from '../../pages/news/news';
+import React from "react";
 
-export default function CreateInvoicePage ()  {
- 
+export default function NewsPage() {
+
   return (
+
     <div>
-      
-        <News />
-      
+
+      <h1>Powiadomienia - dotyczące faktur</h1>
+      <br />
+      <br />
+      <p>brak danych</p>
+
     </div>
   );
-};
-
+}

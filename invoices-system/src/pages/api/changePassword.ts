@@ -1,9 +1,9 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { jwtVerify } from 'jose';
 import bcrypt from 'bcrypt';
-import pool from '../api/lib/db';
+import pool from './lib/db';
 
-const NEXT_PUBLIC_SECRET_KEY_ADMINISTRATOR =  new TextEncoder().encode(process.env.NEXT_PUBLIC_SECRET_KEY_ADMINISTRATOR);
+const NEXT_PUBLIC_SECRET_KEY_ADMINISTRATOR = new TextEncoder().encode(process.env.NEXT_PUBLIC_SECRET_KEY_ADMINISTRATOR);
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
 
@@ -27,7 +27,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     const [rows]: any = await pool.query('SELECT * FROM login WHERE id = ?', [userId]);
 
     if (rows.length === 0) {
-        
+
       return res.status(404).json({ message: 'Użytkownik nie znaleziony' });
     }
 

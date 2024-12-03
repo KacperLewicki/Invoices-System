@@ -1,54 +1,67 @@
 "use client";
 
-import React, { createContext, useContext, useState, ReactNode } from 'react';
+import React, { createContext, useContext, useState, ReactNode, useEffect } from 'react';
+import { InvoiceData, ItemData, } from '../../types/typesInvoice';
+import { InvoiceContextType } from '../../types/typesInvoice';
 
-interface ItemData {
+interface Item_Data extends ItemData {
+
     id: number;
-    nameItem: string;
-    quantity: number;
-    vatItem: number;
-    nettoItem: number;
-    bruttoItem: number;
-    comment: string;
 }
 
-interface InvoiceData {
+interface Invoice_Data extends InvoiceData {
+
     id: number;
-    nameInvoice: string;
-    dataInvoice: string;
-    dataInvoiceSell: string;
-    dueDate: string;
-    paymentTerm: string;
-    comments: string;
-    seller: string;
-    description: string;
-    summaryNetto: number;
-    summaryVat: number;
-    summaryBrutto: number;
-    exchangeRate: number;
-    paymentMethod: string;
-    effectiveMonth: string;
-    documentStatus: string;
-    currency: string;
-    status: string;
-    customerName: string;
-    items: ItemData[];
+    items: Item_Data[];
 }
 
-interface InvoiceContextType {
+interface Invoice_ContextType extends InvoiceContextType {
 
-    selectedInvoice: InvoiceData | null;
-    setSelectedInvoice: (invoice: InvoiceData | null) => void;
+    selectedInvoice: Invoice_Data | null;
+    setSelectedInvoice: (invoice: Invoice_Data | null) => void;
+    invoices: Invoice_Data[];
 }
 
-const InvoiceContext = createContext<InvoiceContextType | undefined>(undefined);
+const InvoiceContext = createContext<Invoice_ContextType | undefined>(undefined);
 
 export const InvoiceProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
 
-    const [selectedInvoice, setSelectedInvoice] = useState<InvoiceData | null>(null);
+    const [selectedInvoice, setSelectedInvoice] = useState<Invoice_Data | null>(null);
+    const [invoices, setInvoices] = useState<Invoice_Data[]>([]);
+    const [loading, setLoading] = useState<boolean>(true);
+
+    useEffect(() => {
+
+        const fetchInvoices = async () => {
+
+            try {
+
+                const response = await fetch('/api/dowolandInvoiceDataToInvoicePage');
+                const data = await response.json();
+
+                if (Array.isArray(data)) {
+
+                    setInvoices(data);
+                } else {
+
+                    console.error("Oczekiwana tablica, otrzymano:", data);
+                    setInvoices([]);
+                }
+            } catch (error) {
+
+                console.error('Błąd podczas pobierania faktur:', error);
+                setInvoices([]);
+            } finally {
+
+                setLoading(false);
+            }
+        };
+
+        fetchInvoices();
+    }, []);
 
     return (
-        <InvoiceContext.Provider value={{ selectedInvoice, setSelectedInvoice }}>
+        <InvoiceContext.Provider value={{ selectedInvoice, setSelectedInvoice, invoices, loading }}>
             {children}
         </InvoiceContext.Provider>
     );
@@ -58,7 +71,7 @@ export const useInvoice = () => {
 
     const context = useContext(InvoiceContext);
     if (!context) {
-        
+
         throw new Error('useInvoice must be used within an InvoiceProvider');
     }
     return context;

@@ -1,36 +1,5 @@
 import moment from 'moment';
-
-interface InvoiceData {
-
-  nameInvoice: string;
-  dataInvoice: string;
-  dataInvoiceSell: string;
-  dueDate: string;
-  paymentTerm: string;
-  comments: string;
-  seller: string;
-  description: string;
-  summaryNetto: number;
-  summaryVat: number;
-  summaryBrutto: number;
-  exchangeRate: number;
-  paymentMethod: string;
-  effectiveMonth: string;
-  documentStatus: string;
-  currency: string;
-  status: string;
-  customerName: string;
-}
-
-interface ItemData {
-
-  nameItem: string;
-  quantity: number;
-  vatItem: number;
-  nettoItem: number;
-  bruttoItem: number;
-  comment: string;
-}
+import { InvoiceData, ItemData } from '../../types/typesInvoice';
 
 const checkInvoiceExists = async (invoiceName: string): Promise<boolean> => {
 
@@ -40,7 +9,7 @@ const checkInvoiceExists = async (invoiceName: string): Promise<boolean> => {
 
     throw new Error('Nie udało się sprawdzić, czy faktura istnieje');
   }
-  
+
   const data = await response.json();
 
   if (typeof data.exists !== 'boolean') {

@@ -1,23 +1,6 @@
 import db from './lib/db';
 import { NextApiRequest, NextApiResponse } from 'next';
-
-interface Invoice {
-
-  nameInvoice: string;
-  [key: string]: any;
-
-}
-
-interface InvoiceItem {
-
-  nameItem: string;
-  quantity: number;
-  vatItem: number;
-  nettoItem: number;
-  bruttoItem: number;
-  comment: string;
-
-}
+import { ItemData, Invoice } from '../../types/typesInvoice';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse): Promise<void> {
 
@@ -25,7 +8,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     try {
 
-      const { invoice, items }: { invoice: Invoice; items: InvoiceItem[] } = req.body;
+      const { invoice, items }: { invoice: Invoice; items: ItemData[] } = req.body;
 
       const sqlInvoice = 'INSERT INTO invoicemanual SET ?';
 

@@ -3,7 +3,7 @@ import Joi from 'joi';
 import { NextApiRequest, NextApiResponse } from 'next';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse): Promise<void> {
-  
+
   if (req.method === 'GET') {
 
     const { nameInvoice } = req.query;
@@ -21,7 +21,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     try {
 
-      const query = 'SELECT COUNT(*) as count FROM invoicemanual WHERE nameInvoice = ?'; 
+      const query = 'SELECT COUNT(*) as count FROM invoicemanual WHERE nameInvoice = ?';
 
       const [result]: any[] = await db.query(query, [nameInvoice]);
 
