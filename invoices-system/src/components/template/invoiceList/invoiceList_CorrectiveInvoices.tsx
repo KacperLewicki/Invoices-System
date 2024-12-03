@@ -1,6 +1,6 @@
 import React from 'react'
 
-const InvoiceCreditNoteUnderPage: React.FC = () => {
+const CorrectiveInvoices: React.FC = () => {
 
     return (
         <div>
@@ -11,4 +11,4 @@ const InvoiceCreditNoteUnderPage: React.FC = () => {
     )
 }
 
-export default InvoiceCreditNoteUnderPage;
+export default CorrectiveInvoices;

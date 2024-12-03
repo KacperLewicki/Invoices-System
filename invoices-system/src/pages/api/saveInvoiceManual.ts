@@ -1,38 +1,7 @@
 import connection from './lib/db';
 import { NextApiRequest, NextApiResponse } from 'next';
 import { RowDataPacket } from 'mysql2';
-
-interface Invoice {
-
-  nameInvoice?: string;
-  dataInvoice: string;
-  dataInvoiceSell: string;
-  dueDate: string;
-  paymentTerm: string;
-  comments: string;
-  seller: string;
-  description: string;
-  summaryNetto: number;
-  summaryVat: number;
-  summaryBrutto: number;
-  exchangeRate: number;
-  paymentMethod: string;
-  effectiveMonth: string;
-  documentStatus: string;
-  currency: string;
-  status: string;
-  customerName: string;
-}
-
-interface InvoiceItem {
-
-  nameItem: string;
-  quantity: number;
-  vatItem: number;
-  nettoItem: number;
-  bruttoItem: number;
-  comment: string;
-}
+import { InvoiceData, ItemData } from '../../types/typesInvoice';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse): Promise<void> {
 
@@ -43,7 +12,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
   try {
 
-    const { invoice, items }: { invoice: Invoice; items: InvoiceItem[] } = req.body;
+    const { invoice, items }: { invoice: InvoiceData; items: ItemData[] } = req.body;
 
     if (!invoice || !items || !Array.isArray(items)) {
 
@@ -70,7 +39,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     const generatedNameInvoice = `NB/24/${newInvoiceNumberStr}`;
     invoice.nameInvoice = generatedNameInvoice;
 
-    const validInvoiceFields: Invoice = {
+    const validInvoiceFields: InvoiceData = {
 
       ...invoice,
       nameInvoice: generatedNameInvoice,
@@ -79,7 +48,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     for (const [key, value] of Object.entries(validInvoiceFields)) {
 
       if (value === undefined || value === null) {
-        
+
         return res.status(400).send(`Pole ${key} jest wymagane.`);
       }
     }

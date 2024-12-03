@@ -1,91 +1,36 @@
 "use client";
 
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { useRouter } from 'next/navigation';
 import { useInvoice } from '../../../hooks/context/invoiceContext';
 import "../../../globalCSS/globals.css";
+import { InvoiceData, ItemData } from '../../../types/typesInvoice';
 
-interface ItemData {
-
-    id: number;
-    nameItem: string;
-    quantity: number;
-    vatItem: number;
-    nettoItem: number;
-    bruttoItem: number;
-    comment: string;
-}
-
-interface InvoiceData {
+interface Item_Data extends ItemData {
 
     id: number;
-    nameInvoice: string;
-    dataInvoice: string;
-    dataInvoiceSell: string;
-    dueDate: string;
-    paymentTerm: string;
-    comments: string;
-    seller: string;
-    description: string;
-    summaryNetto: number;
-    summaryVat: number;
-    summaryBrutto: number;
-    exchangeRate: number;
-    paymentMethod: string;
-    effectiveMonth: string;
-    documentStatus: string;
-    currency: string;
-    status: string;
-    customerName: string;
-    items: ItemData[];
 }
 
-const InvoiceUnderPage: React.FC = () => {
+interface Invoice_Data extends InvoiceData {
 
-    const [invoices, setInvoices] = useState<InvoiceData[]>([]);
-    const [loading, setLoading] = useState<boolean>(true);
+    id: number;
+    items: Item_Data[];
+}
+
+const Invoices: React.FC = () => {
+
+    const { invoices, loading, setSelectedInvoice } = useInvoice();
     const router = useRouter();
-    const { setSelectedInvoice } = useInvoice();
 
-    useEffect(() => {
-
-        const fetchInvoices = async () => {
-
-            try {
-                const response = await fetch('/api/dowolandInvoiceDataToInvoicePage');
-                const data = await response.json();
-
-                if (Array.isArray(data)) {
-
-                    setInvoices(data);
-                } else {
-
-                    console.error("Oczekiwana tablica, otrzymano:", data);
-                    setInvoices([]);
-                }
-            } catch (error) {
-
-                console.error('Błąd podczas pobierania faktur:', error);
-                setInvoices([]);
-            } finally {
-
-                setLoading(false);
-            }
-        };
-
-        fetchInvoices();
-    }, []);
-
-    if (loading) {
-
-        return <p className="text-center mt-10 text-lg text-gray-600">Ładowanie danych...</p>;
-    }
-
-    const handleRowClick = (invoice: InvoiceData) => {
+    const handleRowClick = (invoice: Invoice_Data) => {
 
         setSelectedInvoice(invoice);
-        router.push(`/invoiceList/invoiceDetail`);
+        router.push(`/invoiceList/invoiceDetails`);
     };
+
+    if (loading) {
+        return <p className="text-center mt-10 text-lg text-gray-600">Ładowanie danych...</p>;
+    }
 
     return (
 
@@ -143,4 +88,4 @@ const InvoiceUnderPage: React.FC = () => {
     );
 };
 
-export default InvoiceUnderPage;
+export default Invoices;

@@ -11,6 +11,7 @@
     "src/pages/api/login.ts",
     "src/pages/api/logout.ts",
     "src/pages/api/changePassword.ts",
-    "src/pages/api/user.ts"
+    "src/pages/api/user.ts",
+    "middleware.js"
   ]
 }

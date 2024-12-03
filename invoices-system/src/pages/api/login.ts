@@ -1,7 +1,7 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { SignJWT } from 'jose';
 import bcrypt from 'bcrypt';
-import pool from '../api/lib/db';
+import pool from './lib/db';
 
 const NEXT_PUBLIC_SECRET_KEY_ADMINISTRATOR = new TextEncoder().encode(process.env.NEXT_PUBLIC_SECRET_KEY_ADMINISTRATOR);
 

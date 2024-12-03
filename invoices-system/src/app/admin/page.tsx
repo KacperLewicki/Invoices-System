@@ -1,12 +1,13 @@
+"use client";
+
 import React from 'react'
 
-const AdminPage: React.FC = () => {
+export default function AdminPage() {
 
     return (
-        
+
         <div>Widok faktur dla administratorów</div>
     )
 }
 
-export default AdminPage;
 

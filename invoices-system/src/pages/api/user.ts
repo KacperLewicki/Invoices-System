@@ -1,6 +1,6 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { jwtVerify } from 'jose';
-import pool from '../../pages/api/lib/db';
+import pool from './lib/db';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
 

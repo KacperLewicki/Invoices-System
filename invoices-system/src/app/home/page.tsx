@@ -1,13 +1,15 @@
+"use client";
+
 import React from 'react';
 
-const HomePage: React.FC = () => {
+export default function HomePage() {
 
   return (
 
     <div>
-      
+
       <h1>Strona Główna - System Faktur</h1>
-      <br />    
+      <br />
       <br />
       <p>brak danych</p>
 
@@ -15,5 +17,3 @@ const HomePage: React.FC = () => {
 
   );
 }
-
-export default HomePage;

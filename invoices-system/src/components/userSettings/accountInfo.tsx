@@ -1,8 +1,8 @@
 'use client';
 
 import React from 'react';
-import Modal from './modal';
-import { User } from '../../hooks/context/autoContext';
+import Modal from '../modal/modal_popup';
+import { User } from '../../types/typesInvoice';
 
 interface AccountInfoModalProps {
 
@@ -11,10 +11,10 @@ interface AccountInfoModalProps {
   user: User | null;
 }
 
-const  AccountInfoModal = ({ isOpen, onClose, user }: AccountInfoModalProps) => {
+const AccountInfoModal = ({ isOpen, onClose, user }: AccountInfoModalProps) => {
 
   return (
-    
+
     <Modal isOpen={isOpen} onClose={onClose}>
       <h2 className="text-xl mb-4">Informacje o koncie</h2>
       {user ? (

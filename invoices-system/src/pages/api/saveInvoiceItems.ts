@@ -1,15 +1,10 @@
 import db from './lib/db';
 import { NextApiRequest, NextApiResponse } from 'next';
+import { ItemData } from '../../types/typesInvoice';
 
-interface InvoiceItem {
+interface Items extends ItemData {
 
   nameInvoice: string;
-  nameItem: string;
-  quantity: number;
-  vatItem: number;
-  nettoItem: number;
-  bruttoItem: number;
-  comment: string;
 }
 
 const queryDb = (sql: string, values: any[]): Promise<any> => {
@@ -28,8 +23,8 @@ export default async function saveInvoiceItems(req: NextApiRequest, res: NextApi
 
     try {
 
-      const itemsData: InvoiceItem[] = req.body;
-      const values = itemsData.map(item => [
+      const Items: Items[] = req.body;
+      const values = Items.map(item => [
         item.nameInvoice,
         item.nameItem,
         item.quantity,

@@ -1,15 +1,11 @@
 'use client';
 
 import React, { useState } from 'react';
-import Modal from './modal';
+import Modal from '../modal/modal_popup';
+import { changePassword } from '../../service/userSettings/settingsService';
+import { ChangePasswordProps } from '../../types/typesInvoice';
 
-interface ChangePasswordModalProps {
-
-    isOpen: boolean;
-    onClose: () => void;
-}
-
-const ChangePasswordModal = ({ isOpen, onClose }: ChangePasswordModalProps) => {
+const ChangePassword: React.FC<ChangePasswordProps> = ({ isOpen, onClose }) => {
 
     const [currentPassword, setCurrentPassword] = useState('');
     const [newPassword, setNewPassword] = useState('');
@@ -24,29 +20,19 @@ const ChangePasswordModal = ({ isOpen, onClose }: ChangePasswordModalProps) => {
             return;
         }
 
-        const res = await fetch('/api/changePassword', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            credentials: 'include',
-            body: JSON.stringify({ currentPassword, newPassword }),
-        });
+        const result = await changePassword(currentPassword, newPassword);
 
-        const data = await res.json();
+        setMessage(result.message);
 
-        if (res.ok) {
-
-            setMessage('Hasło zmienione pomyślnie.');
+        if (result.success) {
             setCurrentPassword('');
             setNewPassword('');
             setConfirmPassword('');
-        } else {
-
-            setMessage(data.message || 'Wystąpił błąd podczas zmiany hasła.');
         }
     };
 
     return (
-        
+
         <Modal isOpen={isOpen} onClose={onClose}>
             <h2 className="text-2xl mb-6 font-semibold text-center">Zmień Hasło</h2>
             {message && <p className="mb-4 text-center text-red-500">{message}</p>}
@@ -92,4 +78,4 @@ const ChangePasswordModal = ({ isOpen, onClose }: ChangePasswordModalProps) => {
     );
 }
 
-export default ChangePasswordModal;
+export default ChangePassword;

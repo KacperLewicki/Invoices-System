@@ -1,28 +1,14 @@
 'use client';
 
 import React, { createContext, useState, useEffect, useContext } from 'react';
-
-export interface User {
-
-  id: number;
-  email: string;
-  name: string;
-}
-
-interface AuthContextProps {
-
-  user: User | null;
-  loading: boolean;
-  login: (email: string, password: string) => Promise<void>;
-  logout: () => Promise<void>;
-}
+import { User, AuthContextProps } from '../../types/typesInvoice';
 
 const AuthContext = createContext<AuthContextProps>({
 
   user: null,
   loading: true,
-  login: async () => {},
-  logout: async () => {},
+  login: async () => { },
+  logout: async () => { },
 });
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
@@ -36,7 +22,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
       const res = await fetch('/api/user', {
         method: 'GET',
-        headers: { 'Content-Type': 'application/json'},
+        headers: { 'Content-Type': 'application/json' },
         credentials: 'include',
       });
 
@@ -44,7 +30,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
         const data = await res.json();
         setUser(data.user);
-  
+
       } else {
 
         setUser(null);
@@ -87,7 +73,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   };
 
   return (
-    
+
     <AuthContext.Provider value={{ user, loading, login, logout }}>
       {children}
     </AuthContext.Provider>

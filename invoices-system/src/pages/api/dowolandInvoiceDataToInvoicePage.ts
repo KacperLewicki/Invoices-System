@@ -1,4 +1,4 @@
-import connection from './lib/db';
+import pool from './lib/db';
 import { NextApiRequest, NextApiResponse } from 'next';
 import { RowDataPacket } from 'mysql2';
 
@@ -6,7 +6,7 @@ interface Invoice extends RowDataPacket {
 
   id: number;
   nameInvoice: string;
-  [key: string]: any; 
+  [key: string]: any;
 }
 
 interface InvoiceItem extends RowDataPacket {
@@ -20,13 +20,13 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
   try {
 
-    const [invoices]: [Invoice[], any] = await connection.query<Invoice[]>(
+    const [invoices]: [Invoice[], any] = await pool.query<Invoice[]>(
       'SELECT * FROM invoicemanual'
     );
 
     const invoiceData = await Promise.all(
       invoices.map(async (invoice) => {
-        const [items]: [InvoiceItem[], any] = await connection.query<InvoiceItem[]>(
+        const [items]: [InvoiceItem[], any] = await pool.query<InvoiceItem[]>(
           'SELECT * FROM invoiceitem WHERE nameInvoice = ?',
           [invoice.nameInvoice]
         );
