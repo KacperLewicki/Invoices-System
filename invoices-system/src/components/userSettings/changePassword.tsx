@@ -33,7 +33,7 @@ const ChangePassword: React.FC<ChangePasswordProps> = ({ isOpen, onClose }) => {
 
     return (
 
-        <Modal isOpen={isOpen} onClose={onClose}>
+        <Modal isOpen={isOpen} onClose={onClose} >
             <h2 className="text-2xl mb-6 font-semibold text-center">Zmień Hasło</h2>
             {message && <p className="mb-4 text-center text-red-500">{message}</p>}
             <div className="space-y-4">
