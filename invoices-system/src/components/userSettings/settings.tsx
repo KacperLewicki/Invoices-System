@@ -5,7 +5,6 @@ import Modal from '../modal/modal_popup';
 import ChangePassword from './changePassword';
 
 interface SettingsModalProps {
-
     isOpen: boolean;
     onClose: () => void;
 }
@@ -14,12 +13,15 @@ const Settings = ({ isOpen, onClose }: SettingsModalProps) => {
 
     const [isChangePasswordOpen, setIsChangePasswordOpen] = useState(false);
 
-    const openChangePassword = () => { setIsChangePasswordOpen(true) };
+    const openChangePassword = () => {
+        setIsChangePasswordOpen(true);
+    };
 
-    const closeChangePassword = () => { setIsChangePasswordOpen(false) };
+    const closeChangePassword = () => {
+        setIsChangePasswordOpen(false);
+    };
 
     return (
-
         <>
             <Modal isOpen={isOpen} onClose={onClose}>
                 <h2 className="text-2xl mb-6 font-semibold text-center">Ustawienia</h2>
@@ -39,5 +41,6 @@ const Settings = ({ isOpen, onClose }: SettingsModalProps) => {
             />
         </>
     );
-}
+};
+
 export default Settings;
