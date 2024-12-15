@@ -1,8 +1,8 @@
 import React from 'react';
-import Navigation from '@/components/navigation/navigation';
+import Navigation from '../components/navigation/navigation';
 import "../globalCSS/globals.css";
-import { InvoiceProvider } from '../hooks/invoiceContext';
-import { AuthProvider } from '../components/context/autoContext';
+import { InvoiceProvider } from '../hooks/context/invoiceContext';
+import { AuthProvider } from '../hooks/context/authContext';
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
 

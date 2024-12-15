@@ -1,44 +1,11 @@
 import moment from 'moment';
-
-interface InvoiceData {
-
-  nameInvoice: string;
-  dataInvoice: string;
-  dataInvoiceSell: string;
-  dueDate: string;
-  paymentTerm: string;
-  comments: string;
-  seller: string;
-  description: string;
-  summaryNetto: number;
-  summaryVat: number;
-  summaryBrutto: number;
-  exchangeRate: number;
-  paymentMethod: string;
-  effectiveMonth: string;
-  documentStatus: string;
-  currency: string;
-  status: string;
-  customerName: string;
-}
-
-interface ItemData {
-
-  nameItem: string;
-  quantity: number;
-  vatItem: number;
-  nettoItem: number;
-  bruttoItem: number;
-  comment: string;
-}
+import { InvoiceData, ItemData } from '../../types/typesInvoice';
 
 const checkInvoiceExists = async (invoiceName: string): Promise<boolean> => {
 
   const response = await fetch(`/api/checkInvoiceManualName?nameInvoice=${encodeURIComponent(invoiceName)}`);
 
   if (!response.ok) {
-
-    //console.error(`Nie udało się sprawdzić, czy faktura istnieje: Status ${response.status} - ${response.statusText}`);
 
     throw new Error('Nie udało się sprawdzić, czy faktura istnieje');
   }
@@ -49,13 +16,10 @@ const checkInvoiceExists = async (invoiceName: string): Promise<boolean> => {
 
     throw new Error('Nieprawidłowy format odpowiedzi');
   }
-
   return data.exists;
 };
 
 const saveInvoiceToDatabase = async (invoiceData: InvoiceData, itemsData: ItemData[]): Promise<string> => {
-
-  //console.log('Rozpoczęcie saveInvoiceToDatabase');
 
   const response = await fetch('/api/saveInvoiceManual', {
 
@@ -68,20 +32,13 @@ const saveInvoiceToDatabase = async (invoiceData: InvoiceData, itemsData: ItemDa
       items: itemsData,
     }),
   });
-
-  //console.log('Otrzymano odpowiedź z API');
-
   if (!response.ok) {
 
-    const errorText = await response.text();
-
-    //console.error(`Błąd podczas zapisywania faktury: ${errorText}`);
-
+    await response.text();
     throw new Error('Nie udało się zapisać faktury');
   }
 
   const responseData = await response.json();
-
   return responseData.nameInvoice;
 };
 
@@ -99,6 +56,7 @@ const formatInvoiceDates = (invoiceData: InvoiceData): InvoiceData => {
 };
 
 export {
+
   type InvoiceData,
   type ItemData,
   checkInvoiceExists,

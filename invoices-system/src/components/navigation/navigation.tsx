@@ -2,12 +2,13 @@
 
 import React, { useState } from 'react';
 import Link from 'next/link';
-import AccountInfoModal from '../login/accountInfoModal';
-import SettingsModal from '../login/settingsModal';
-import { useAuth } from '../../components/context/autoContext';
+import AccountInfoModal from '../userSettings/accountInfo';
+import Settings from '../userSettings/settings';
+import { useAuth } from '../../hooks/context/authContext';
 import { usePathname } from 'next/navigation';
 
-export default function Navigation() {
+const Navigation = () => {
+
   const { user, logout } = useAuth();
   const [showMenu, setShowMenu] = useState(false);
   const [isAccountInfoOpen, setIsAccountInfoOpen] = useState(false);
@@ -15,39 +16,23 @@ export default function Navigation() {
 
   const pathname = usePathname();
 
-  const initials = user
-    ? user.name
-      .split(' ')
-      .map((n) => n[0])
-      .join('')
-      .toUpperCase()
-    : '';
+  const initials = user ? user.name.split(' ').map((n) => n[0]).join('').toUpperCase() : '';
 
-  const toggleMenu = () => {
-    setShowMenu(!showMenu);
-  };
+  const toggleMenu = () => { setShowMenu(!showMenu) };
 
-  const handleLogout = async () => {
-    await logout();
-    window.location.href = '/';
-  };
+  const handleLogout = async () => { await logout(), window.location.href = '/home' };
 
-  const openAccountInfo = () => {
-    setShowMenu(false);
-    setIsAccountInfoOpen(true);
-  };
+  const openAccountInfo = () => { setShowMenu(false), setIsAccountInfoOpen(true) };
 
-  const openSettings = () => {
-    setShowMenu(false);
-    setIsSettingsOpen(true);
-  };
+  const openSettings = () => { setShowMenu(false), setIsSettingsOpen(true) };
 
   return (
+
     <>
       <nav className="flex justify-between items-center bg-purple-700 p-4 rounded-lg shadow-lg">
         <ul className="flex space-x-6 text-white font-semibold">
           <li>
-            <Link href="/" className="hover:bg-purple-500 px-3 py-2 rounded-md transition duration-200">
+            <Link href="/home" className="hover:bg-purple-500 px-3 py-2 rounded-md transition duration-200">
               Strona Główna
             </Link>
           </li>
@@ -70,7 +55,7 @@ export default function Navigation() {
                 </Link>
               </li>
               <li>
-                <Link href="/administrator" className="hover:bg-purple-500 px-3 py-2 rounded-md transition duration-200">
+                <Link href="/admin" className="hover:bg-purple-500 px-3 py-2 rounded-md transition duration-200">
                   Administrator
                 </Link>
               </li>
@@ -78,7 +63,7 @@ export default function Navigation() {
           )}
         </ul>
 
-        {!user && pathname === '/' && (
+        {!user && pathname === '/home' && (
           <div>
             <Link href="/login">
               <button className="bg-white text-purple-700 font-semibold py-2 px-4 rounded hover:bg-purple-100 transition duration-200">
@@ -127,7 +112,9 @@ export default function Navigation() {
         onClose={() => setIsAccountInfoOpen(false)}
         user={user}
       />
-      <SettingsModal isOpen={isSettingsOpen} onClose={() => setIsSettingsOpen(false)} />
+      <Settings isOpen={isSettingsOpen} onClose={() => setIsSettingsOpen(false)} />
     </>
   );
 }
+
+export default Navigation;

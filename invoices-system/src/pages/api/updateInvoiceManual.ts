@@ -1,23 +1,6 @@
 import db from './lib/db';
 import { NextApiRequest, NextApiResponse } from 'next';
-
-interface Invoice {
-
-  nameInvoice: string;
-  [key: string]: any;
-
-}
-
-interface InvoiceItem {
-
-  nameItem: string;
-  quantity: number;
-  vatItem: number;
-  nettoItem: number;
-  bruttoItem: number;
-  comment: string;
-
-}
+import { ItemData, Invoice } from '../../types/typesInvoice';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse): Promise<void> {
 
@@ -25,11 +8,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     try {
 
-      const { invoice, items }: { invoice: Invoice; items: InvoiceItem[] } = req.body;
+      const { invoice, items }: { invoice: Invoice; items: ItemData[] } = req.body;
 
       const sqlInvoice = 'INSERT INTO invoicemanual SET ?';
 
-      const [resultInvoice]: any = await db.query(sqlInvoice, invoice);
+      await db.query(sqlInvoice, invoice);
 
       const invoiceName = invoice.nameInvoice;
       const values = items.map(item => [
@@ -48,8 +31,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       res.status(200).send('Invoice and items saved successfully');
 
     } catch (err: any) {
-
-      //console.error('Error:', err);
 
       res.status(500).send('Error saving invoice');
     }

@@ -1,26 +1,20 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import jwt from 'jsonwebtoken';
-import pool from '../../pages/api/lib/db';
-
-const JWT_SECRET = '123456';
+import { jwtVerify } from 'jose';
+import pool from './lib/db';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
 
     const token = req.cookies.token;
-
-    //console.log('Ciasteczka:', req.cookies);
-    //console.log('Token:', token);
+    const NEXT_PUBLIC_SECRET_KEY_ADMINISTRATOR = new TextEncoder().encode(process.env.NEXT_PUBLIC_SECRET_KEY_ADMINISTRATOR);
 
     if (!token) {
 
         return res.status(401).json({ message: 'Nieautoryzowany' });
     }
-
     try {
 
-        const decoded: any = jwt.verify(token, JWT_SECRET);
-
-        const userId = decoded.id;
+        const decoded: any = await jwtVerify(token, NEXT_PUBLIC_SECRET_KEY_ADMINISTRATOR);
+        const userId = decoded.payload.id;
 
         const [rows]: any = await pool.query('SELECT id, email, name FROM login WHERE id = ?', [userId]);
 
@@ -28,14 +22,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
             return res.status(404).json({ message: 'Użytkownik nie znaleziony' });
         }
-
         const user = rows[0];
 
         return res.status(200).json({ user });
 
     } catch (error) {
-
-        //console.error('Błąd weryfikacji tokena:', error);
 
         return res.status(401).json({ message: 'Nieautoryzowany' });
     }

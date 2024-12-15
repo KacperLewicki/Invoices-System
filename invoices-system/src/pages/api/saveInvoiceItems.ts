@@ -1,15 +1,10 @@
 import db from './lib/db';
 import { NextApiRequest, NextApiResponse } from 'next';
+import { ItemData } from '../../types/typesInvoice';
 
-interface InvoiceItem {
+interface Items extends ItemData {
 
   nameInvoice: string;
-  nameItem: string;
-  quantity: number;
-  vatItem: number;
-  nettoItem: number;
-  bruttoItem: number;
-  comment: string;
 }
 
 const queryDb = (sql: string, values: any[]): Promise<any> => {
@@ -28,9 +23,8 @@ export default async function saveInvoiceItems(req: NextApiRequest, res: NextApi
 
     try {
 
-      const itemsData: InvoiceItem[] = req.body;
-
-      const values = itemsData.map(item => [
+      const Items: Items[] = req.body;
+      const values = Items.map(item => [
         item.nameInvoice,
         item.nameItem,
         item.quantity,
@@ -40,8 +34,7 @@ export default async function saveInvoiceItems(req: NextApiRequest, res: NextApi
         item.comment,
       ]);
 
-      const sql ='INSERT INTO invoiceitem (nameInvoice, nameItem, quantity, vatItem, nettoItem, bruttoItem, comment) VALUES ?';
-
+      const sql = 'INSERT INTO invoiceitem (nameInvoice, nameItem, quantity, vatItem, nettoItem, bruttoItem, comment) VALUES ?';
       await queryDb(sql, [values]);
 
       res.status(200).send('Invoice items saved successfully');
@@ -51,7 +44,7 @@ export default async function saveInvoiceItems(req: NextApiRequest, res: NextApi
       res.status(500).send('Error saving invoice items');
     }
   } else {
-    
+
     res.status(405).send('Method not allowed');
   }
 }

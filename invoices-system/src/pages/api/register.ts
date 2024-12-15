@@ -1,5 +1,5 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import pool from '../../pages/api/lib/db';
+import pool from './lib/db';
 import bcrypt from 'bcrypt';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
@@ -7,11 +7,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     if (req.method === 'POST') {
 
         const { name, email, password } = req.body;
-
         try {
 
             const [existingUsers]: any = await pool.query('SELECT * FROM login WHERE email = ?', [email]);
-
             if (existingUsers.length > 0) {
 
                 return res.status(400).json({ message: 'Użytkownik z tym emailem już istnieje' });
@@ -24,12 +22,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                 email,
                 hashedPassword,
             ]);
-
             return res.status(201).json({ message: 'Rejestracja zakończona sukcesem' });
 
         } catch (error) {
 
-            //console.error('Błąd rejestracji:', error);
             return res.status(500).json({ message: 'Błąd serwera' });
         }
     } else {
