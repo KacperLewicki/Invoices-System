@@ -2,9 +2,9 @@
 
 import React from 'react';
 import { useRouter } from 'next/navigation';
-import { useInvoice } from '../../../hooks/context/invoiceContext';
-import "../../../globalCSS/globals.css";
-import { InvoiceData, ItemData } from '../../../types/typesInvoice';
+import { useInvoice } from '../../hooks/context/invoiceContext';
+import "../../globalCSS/globals.css";
+import { InvoiceData, ItemData } from '../../types/typesInvoice';
 
 interface Item_Data extends ItemData {
 
@@ -29,6 +29,7 @@ const Invoices: React.FC = () => {
     };
 
     if (loading) {
+
         return <p className="text-center mt-10 text-lg text-gray-600">Ładowanie danych...</p>;
     }
 
@@ -87,5 +88,4 @@ const Invoices: React.FC = () => {
         </div>
     );
 };
-
 export default Invoices;

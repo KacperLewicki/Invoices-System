@@ -1,8 +1,8 @@
 "use client";
 
 import React, { useState } from 'react'
-import CorrectiveInvoices from '../../components/template/invoiceList/invoiceList_CorrectiveInvoices';
-import Invoices from '../../components/template/invoiceList/invoiceList_Invoices';
+import CorrectiveInvoices from '../../components/invoiceList/correctiveInvoices';
+import Invoices from '../../components/invoiceList/invoices';
 import '../../globalCSS/globals.css';
 
 export default function InvoiceList() {
@@ -41,13 +41,12 @@ export default function InvoiceList() {
         </button>
       </div>
 
-      <div className="w-full max-w-5xl">
+      <div className="max-w-5xl">
         {showInvoices && <Invoices />}
         {showCorrectiveInvoices && <CorrectiveInvoices />}
       </div>
     </div>
   );
-
 }
 
 

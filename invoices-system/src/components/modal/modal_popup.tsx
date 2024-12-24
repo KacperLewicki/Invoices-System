@@ -10,17 +10,13 @@ interface ModalProps {
 }
 
 const Modal = ({ isOpen, onClose, children }: ModalProps) => {
-
+    
     if (!isOpen) return null;
 
     return (
-
-        <div
-            className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 backdrop-blur-sm"
-            onClick={onClose}
-        >
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 backdrop-blur-sm">
             <div
-                className="bg-white rounded-lg shadow-lg w-full max-w-md mx-4 p-6 relative"
+                className="bg-white rounded-lg shadow-lg w-full max-w-5xl mx-4 p-6 relative"
                 onClick={(e) => e.stopPropagation()}
             >
                 <button
@@ -40,5 +36,6 @@ const Modal = ({ isOpen, onClose, children }: ModalProps) => {
             </div>
         </div>
     );
-}
+};
+
 export default Modal;

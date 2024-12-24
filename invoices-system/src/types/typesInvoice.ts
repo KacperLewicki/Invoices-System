@@ -26,8 +26,43 @@ export interface InvoiceData {
     effectiveMonth: string;
     documentStatus: string;
     currency: string;
-    status: string;
+    identyfikator: string;
     customerName: string;
+}
+
+export interface CreditNoteItemData {
+
+    id?: number;
+    creditNoteId?: number;
+    itemName: string;
+    quantity: number;
+    nettoItem: number;
+    vatItem: number;
+    bruttoItem: number;
+}
+
+export interface CreditNoteData {
+
+    creditNote: string;
+    invoiceName: string;
+    dataInvoice: string;
+    dataInvoiceSell: string;
+    dueDate: string;
+    paymentTerm: string;
+    comments: string;
+    seller: string;
+    summaryNetto: number;
+    summaryBrutto: number;
+    summaryVat: number;
+    customerName: string;
+    description: string;
+    exchangeRate: number;
+    paymentMethod: string;
+    effectiveMonth: string;
+    documentStatus: string;
+    identyfikator: string;
+    currency: string;
+    items: CreditNoteItemData[];
 }
 
 export interface Invoice {
@@ -45,9 +80,10 @@ export interface InvoiceContextType {
 
 export interface User {
 
-    id: number;
-    email: string;
+    id: string;
     name: string;
+    email: string;
+    identyfikator: string;
 }
 
 export interface AuthContextProps {
@@ -57,7 +93,6 @@ export interface AuthContextProps {
     login: (email: string, password: string) => Promise<void>;
     logout: () => Promise<void>;
 }
-
 
 export interface ChangePasswordProps {
 

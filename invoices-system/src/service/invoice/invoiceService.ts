@@ -1,9 +1,16 @@
 import moment from 'moment';
 import { InvoiceData, ItemData } from '../../types/typesInvoice';
 
+/**
+ * @function checkInvoiceExists
+ * @description Sprawdza, czy faktura o podanej nazwie istnieje już w bazie danych.
+ * @param {string} invoiceName - Nazwa faktury do sprawdzenia.
+ * @returns {Promise<boolean>} - Zwraca true, jeśli faktura istnieje; false w przeciwnym razie.
+ */
+
 const checkInvoiceExists = async (invoiceName: string): Promise<boolean> => {
 
-  const response = await fetch(`/api/checkInvoiceManualName?nameInvoice=${encodeURIComponent(invoiceName)}`);
+  const response = await fetch(`/api/getNameOfTheLastInvoice?nameInvoice=${encodeURIComponent(invoiceName)}`);
 
   if (!response.ok) {
 
@@ -16,42 +23,67 @@ const checkInvoiceExists = async (invoiceName: string): Promise<boolean> => {
 
     throw new Error('Nieprawidłowy format odpowiedzi');
   }
+
   return data.exists;
 };
 
+/**
+ * @function saveInvoiceToDatabase
+ * @description Zapisuje fakturę oraz jej pozycje do bazy danych.
+ * @param {InvoiceData} invoiceData - Dane faktury.
+ * @param {ItemData[]} itemsData - Lista pozycji faktury.
+ * @returns {Promise<string>} - Zwraca nazwę zapisanej faktury.
+ */
+
 const saveInvoiceToDatabase = async (invoiceData: InvoiceData, itemsData: ItemData[]): Promise<string> => {
 
-  const response = await fetch('/api/saveInvoiceManual', {
+  try {
+    const response = await fetch('/api/postInvoiceManual', {
 
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({
-      invoice: invoiceData,
-      items: itemsData,
-    }),
-  });
-  if (!response.ok) {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${localStorage.getItem('token')}`,
+        'identyfikator': localStorage.getItem('token') || '',
+      },
+      body: JSON.stringify({
+        invoice: invoiceData,
+        items: itemsData,
+      }),
+    });
 
-    await response.text();
+    if (!response.ok) {
+
+      const errorText = await response.text();
+      console.error('Błąd odpowiedzi API:', errorText);
+      throw new Error('Nie udało się zapisać faktury');
+    }
+
+    const responseData = await response.json();
+    return responseData.nameInvoice;
+
+  } catch (error: any) {
+
+    console.error('Wystąpił błąd podczas zapisywania faktury:', error.message);
     throw new Error('Nie udało się zapisać faktury');
   }
-
-  const responseData = await response.json();
-  return responseData.nameInvoice;
 };
+
+/**
+ * @function formatInvoiceDates
+ * @description Formatuje daty faktury do formatu zgodnego z bazą danych.
+ * @param {InvoiceData} invoiceData - Dane faktury z datami do sformatowania.
+ * @returns {InvoiceData} - Faktura z sformatowanymi datami.
+ */
 
 const formatInvoiceDates = (invoiceData: InvoiceData): InvoiceData => {
 
   return {
-
     ...invoiceData,
     dataInvoice: moment(invoiceData.dataInvoice).format('YYYY-MM-DD'),
     dataInvoiceSell: moment(invoiceData.dataInvoiceSell).format('YYYY-MM-DD'),
     dueDate: moment(invoiceData.dueDate).format('YYYY-MM-DD'),
     paymentTerm: moment(invoiceData.paymentTerm).format('YYYY-MM-DD'),
-
   };
 };
 
