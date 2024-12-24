@@ -12,6 +12,7 @@
     "src/pages/api/logout.ts",
     "src/pages/api/changePassword.ts",
     "src/pages/api/user.ts",
+    "src/pages/api/creditNoteSend.ts",
     "middleware.js"
   ]
 }

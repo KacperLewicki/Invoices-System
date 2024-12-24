@@ -7,7 +7,7 @@ import Settings from '../userSettings/settings';
 import { useAuth } from '../../hooks/context/authContext';
 import { usePathname } from 'next/navigation';
 
-const Navigation = () => {
+const Navigation =  () => {
 
   const { user, logout } = useAuth();
   const [showMenu, setShowMenu] = useState(false);
@@ -16,7 +16,7 @@ const Navigation = () => {
 
   const pathname = usePathname();
 
-  const initials = user ? user.name.split(' ').map((n) => n[0]).join('').toUpperCase() : '';
+  const initials = user && typeof user.name === 'string' ? user.name.split(' ').map((n) => n[0]).join('').toUpperCase() : '';
 
   const toggleMenu = () => { setShowMenu(!showMenu) };
 
@@ -27,7 +27,6 @@ const Navigation = () => {
   const openSettings = () => { setShowMenu(false), setIsSettingsOpen(true) };
 
   return (
-
     <>
       <nav className="flex justify-between items-center bg-purple-700 p-4 rounded-lg shadow-lg">
         <ul className="flex space-x-6 text-white font-semibold">

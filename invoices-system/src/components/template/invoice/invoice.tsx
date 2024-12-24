@@ -26,7 +26,7 @@ const Invoice: React.FC = () => {
     effectiveMonth: '',
     documentStatus: 'W trakcie akceptacji',
     currency: 'PLN',
-    status: 'W trakcie akceptacji',
+    identyfikator: '',
     customerName: ''
   });
 
@@ -111,7 +111,7 @@ const Invoice: React.FC = () => {
       effectiveMonth: '',
       documentStatus: '',
       currency: '',
-      status: '',
+      identyfikator: '',
       customerName: ''
     });
 

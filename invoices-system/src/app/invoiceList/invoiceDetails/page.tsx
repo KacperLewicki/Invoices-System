@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import InvoiceDetail_InvoiceList from "../../../components/invoiceDetail/invoiceList_InvoiceDetail";
+import InvoiceDetailManager from "../../../components/invoiceList/invoiceDetail/InvoiceDetailManager";
 
 export default function InvoiceDetail() {
 
@@ -9,7 +9,7 @@ export default function InvoiceDetail() {
 
     <div>
 
-      <InvoiceDetail_InvoiceList />
+      <InvoiceDetailManager />
 
     </div>
   );

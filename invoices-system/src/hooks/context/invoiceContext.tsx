@@ -4,119 +4,167 @@ import React, { createContext, useContext, useState, ReactNode, useEffect } from
 import { InvoiceData, ItemData } from '../../types/typesInvoice';
 import { InvoiceContextType } from '../../types/typesInvoice';
 
+// 📚 **InvoiceContext Hook – Zarządzanie Fakturami**
+
 /**
- * Rozszerzony interfejs dla pojedynczego przedmiotu (item) na fakturze.
- * Dodaje własność `id`, aby móc jednoznacznie identyfikować dany przedmiot.
+ * @module InvoiceContext
+ * @description
+ * Kontekst React do zarządzania stanem faktur w aplikacji.
+ * Obejmuje wybraną fakturę, listę faktur oraz stan ładowania danych.
  */
+
+
+// 🛠️ **Typy i Interfejsy**
+
+/**
+ * @interface Item_Data
+ * @description Rozszerza ItemData o unikalny identyfikator `id`.
+ */
+
 interface Item_Data extends ItemData {
+
     id: number;
 }
 
 /**
- * Rozszerzony interfejs dla pojedynczej faktury.
- * Oprócz typów zdefiniowanych w `InvoiceData`, dodaje pole `id` i tablicę przedmiotów `items`,
- * dzięki czemu możliwe jest zarządzanie zidentyfikowanymi fakturami i ich pozycjami.
+ * @interface Invoice_Data
+ * @description Rozszerza InvoiceData o identyfikator `id` oraz tablicę pozycji `items`.
  */
 interface Invoice_Data extends InvoiceData {
+
     id: number;
     items: Item_Data[];
 }
 
 /**
- * Interfejs rozszerzający `InvoiceContextType` o konkretne pola dla wybranej faktury i listy faktur.
- * `selectedInvoice` reprezentuje aktualnie wybraną fakturę, a `invoices` to tablica pobranych faktur.
+ * @interface Invoice_ContextType
+ * @description Definiuje strukturę kontekstu dla faktur.
  */
+
+
 interface Invoice_ContextType extends InvoiceContextType {
+
     selectedInvoice: Invoice_Data | null;
     setSelectedInvoice: (invoice: Invoice_Data | null) => void;
     invoices: Invoice_Data[];
+    loading: boolean;
+    error: string | null;
+    fetchInvoices: () => Promise<void>;
 }
 
+// 🌐 **Kontekst Faktur**
+
 /**
- * Tworzy kontekst dla faktur, który zostanie wykorzystany w całej aplikacji.
- * Pozwala to na dostęp do wybranej faktury, listy faktur i stanu ładowania,
- * bez konieczności przekazywania ich przez propsy.
+ * Tworzy kontekst dla faktur, umożliwiający globalny dostęp do wybranej faktury,
+ * listy faktur oraz stanu ładowania.
  */
+
 const InvoiceContext = createContext<Invoice_ContextType | undefined>(undefined);
 
 /**
- * Komponent `InvoiceProvider`:
- * 
- * Odpowiada za:
- * - Stan `selectedInvoice` - aktualnie wybrana faktura.
- * - Stan `invoices` - lista wszystkich faktur pobranych z API.
- * - Stan `loading` - wskaźnik procesu pobierania faktur.
- * 
- * Gdy komponent zostaje zamontowany, pobiera dane faktur z endpointu `'/api/dowolandInvoiceDataToInvoicePage'`.
- * Następnie udostępnia te informacje w całej aplikacji poprzez `InvoiceContext`.
+ * @component InvoiceProvider
+ * @description Komponent dostarczający kontekst faktur dla swojej poddrzewa komponentów.
  */
 
 export const InvoiceProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
 
-    // Aktualnie wybrana faktura, domyślnie brak
-
     const [selectedInvoice, setSelectedInvoice] = useState<Invoice_Data | null>(null);
-
-    // Lista wszystkich pobranych faktur
-
     const [invoices, setInvoices] = useState<Invoice_Data[]>([]);
-
-    // Stan ładowania danych
-    
     const [loading, setLoading] = useState<boolean>(true);
+    const [error, setError] = useState<string | null>(null);
+
+    const fetchInvoices = async () => {
+
+        setLoading(true);
+        setError(null);
+    
+        try {
+            const token = localStorage.getItem('token') || '';
+    
+            //console.log('Token:', token);
+    
+            const response = await fetch('/api/getInvoiceData', {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`,
+                    'identyfikator': token,
+                },
+            });
+    
+            //console.log('Nagłówki żądania:', response.headers);
+    
+            if (!response.ok) {
+
+                const errorText = await response.text();
+                throw new Error(`Błąd sieci: ${response.status} - ${errorText}`);
+            }
+    
+            const data = await response.json();
+    
+            if (Array.isArray(data)) {
+
+                setInvoices(data);
+
+            } else {
+                
+            }
+        } catch (error: any) {
+
+            console.error('Błąd podczas pobierania faktur:', error.message);
+            setError(error.message || 'Wystąpił błąd podczas pobierania faktur');
+            setInvoices([]);
+
+        } finally {
+
+            setLoading(false);
+        }
+    };
 
     useEffect(() => {
-
-        /**
-         * Asynchroniczna funkcja pobierająca dane faktur z API.
-         * W przypadku powodzenia zapisuje dane do stanu `invoices`,
-         * w przypadku błędu loguje go i ustawia pustą tablicę faktur.
-         */
-
-        const fetchInvoices = async () => {
-            try {
-                const response = await fetch('/api/dowolandInvoiceDataToInvoicePage');
-                const data = await response.json();
-
-                if (Array.isArray(data)) {
-                    setInvoices(data);
-                } else {
-                    console.error("Oczekiwana tablica, otrzymano:", data);
-                    setInvoices([]);
-                }
-            } catch (error) {
-                console.error('Błąd podczas pobierania faktur:', error);
-                setInvoices([]);
-            } finally {
-                setLoading(false);
-            }
-        };
 
         fetchInvoices();
     }, []);
 
     return (
-        <InvoiceContext.Provider value={{ selectedInvoice, setSelectedInvoice, invoices, loading }}>
+        <InvoiceContext.Provider value={{ selectedInvoice, setSelectedInvoice, invoices, loading, error, fetchInvoices}}>
             {children}
         </InvoiceContext.Provider>
     );
 };
 
-/**
- * Hook `useInvoice`:
- * 
- * Pozwala na pobranie wartości z `InvoiceContext`. Jeśli hook zostanie wywołany
- * poza komponentem otoczonym `InvoiceProvider`, rzuci błąd, zapewniając
- * integralność kontekstu i zapobiegając nieprawidłowemu użyciu.
- * 
- * @throws {Error} Gdy hook jest używany poza `InvoiceProvider`.
- * @returns {Invoice_ContextType} Obiekt zawierający aktualnie wybraną fakturę, funkcję do jej zmiany, listę faktur oraz stan ładowania.
- */
 
+// 🪝 **Hook useInvoice**
+
+
+/**
+ * @function useInvoice
+ * @description Hook dostarczający dostęp do kontekstu faktur.
+ */
 export const useInvoice = (): Invoice_ContextType => {
+
     const context = useContext(InvoiceContext);
+
     if (!context) {
+        
         throw new Error('useInvoice must be used within an InvoiceProvider');
     }
     return context;
 };
+
+
+// 📌 **Podsumowanie**
+
+
+/**
+ * - **InvoiceProvider**: Zarządza stanem faktur i dostarcza dane przez kontekst.
+ * - **useInvoice**: Hook do pobierania danych z kontekstu.
+ * - **selectedInvoice**: Aktualnie wybrana faktura.
+ * - **invoices**: Lista faktur.
+ * - **loading**: Wskaźnik ładowania.
+ * - **error**: Komunikat błędu w przypadku problemów z API.
+ * 
+ * 🔄 Dane są automatycznie pobierane przy montowaniu komponentu.
+ * 🛡️ Zapewnia integralność kontekstu dzięki walidacji w `useInvoice`.
+ * 🛡️ Dodatkowe zabezpieczenie przed pustymi obiektami, `null` i błędnymi odpowiedziami API.
+ */
