@@ -106,7 +106,7 @@ const Invoice: React.FC = () => {
       summaryNetto: 0,
       summaryVat: 0,
       summaryBrutto: 0,
-      exchangeRate: 0,
+      exchangeRate: 1,
       paymentMethod: '',
       effectiveMonth: '',
       documentStatus: '',
