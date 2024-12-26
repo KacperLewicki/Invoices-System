@@ -3,10 +3,13 @@
 import React, { useState } from 'react';
 import { checkInvoiceExists, saveInvoiceToDatabase, formatInvoiceDates } from '../../../service/invoice/invoiceService';
 import { InvoiceData, ItemData } from '../../../types/typesInvoice';
+import { useInvoice } from '../../../hooks/context/invoiceContext';
 
 import "../../../globalCSS/globals.css";
 
 const Invoice: React.FC = () => {
+
+  const { fetchInvoices, fetchCreditNotes } = useInvoice();
 
   const [formData, setFormData] = useState<InvoiceData>({
 
@@ -82,6 +85,9 @@ const Invoice: React.FC = () => {
       const generatedInvoiceName = await saveInvoiceToDatabase(formattedData, items);
 
       setFormData({ ...formData, nameInvoice: generatedInvoiceName });
+
+      await fetchInvoices();
+      await fetchCreditNotes();
 
       alert(`Faktura ${generatedInvoiceName} została zapisana pomyślnie`);
 
