@@ -8,7 +8,7 @@ export const changePassword = async (
 
     currentPassword: string,
     newPassword: string
-    
+
 ): Promise<ChangePasswordResponse> => {
 
     try {

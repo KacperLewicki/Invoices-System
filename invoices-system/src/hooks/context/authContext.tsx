@@ -99,7 +99,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       if (parsedUser?.identyfikator) {
 
         axios.defaults.headers.common['identyfikator'] = parsedUser.identyfikator;
-        
+
       } else {
 
         console.warn('Brak identyfikatora w danych użytkownika');
@@ -151,24 +151,24 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const logout = async () => {
 
     try {
-     
+
       await axios.post('/api/logout');
 
       localStorage.removeItem('token');
       localStorage.removeItem('user');
       setToken(null);
       setUser(null);
-  
+
       delete axios.defaults.headers.common['Authorization'];
       delete axios.defaults.headers.common['identyfikator'];
-  
+
     } catch (error) {
 
       //console.error('Błąd podczas wylogowywania:', error);
-      
+
     }
   };
-  
+
 
 
   // 📦 **Zwracanie Kontekstu**

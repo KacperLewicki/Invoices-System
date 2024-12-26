@@ -45,9 +45,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       return;
     }
 
- 
+
     // 🛠️ **Zapytanie do Bazy Danych**
-  
+
     try {
 
       /**
@@ -67,9 +67,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
       const exists = result[0].count > 0;
 
- 
+
       // ✅ **Zwrócenie Odpowiedzi**
-  
+
       /**
        * Jeśli faktura istnieje, zwracamy `exists: true`.
        * Jeśli nie istnieje, zwracamy `exists: false`.
@@ -80,7 +80,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     } catch (error) {
 
       // ❌ **Obsługa Błędów Bazy Danych**
-  
+
       console.error('Database query error:', error);
       res.status(500).json({ error: 'Internal server error' });
 
@@ -93,7 +93,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     /**
      * Jeśli metoda żądania nie jest `GET`, zwracamy błąd 405.
      */
-    
+
     res.status(405).json({ error: 'Method not allowed' });
   }
 }

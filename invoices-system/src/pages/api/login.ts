@@ -126,7 +126,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     });
 
   } catch (error) {
-   
+
     // ❌ **Obsługa Błędów**
 
     console.error('Błąd logowania użytkownika:', error);

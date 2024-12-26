@@ -27,7 +27,7 @@ export const fetchInvoices = async (): Promise<InvoiceData[]> => {
 };
 
 export const fetchInvoiceData = (invoice: any): CreditNoteData | null => {
-    
+
     if (!invoice) return null;
 
     return {
@@ -71,7 +71,7 @@ export const calculateTotals = (items: any[]) => {
 
 
 export const sendCreditNote = async (creditNoteData: CreditNoteData) => {
-    
+
     const response = await axios.post('/api/postInvoiceCreditNote', creditNoteData);
     return response.data;
 };

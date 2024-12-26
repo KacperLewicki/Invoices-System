@@ -45,7 +45,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     } catch (error) {
 
         // Logowanie błędu do konsoli serwera
-        
+
         console.error('Database Error:', error);
         return res.status(500).json({ error: 'Internal Server Error' });
     }

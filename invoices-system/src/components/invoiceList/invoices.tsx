@@ -89,12 +89,12 @@ const Invoices: React.FC = () => {
                                     <td className="px-4 py-4 text-sm border border-gray-200 text-center">
                                         <span
                                             className={`px-3 py-1 inline-flex text-xs font-semibold rounded-full ${invoice.documentStatus === 'Opłacona - Gotowa faktura'
-                                                    ? 'bg-green-200 text-green-800'
-                                                    : invoice.documentStatus === 'Do poprawy'
-                                                        ? 'bg-red-200 text-red-800'
-                                                        : invoice.documentStatus === 'W trakcie akceptacji'
-                                                            ? 'bg-yellow-200 text-yellow-800'
-                                                            : 'bg-orange-100 text-orange-600'
+                                                ? 'bg-green-200 text-green-800'
+                                                : invoice.documentStatus === 'Do poprawy'
+                                                    ? 'bg-red-200 text-red-800'
+                                                    : invoice.documentStatus === 'W trakcie akceptacji'
+                                                        ? 'bg-yellow-200 text-yellow-800'
+                                                        : 'bg-orange-100 text-orange-600'
                                                 }`}>
                                             {invoice.documentStatus}
                                         </span>

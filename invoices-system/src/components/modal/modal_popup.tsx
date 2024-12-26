@@ -10,7 +10,7 @@ interface ModalProps {
 }
 
 const Modal = ({ isOpen, onClose, children }: ModalProps) => {
-    
+
     if (!isOpen) return null;
 
     return (

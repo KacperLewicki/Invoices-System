@@ -22,11 +22,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     }
 
     try {
-       
+
         // 🛡️ **Weryfikacja i Pobranie Identyfikatora**
-    
+
         const identyfikatorHeader = req.headers['identyfikator'];
-       
+
         const identyfikator = Array.isArray(identyfikatorHeader) ? identyfikatorHeader[0] : identyfikatorHeader;
 
         if (!identyfikator) {
@@ -34,9 +34,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             return res.status(400).json({ error: 'Brak identyfikatora w nagłówku' });
         }
 
-    
+
         // 📄 **Weryfikacja Danych Faktury i Pozycji**
-      
+
         const { invoice, items }: { invoice: InvoiceData; items: ItemData[] } = req.body;
 
         if (!invoice || !items || !Array.isArray(items)) {
@@ -47,7 +47,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         const db = connection;
 
         // 🔢 **Generowanie Numeru Faktury**
-    
+
         const getLastInvoiceQuery = 'SELECT nameInvoice FROM invoicemanual ORDER BY id DESC LIMIT 1';
         const [lastInvoiceResult]: [RowDataPacket[], any] = await db.execute(getLastInvoiceQuery);
 
@@ -65,7 +65,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         const generatedNameInvoice = `NB/24/${newInvoiceNumberStr}`;
         invoice.nameInvoice = generatedNameInvoice;
 
-    
+
         // 📝 **Przygotowanie Danych Faktury**
 
         const validInvoiceFields: InvoiceData = {
@@ -83,9 +83,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             }
         }
 
-      
+
         // 💾 **Zapis Faktury do Bazy Danych**
-   
+
         const fields = Object.keys(validInvoiceFields);
         const placeholders = fields.map(() => '?').join(', ');
         const values = Object.values(validInvoiceFields);
@@ -95,7 +95,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         await db.execute(saveInvoiceQuery, values);
 
         // 📦 **Zapis Pozycji Faktury do Bazy Danych**
-       
+
         if (items.length > 0) {
 
             const itemsValues = items.map(item => [
@@ -118,7 +118,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         }
 
         // ✅ **Zwrócenie Odpowiedzi**
-     
+
         res.status(200).json({ nameInvoice: invoice.nameInvoice });
 
     } catch (error: any) {

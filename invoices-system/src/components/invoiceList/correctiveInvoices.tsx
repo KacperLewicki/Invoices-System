@@ -86,8 +86,8 @@ const CreditNotes: React.FC = () => {
                                     <td className="px-4 py-4 text-sm border border-gray-200 text-center">
                                         <span
                                             className={`px-3 py-1 inline-flex text-xs font-semibold rounded-full ${creditNote.documentStatus === 'Poprawka zatwierdzona - opłacona - gotowa faktura'
-                                                    ? 'bg-green-200 text-green-800'
-                                                    : 'bg-yellow-200 text-yellow-800'
+                                                ? 'bg-green-200 text-green-800'
+                                                : 'bg-yellow-200 text-yellow-800'
                                                 }`}>
                                             {creditNote.documentStatus}
                                         </span>

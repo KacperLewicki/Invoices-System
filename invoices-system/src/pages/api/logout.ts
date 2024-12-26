@@ -20,6 +20,6 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
 
 
   // ✅ **Zwrócenie Odpowiedzi Sukcesu**
- 
+
   return res.status(200).json({ message: 'Wylogowano pomyślnie' });
 }

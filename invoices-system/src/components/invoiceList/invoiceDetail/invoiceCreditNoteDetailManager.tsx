@@ -16,16 +16,16 @@ const CreditNoteDetails: React.FC = () => {
     return (
 
         <div className="flex flex-col lg:flex-row gap-6 py-10 px-4">
-       
+
             <div className="flex flex-col items-start">
                 <button className="bg-purple-800 text-white py-2 px-6 rounded-lg shadow-md hover:bg-purple-900 mb-4">
                     Wygeneruj PDF Faktury
                 </button>
             </div>
 
-    
+
             <div className="w-full max-w-7xl bg-white p-8 shadow-lg rounded-lg border border-gray-200">
-            
+
                 <header className="border-b border-gray-300 pb-4 mb-4 flex justify-between items-center">
                     <h1 className="text-3xl font-bold text-purple-700">
                         Nota Kredytowa: {creditNote.creditNote}
@@ -33,8 +33,8 @@ const CreditNoteDetails: React.FC = () => {
                     <p className="text-lg text-gray-700"> Status:{" "}
                         <span
                             className={`px-3 py-1 inline-flex text-xs font-semibold rounded-full ${creditNote.documentStatus === "Poprawka zatwierdzona - opłacona - gotowa faktura"
-                                    ? "bg-green-200 text-green-800"
-                                    : "bg-green-200 text-green-800"
+                                ? "bg-green-200 text-green-800"
+                                : "bg-green-200 text-green-800"
                                 }`}>
                             {creditNote.documentStatus}
                         </span>
