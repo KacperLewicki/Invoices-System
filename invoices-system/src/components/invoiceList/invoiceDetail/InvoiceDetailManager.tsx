@@ -8,13 +8,11 @@ import { fetchInvoiceData, calculateTotals, sendCreditNote } from "../../../serv
 
 const InvoiceDetailManager: React.FC = () => {
 
-    const { selectedInvoice: invoice } = useInvoice();
+    const { selectedInvoice: invoice, fetchInvoices, fetchCreditNotes } = useInvoice();
     const [showComment, setShowComment] = useState(false);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [creditNoteData, setCreditNoteData] = useState<CreditNoteData | null>(null);
-
     const [creditNoteItems, setCreditNoteItems] = useState<CreditNoteItemData[]>([]);
-
     const [showConfirmation, setShowConfirmation] = useState(false);
 
     useEffect(() => {
@@ -25,11 +23,40 @@ const InvoiceDetailManager: React.FC = () => {
             setCreditNoteData(data);
             setCreditNoteItems(data?.items || []);
         }
-    }, [invoice]);
 
+    }, [invoice]);
 
     const createCreditNote = () => setIsModalOpen(true);
     const closeModal = () => setIsModalOpen(false);
+
+    const calculateTotals = (items: any[]) => {
+
+        let summaryNetto = 0;
+        let summaryVat = 0;
+        let summaryBrutto = 0;
+
+        items.forEach((item) => {
+
+            const quantity = parseFloat(item.quantity?.toString()) || 1;
+            const netto = parseFloat(item.nettoItem?.toString()) || 0;
+            const vat = parseFloat(item.vatItem?.toString()) || 0;
+
+            const totalNetto = netto * quantity;
+            const totalBrutto = totalNetto + (totalNetto * vat / 100);
+            const totalVat = totalBrutto - totalNetto;
+
+            summaryNetto += parseFloat(totalNetto.toFixed(2));
+            summaryBrutto += parseFloat(totalBrutto.toFixed(2));
+            summaryVat += parseFloat(totalVat.toFixed(2));
+        });
+
+        return {
+
+            summaryNetto: parseFloat(summaryNetto.toFixed(2)),
+            summaryVat: parseFloat(summaryVat.toFixed(2)),
+            summaryBrutto: parseFloat(summaryBrutto.toFixed(2)),
+        };
+    };
 
     const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
 
@@ -49,14 +76,27 @@ const InvoiceDetailManager: React.FC = () => {
             [name]: name === "itemName" ? value : parseFloat(value) || 0,
         };
 
-        if (name === "nettoItem" || name === "vatItem") {
+        const currentItem = updatedItems[index];
+        const quantity = parseFloat(currentItem.quantity?.toString()) || 1;
+        const netto = parseFloat(currentItem.nettoItem?.toString()) || 0;
+        const vat = parseFloat(currentItem.vatItem?.toString()) || 0;
 
-            const netto = updatedItems[index].nettoItem || 0;
-            const vat = updatedItems[index].vatItem || 0;
-            updatedItems[index].bruttoItem = netto + (netto * vat) / 100;
+
+        if (netto > 0 && quantity > 0) {
+
+            const totalNetto = netto * quantity;
+            const totalVat = (totalNetto * vat) / 100;
+            const totalBrutto = totalNetto + totalVat;
+
+            currentItem.bruttoItem = parseFloat(totalBrutto.toFixed(2));
+        } else {
+            currentItem.bruttoItem = 0;
         }
 
+        updatedItems[index] = currentItem;
+
         setCreditNoteItems(updatedItems);
+
         const totals = calculateTotals(updatedItems);
         setCreditNoteData((prevData) => prevData ? { ...prevData, ...totals } : null);
     };
@@ -114,7 +154,6 @@ const InvoiceDetailManager: React.FC = () => {
                 return false;
             }
         }
-
         return true;
     };
 
@@ -127,7 +166,6 @@ const InvoiceDetailManager: React.FC = () => {
                 console.warn('Formularz zawiera błędy.');
                 return;
             }
-
             if (creditNoteData) {
 
                 const itemsToSend = creditNoteItems.map(
@@ -139,12 +177,10 @@ const InvoiceDetailManager: React.FC = () => {
                         bruttoItem,
                     })
                 );
-
                 await sendCreditNote({
                     ...creditNoteData,
                     items: itemsToSend,
                 });
-
                 if (invoice) {
 
                     await fetch('/api/updateInvoiceStatus', {
@@ -156,6 +192,8 @@ const InvoiceDetailManager: React.FC = () => {
                         body: JSON.stringify({ invoiceName: invoice.nameInvoice }),
                     });
                 }
+                await fetchInvoices();
+                await fetchCreditNotes();
 
                 setIsModalOpen(false);
                 setShowConfirmation(true);
@@ -165,6 +203,11 @@ const InvoiceDetailManager: React.FC = () => {
             console.error('Error creating credit note:', error);
             alert('Wystąpił błąd podczas przesyłania poprawionej faktury.');
         }
+    };
+
+    const handleBackToInvoiceList = () => {
+
+        window.location.href = '/invoiceList';
     };
 
     if (!invoice) return <p>Faktura nie znaleziona</p>;
@@ -178,7 +221,7 @@ const InvoiceDetailManager: React.FC = () => {
                         <p className="mb-4 text-center">Twoja poprawiona faktura jest w zakładce Poprawione Faktury i jest w oczekiwaniu na akceptację przez administratora</p>
                         <div className="flex justify-center">
                             <button
-                                onClick={() => setShowConfirmation(false)}
+                                onClick={handleBackToInvoiceList}
                                 className="bg-purple-800 text-white py-2 px-6 rounded-lg shadow-md hover:bg-purple-900">
                                 Powrót do widoku faktury
                             </button>
