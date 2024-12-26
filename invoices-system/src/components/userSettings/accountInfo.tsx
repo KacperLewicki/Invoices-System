@@ -11,7 +11,9 @@ interface AccountInfoModalProps {
 }
 
 const AccountInfoModal = ({ isOpen, onClose, user }: AccountInfoModalProps) => {
+
   return (
+    
     <Modal isOpen={isOpen} onClose={onClose}>
       <div className="bg-white p-6 rounded-lg max-w-lg mx-auto">
         <div className="flex justify-between items-center mb-6">

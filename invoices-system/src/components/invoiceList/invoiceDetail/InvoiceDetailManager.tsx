@@ -419,8 +419,7 @@ const InvoiceDetailManager: React.FC = () => {
                                             setCreditNoteItems([...creditNoteItems, newItem]);
                                             calculateTotals([...creditNoteItems, newItem]);
                                         }}
-                                        className="bg-purple-600 text-white py-1 px-3 rounded hover:bg-green-700"
-                                    >
+                                        className="bg-purple-600 text-white py-1 px-3 rounded hover:bg-green-700">
                                         Dodaj pozycję
                                     </button>
                                 </div>
@@ -491,8 +490,7 @@ const InvoiceDetailManager: React.FC = () => {
                                                 <td className="px-4 py-2 border border-gray-200 text-right">
                                                     <button
                                                         onClick={() => handleItemDelete(index)}
-                                                        className="bg-red-600 text-white px-3 py-1 rounded hover:bg-red-700"
-                                                    >
+                                                        className="bg-red-600 text-white px-3 py-1 rounded hover:bg-red-700">
                                                         Usuń
                                                     </button>
                                                 </td>

@@ -91,8 +91,7 @@ const ApprovedInvoices: React.FC = () => {
                                 <tr
                                     key={`${item.type}-${item.id}`}
                                     onClick={() => handleRowClick(item)}
-                                    className="cursor-pointer hover:bg-purple-100 transition duration-200 ease-in-out"
-                                >
+                                    className="cursor-pointer hover:bg-purple-100 transition duration-200 ease-in-out">
                                     <td className="px-4 py-4 text-sm text-center border border-gray-200">{index + 1}</td>
                                     <td className="px-4 py-4 text-sm font-medium border border-gray-200">
                                         {item.type === 'invoice' ? item.nameInvoice : item.creditNote}

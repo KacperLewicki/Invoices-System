@@ -27,8 +27,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         const query = `
             UPDATE invoicemanual 
             SET documentStatus = 'Przekazane do poprawy'
-            WHERE nameInvoice = ?;
-        `;
+            WHERE nameInvoice = ?;`;
 
         const [result]: any = await pool.execute(query, [invoiceName]);
 

@@ -69,8 +69,7 @@ const ChangePassword: React.FC<ChangePasswordProps> = ({ isOpen, onClose }) => {
                 </div>
                 <button
                     onClick={handleChangePassword}
-                    className="w-full bg-purple-700 text-white py-2 rounded hover:bg-purple-600 transition duration-200 mt-4"
-                >
+                    className="w-full bg-purple-700 text-white py-2 rounded hover:bg-purple-600 transition duration-200 mt-4">
                     Zmień Hasło
                 </button>
             </div>

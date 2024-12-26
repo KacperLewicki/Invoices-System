@@ -40,20 +40,17 @@ export default function InvoiceList() {
       <div className="flex space-x-4 mb-8">
         <button
           className="bg-purple-600 text-white rounded-lg py-2 px-6 hover:bg-purple-700 transition duration-300 ease-in-out transform hover:scale-105"
-          onClick={showApprovedInvoice}
-        >
+          onClick={showApprovedInvoice}>
           Zatwierdzoen Faktury
         </button>
         <button
           className="bg-purple-600 text-white rounded-lg py-2 px-6 hover:bg-purple-700 transition duration-300 ease-in-out transform hover:scale-105"
-          onClick={showInvoice}
-        >
+          onClick={showInvoice}>
           Stworzone Faktury
         </button>
         <button
           className="bg-purple-600 text-white rounded-lg py-2 px-6 hover:bg-purple-700 transition duration-300 ease-in-out transform hover:scale-105"
-          onClick={showCreditNote}
-        >
+          onClick={showCreditNote}>
           Poprawione Faktury
         </button>
 

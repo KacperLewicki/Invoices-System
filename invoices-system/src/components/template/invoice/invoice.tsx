@@ -195,8 +195,7 @@ const Invoice: React.FC = () => {
             <button
               type="button"
               onClick={handleNewForm}
-              className="bg-purple-600 text-white rounded-lg py-2 px-4 hover:bg-purple-700 transition duration-300 ease-in-out transform hover:shadow-md"
-            >
+              className="bg-purple-600 text-white rounded-lg py-2 px-4 hover:bg-purple-700 transition duration-300 ease-in-out transform hover:shadow-md">
               Nowy Formularz
             </button>
           </div>
@@ -257,14 +256,13 @@ const Invoice: React.FC = () => {
                 name="description"
                 placeholder="Opis"
                 value={formData.description}
-                onChange={handleChange}
-              ></textarea>
+                onChange={handleChange}>
+              </textarea>
               <select
                 className="border border-purple-300 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-purple-500"
                 name="effectiveMonth"
                 value={formData.effectiveMonth}
-                onChange={handleChange}
-              >
+                onChange={handleChange}>
                 <option hidden>Obowiązujący miesiąc</option>
                 <option>Styczeń</option>
                 <option>Luty</option>
@@ -335,8 +333,7 @@ const Invoice: React.FC = () => {
                 <button
                   type="button"
                   onClick={addItem}
-                  className="bg-purple-600 text-white rounded-lg py-2 px-6 hover:bg-purple-700 transition duration-300 ease-in-out transform hover:scale-105"
-                >
+                  className="bg-purple-600 text-white rounded-lg py-2 px-6 hover:bg-purple-700 transition duration-300 ease-in-out transform hover:scale-105">
                   Dodaj Przedmiot
                 </button>
               </div>
@@ -415,8 +412,7 @@ const Invoice: React.FC = () => {
                 className="border border-purple-300 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-purple-500"
                 name="currency"
                 value={formData.currency}
-                onChange={handleChange}
-              >
+                onChange={handleChange}>
                 <option hidden>Wybierz Walutę</option>
                 <option>PLN</option>
                 <option>EUR</option>
@@ -449,7 +445,6 @@ const Invoice: React.FC = () => {
                 value={formData.paymentMethod}
                 onChange={handleChange}
                 readOnly
-
               />
               <input
                 className="border border-purple-300 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-purple-500"
@@ -465,8 +460,7 @@ const Invoice: React.FC = () => {
                 className="border border-purple-300 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-purple-500"
                 name="documentStatus"
                 value={formData.documentStatus}
-                onChange={handleChange}
-              >
+                onChange={handleChange}>
                 <option hidden>Status dokumentu</option>
                 <option>W trakcie akceptacji</option>
                 <option>Opłacona - Gotowa faktura</option>
@@ -497,8 +491,7 @@ const Invoice: React.FC = () => {
             {!formData.nameInvoice && (
               <button
                 type="submit"
-                className="bg-purple-600 text-white rounded-lg py-2 px-6 hover:bg-purple-700 transition duration-300 ease-in-out transform hover:scale-105"
-              >
+                className="bg-purple-600 text-white rounded-lg py-2 px-6 hover:bg-purple-700 transition duration-300 ease-in-out transform hover:scale-105">
                 Wyślij Fakturę do weryfikacji
               </button>)}
           </div>
