@@ -4,7 +4,7 @@ import React, { useState, useEffect, ChangeEvent } from "react";
 import { useInvoice } from "../../../hooks/context/invoiceContext";
 import Modal from "../../modal/modal_popup";
 import { CreditNoteData, CreditNoteItemData } from "../../../types/typesInvoice";
-import { fetchInvoiceData, calculateTotals, sendCreditNote } from "../../../service/invoiceList/invoiceListService";
+import { fetchInvoiceData, sendCreditNote } from "../../../service/invoiceList/invoiceListService";
 
 const InvoiceDetailManager: React.FC = () => {
 
