@@ -21,7 +21,7 @@ const Invoice: React.FC = () => {
     summaryNetto: 0,
     summaryVat: 0,
     summaryBrutto: 0,
-    exchangeRate: 0,
+    exchangeRate: 1,
     paymentMethod: 'Bank Transfer',
     effectiveMonth: '',
     documentStatus: 'W trakcie akceptacji',
@@ -448,14 +448,18 @@ const Invoice: React.FC = () => {
                 placeholder="Metoda płatności"
                 value={formData.paymentMethod}
                 onChange={handleChange}
+                readOnly
+
               />
               <input
                 className="border border-purple-300 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-purple-500"
                 name="exchangeRate"
+                title='Kurs'
                 type="number"
                 placeholder="Kurs"
                 value={formData.exchangeRate}
                 onChange={handleChange}
+                readOnly
               />
               <select
                 className="border border-purple-300 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-purple-500"
@@ -465,7 +469,7 @@ const Invoice: React.FC = () => {
               >
                 <option hidden>Status dokumentu</option>
                 <option>W trakcie akceptacji</option>
-                <option>Opłacone</option>
+                <option>Opłacona - Gotowa faktura</option>
                 <option>Częściowo opłacone</option>
                 <option>Do poprawy</option>
               </select>

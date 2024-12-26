@@ -7,7 +7,7 @@ import Settings from '../userSettings/settings';
 import { useAuth } from '../../hooks/context/authContext';
 import { usePathname } from 'next/navigation';
 
-const Navigation =  () => {
+const Navigation = () => {
 
   const { user, logout } = useAuth();
   const [showMenu, setShowMenu] = useState(false);
@@ -76,34 +76,33 @@ const Navigation =  () => {
           <div className="relative">
             <button
               onClick={toggleMenu}
-              className="w-10 h-10 bg-white text-purple-700 rounded-full flex items-center justify-center"
-            >
+              className="w-10 h-10 bg-white text-purple-700 rounded-full flex items-center justify-center">
               {initials}
             </button>
             {showMenu && (
-              <div className="absolute right-0 mt-2 w-48 bg-white rounded shadow-lg">
+              <div
+                className="absolute right-0 mt-2 w-48 bg-white rounded shadow-lg z-50"
+                style={{ zIndex: 9999 }}>
                 <button
                   onClick={openAccountInfo}
-                  className="block w-full text-left px-4 py-2 hover:bg-purple-100"
-                >
+                  className="block w-full text-left px-4 py-2 hover:bg-purple-100">
                   Informacje o koncie
                 </button>
                 <button
                   onClick={openSettings}
-                  className="block w-full text-left px-4 py-2 hover:bg-purple-100"
-                >
+                  className="block w-full text-left px-4 py-2 hover:bg-purple-100">
                   Ustawienia
                 </button>
                 <button
                   onClick={handleLogout}
-                  className="block w-full text-left px-4 py-2 hover:bg-purple-100"
-                >
+                  className="block w-full text-left px-4 py-2 hover:bg-purple-100">
                   Wyloguj
                 </button>
               </div>
             )}
           </div>
         )}
+
       </nav>
 
       <AccountInfoModal

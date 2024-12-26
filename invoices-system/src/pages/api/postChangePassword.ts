@@ -33,7 +33,7 @@ const NEXT_PUBLIC_SECRET_KEY_ADMINISTRATOR = new TextEncoder().encode(
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
 
   // 🔑 **Obsługa Metody POST**
- 
+
   if (req.method !== 'POST') {
 
     return res.status(405).json({ message: 'Metoda niedozwolona' });
@@ -75,7 +75,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
      * Pobierz użytkownika na podstawie ID uzyskanego z tokena.
      */
 
-    const [rows]: any = await pool.query('SELECT * FROM login WHERE id = ?', [userId]);
+    const [rows]: any = await pool.query('SELECT * FROM login WHERE identyfikator = ?', [userId]);
 
     if (rows.length === 0) {
 
@@ -107,7 +107,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     // 🛠️ **Aktualizacja Hasła w Bazie Danych**
 
-    await pool.query('UPDATE login SET password = ? WHERE id = ?', [hashedPassword, userId]);
+    await pool.query('UPDATE login SET password = ? WHERE identyfikator = ?', [hashedPassword, userId]);
 
 
     // ✅ **Zwrócenie Odpowiedzi Sukcesu**

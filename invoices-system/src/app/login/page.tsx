@@ -9,7 +9,7 @@ export default function LoginPage() {
 
   const router = useRouter();
   const { login } = useAuth();
-  const { fetchInvoices } = useInvoice();
+  const { fetchInvoices, fetchCreditNotes } = useInvoice();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
@@ -23,6 +23,7 @@ export default function LoginPage() {
 
       await login(email, password);
       await fetchInvoices();
+      await fetchCreditNotes();
       router.push('/home');
 
     } catch (err: any) {

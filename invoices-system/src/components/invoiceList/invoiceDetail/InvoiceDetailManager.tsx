@@ -4,20 +4,14 @@ import React, { useState, useEffect, ChangeEvent } from "react";
 import { useInvoice } from "../../../hooks/context/invoiceContext";
 import Modal from "../../modal/modal_popup";
 import { CreditNoteData, CreditNoteItemData } from "../../../types/typesInvoice";
-import {
-    fetchInvoiceData,
-    calculateTotals,
-    sendCreditNote,
-} from "../../../service/invoiceList/invoiceListService";
+import { fetchInvoiceData, calculateTotals, sendCreditNote } from "../../../service/invoiceList/invoiceListService";
 
 const InvoiceDetailManager: React.FC = () => {
 
     const { selectedInvoice: invoice } = useInvoice();
     const [showComment, setShowComment] = useState(false);
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const [creditNoteData, setCreditNoteData] = useState<CreditNoteData | null>(
-        null
-    );
+    const [creditNoteData, setCreditNoteData] = useState<CreditNoteData | null>(null);
 
     const [creditNoteItems, setCreditNoteItems] = useState<CreditNoteItemData[]>([]);
 
@@ -32,6 +26,7 @@ const InvoiceDetailManager: React.FC = () => {
             setCreditNoteItems(data?.items || []);
         }
     }, [invoice]);
+
 
     const createCreditNote = () => setIsModalOpen(true);
     const closeModal = () => setIsModalOpen(false);
@@ -97,14 +92,45 @@ const InvoiceDetailManager: React.FC = () => {
         });
     };
 
+    const validateForm = (): boolean => {
+
+        if (!creditNoteData) return false;
+
+        const requiredFields: { field: keyof CreditNoteData; label: string }[] = [
+
+            { field: 'paymentTerm', label: 'Warunki płatności' },
+            { field: 'seller', label: 'Sprzedawca' },
+            { field: 'customerName', label: 'Nazwa klienta' },
+            { field: 'effectiveMonth', label: 'Miesiąc efektywny' },
+            { field: 'currency', label: 'Waluta' }
+        ];
+
+        for (const { field, label } of requiredFields) {
+
+            if (!creditNoteData[field]) {
+
+                alert(`Pole "${label}" jest wymagane.`);
+
+                return false;
+            }
+        }
+
+        return true;
+    };
+
     const submitCorrection = async () => {
 
         try {
 
+            if (!validateForm()) {
+
+                console.warn('Formularz zawiera błędy.');
+                return;
+            }
+
             if (creditNoteData) {
 
                 const itemsToSend = creditNoteItems.map(
-
                     ({ itemName, quantity, nettoItem, vatItem, bruttoItem }) => ({
                         itemName,
                         quantity,
@@ -115,17 +141,29 @@ const InvoiceDetailManager: React.FC = () => {
                 );
 
                 await sendCreditNote({
-
                     ...creditNoteData,
                     items: itemsToSend,
                 });
+
+                if (invoice) {
+
+                    await fetch('/api/updateInvoiceStatus', {
+
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({ invoiceName: invoice.nameInvoice }),
+                    });
+                }
 
                 setIsModalOpen(false);
                 setShowConfirmation(true);
             }
         } catch (error) {
 
-            console.error("Error creating credit note:", error);
+            console.error('Error creating credit note:', error);
+            alert('Wystąpił błąd podczas przesyłania poprawionej faktury.');
         }
     };
 
@@ -137,17 +175,16 @@ const InvoiceDetailManager: React.FC = () => {
                 <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 backdrop-blur-sm">
                     <div className="bg-white rounded-lg shadow-lg p-6">
                         <h2 className="text-2xl mb-4 font-semibold text-center">Dane zostały wysłane</h2>
-                        <p className="mb-4 text-center">Twoja poprawiona faktura jest w zakładce 'Poprawione Faktury' i jest w oczekiwaniu na akceptację przez administratora</p>
+                        <p className="mb-4 text-center">Twoja poprawiona faktura jest w zakładce Poprawione Faktury i jest w oczekiwaniu na akceptację przez administratora</p>
                         <div className="flex justify-center">
                             <button
                                 onClick={() => setShowConfirmation(false)}
-                                className="bg-purple-800 text-white py-2 px-6 rounded-lg shadow-md hover:bg-purple-900"
-                            >
+                                className="bg-purple-800 text-white py-2 px-6 rounded-lg shadow-md hover:bg-purple-900">
                                 Powrót do widoku faktury
                             </button>
                         </div>
                     </div>
-                </div >
+                </div>
             )}
             {
                 showComment && (
@@ -158,94 +195,116 @@ const InvoiceDetailManager: React.FC = () => {
                 )
             }
 
-            <div className="flex justify-center items-start py-10">
-                <div className="flex">
-                    <div className="flex flex-col items-center mr-8 h-full">
-                        {invoice.documentStatus === 'Do poprawy' && (
-                            <>
-                                <button className="mb-4 bg-purple-800 text-white py-2 px-6 rounded-lg shadow-md hover:bg-purple-900 w-48" onClick={() => setShowComment(!showComment)}>
-                                    Pokaż Komentarz
-                                </button>
-                                <button onClick={createCreditNote} className="mb-4 bg-purple-800 text-white py-2 px-6 rounded-lg shadow-md hover:bg-purple-900 w-48">
-                                    Popraw Fakturę
-                                </button>
-                            </>
-                        )}
-                        <button className="bg-purple-800 text-white py-2 px-6 rounded-lg shadow-md hover:bg-purple-900 w-48">
-                            Wygeneruj PDF Faktury
-                        </button>
-                    </div>
+            <div className="flex flex-col lg:flex-row gap-6 py-10 px-4">
 
-                    <div className="w-full max-w-7xl bg-white p-8 shadow-lg rounded-lg border border-gray-200">
-                        <header className="border-b border-gray-300 pb-4 mb-4 flex justify-between items-center">
-                            <h1 className="text-3xl font-bold text-purple-700">Faktura: {invoice.nameInvoice}</h1>
-                            <p className="text-lg text-gray-700">
-                                Status: <span className={`px-3 py-1 inline-flex text-xs font-semibold rounded-full ${invoice.documentStatus === 'Opłacone'
-                                    ? 'bg-green-200 text-green-800' : invoice.documentStatus === 'Do poprawy'
-                                        ? 'bg-red-200 text-red-800' : invoice.documentStatus === 'W trakcie akceptacji'
-                                            ? 'bg-yellow-200 text-yellow-800' : 'bg-orange-100 text-orange-600'}`}>
-                                    {invoice.documentStatus}
-                                </span>
-                            </p>
-                        </header>
+                <div className="flex flex-col items-start">
+                    {invoice.documentStatus === 'Do poprawy' && (
+                        <>
+                            <button
+                                className="mb-4 bg-purple-800 text-white py-2 px-6 rounded-lg shadow-md hover:bg-purple-900 w-48"
+                                onClick={() => setShowComment(!showComment)}>
+                                Pokaż Komentarz
+                            </button>
+                            <button
+                                onClick={createCreditNote}
+                                className="mb-4 bg-purple-800 text-white py-2 px-6 rounded-lg shadow-md hover:bg-purple-900 w-48">
+                                Popraw Fakturę
+                            </button>
+                        </>
+                    )}
+                    <button
+                        className="bg-purple-800 text-white py-2 px-6 rounded-lg shadow-md hover:bg-purple-900 w-48">
+                        Wygeneruj PDF Faktury
+                    </button>
+                </div>
 
-                        <section className="mb-6 text-gray-900">
-                            <h2 className="text-lg font-semibold mb-2 text-purple-700">Dane Klienta</h2>
-                            <div className="grid grid-cols-2 gap-4">
+                <div className="w-full max-w-7xl bg-white p-8 shadow-lg rounded-lg border border-gray-200">
+
+                    <header className="border-b border-gray-300 pb-4 mb-4 flex justify-between items-center">
+                        <h1 className="text-3xl font-bold text-purple-700">
+                            Faktura: {invoice.nameInvoice}
+                        </h1>
+                        <p className="text-lg text-gray-700">
+                            Status:{" "}
+                            <span
+                                className={`px-3 py-1 inline-flex text-xs font-semibold rounded-full ${invoice.documentStatus === 'Opłacona - Gotowa faktura'
+                                    ? 'bg-green-200 text-green-800'
+                                    : invoice.documentStatus === 'Do poprawy'
+                                        ? 'bg-red-200 text-red-800'
+                                        : invoice.documentStatus === 'W trakcie akceptacji'
+                                            ? 'bg-yellow-200 text-yellow-800'
+                                            : 'bg-orange-100 text-orange-600'
+                                    }`}>
+                                {invoice.documentStatus}
+                            </span>
+                        </p>
+                    </header>
+
+                    <section className="mb-6 text-gray-900">
+                        <h2 className="text-lg font-semibold mb-2 text-purple-700">Dane Klienta</h2>
+                        <div className="grid grid-cols-2 gap-8">
+                            <div>
                                 <p><strong>Klient:</strong> {invoice.customerName}</p>
-                                <p><strong>Sprzedawca:</strong> {invoice.seller}</p>
                                 <p><strong>Metoda płatności:</strong> {invoice.paymentMethod}</p>
-                                <p><strong>Miesiąc efektywności:</strong> {invoice.effectiveMonth}</p>
                                 <p><strong>Waluta:</strong> {invoice.currency}</p>
                             </div>
-                        </section>
+                            <div className="pl-6">
+                                <p><strong>Sprzedawca:</strong> {invoice.seller}</p>
+                                <p><strong>Miesiąc efektywności:</strong> {invoice.effectiveMonth}</p>
+                            </div>
+                        </div>
+                    </section>
 
-                        <section className="mb-6 text-gray-900">
-                            <h2 className="text-lg font-semibold mb-2 text-purple-700">Szczegóły Faktury</h2>
-                            <div className="grid grid-cols-2 gap-4">
+                    <section className="mb-6 text-gray-900">
+                        <h2 className="text-lg font-semibold mb-2 text-purple-700">Szczegóły Faktury</h2>
+                        <div className="grid grid-cols-2 gap-8">
+                            <div>
                                 <p><strong>Data wystawienia:</strong> {new Date(invoice.dataInvoice).toLocaleDateString()}</p>
-                                <p><strong>Data sprzedaży:</strong> {new Date(invoice.dataInvoiceSell).toLocaleDateString()}</p>
                                 <p><strong>Termin płatności:</strong> {new Date(invoice.dueDate).toLocaleDateString()}</p>
+                            </div>
+                            <div className="pl-6">
+                                <p><strong>Data sprzedaży:</strong> {new Date(invoice.dataInvoiceSell).toLocaleDateString()}</p>
                                 <p><strong>Komentarz:</strong> {invoice.comments || "Brak"}</p>
                             </div>
-                        </section>
+                        </div>
+                    </section>
 
-                        <section className="mb-6 text-gray-900">
-                            <h2 className="text-lg font-semibold mb-2 text-purple-700">Pozycje Faktury</h2>
-                            <table className="w-full text-left border-collapse bg-white">
-                                <thead>
-                                    <tr className="bg-purple-800 text-white">
-                                        <th className="px-4 py-2 border border-gray-200">Nazwa</th>
-                                        <th className="px-4 py-2 border border-gray-200 text-right">Ilość</th>
-                                        <th className="px-4 py-2 border border-gray-200 text-right">Netto</th>
-                                        <th className="px-4 py-2 border border-gray-200 text-right">VAT</th>
-                                        <th className="px-4 py-2 border border-gray-200 text-right">Brutto</th>
-                                        <th className="px-4 py-2 border border-gray-200">Komentarz</th>
+                    <section className="mb-6 text-gray-900">
+                        <h2 className="text-lg font-semibold mb-2 text-purple-700">Pozycje Faktury</h2>
+                        <table className="w-full text-left border-collapse bg-white">
+                            <thead>
+                                <tr className="bg-purple-800 text-white">
+                                    <th className="px-4 py-2 border border-gray-200">Nazwa</th>
+                                    <th className="px-4 py-2 border border-gray-200 text-right">Ilość</th>
+                                    <th className="px-4 py-2 border border-gray-200 text-right">Netto</th>
+                                    <th className="px-4 py-2 border border-gray-200 text-right">VAT</th>
+                                    <th className="px-4 py-2 border border-gray-200 text-right">Brutto</th>
+                                    <th className="px-4 py-2 border border-gray-200">Komentarz</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {invoice.items.map((item) => (
+                                    <tr key={item.id} className="hover:bg-purple-100 transition duration-200 ease-in-out">
+                                        <td className="px-4 py-2 border border-gray-200">{item.nameItem}</td>
+                                        <td className="px-4 py-2 border border-gray-200 text-right">{item.quantity}</td>
+                                        <td className="px-4 py-2 border border-gray-200 text-right">{item.nettoItem} {invoice.currency}</td>
+                                        <td className="px-4 py-2 border border-gray-200 text-right">{item.vatItem}%</td>
+                                        <td className="px-4 py-2 border border-gray-200 text-right">{item.bruttoItem} {invoice.currency}</td>
+                                        <td className="px-4 py-2 border border-gray-200">{item.comment || "Brak"}</td>
                                     </tr>
-                                </thead>
-                                <tbody>
-                                    {invoice.items.map((item) => (
-                                        <tr key={item.id} className="hover:bg-purple-100 transition duration-200 ease-in-out">
-                                            <td className="px-4 py-2 border border-gray-200">{item.nameItem}</td>
-                                            <td className="px-4 py-2 border border-gray-200 text-right">{item.quantity}</td>
-                                            <td className="px-4 py-2 border border-gray-200 text-right">{item.nettoItem} {invoice.currency}</td>
-                                            <td className="px-4 py-2 border border-gray-200 text-right">{item.vatItem}%</td>
-                                            <td className="px-4 py-2 border border-gray-200 text-right">{item.bruttoItem} {invoice.currency}</td>
-                                            <td className="px-4 py-2 border border-gray-200">{item.comment || "Brak"}</td>
-                                        </tr>
-                                    ))}
-                                </tbody>
-                            </table>
-                        </section>
+                                ))}
+                            </tbody>
+                        </table>
+                    </section>
 
-                        <section className="mt-6 text-right border-t border-gray-300 pt-4 text-gray-900">
-                            <p className="text-lg"><strong>Razem Netto:</strong> {invoice.summaryNetto} {invoice.currency}</p>
-                            <p className="text-lg"><strong>Razem VAT:</strong> {invoice.summaryVat} {invoice.currency}</p>
-                            <p className="text-lg font-bold text-purple-700"><strong>Razem Brutto:</strong> {invoice.summaryBrutto} {invoice.currency}</p>
-                        </section>
-                    </div>
+                    <section className="mt-6 text-right border-t border-gray-300 pt-4 text-gray-900">
+                        <p className="text-lg"><strong>Razem Netto:</strong> {invoice.summaryNetto} {invoice.currency}</p>
+                        <p className="text-lg"><strong>Razem VAT:</strong> {invoice.summaryVat} {invoice.currency}</p>
+                        <p className="text-lg font-bold text-purple-700"><strong>Razem Brutto:</strong> {invoice.summaryBrutto} {invoice.currency}</p>
+                    </section>
                 </div>
             </div>
+
             {
                 isModalOpen && (
                     <Modal isOpen={isModalOpen} onClose={closeModal}>
@@ -260,48 +319,7 @@ const InvoiceDetailManager: React.FC = () => {
                                         value={creditNoteData?.invoiceName || ''}
                                         onChange={handleInputChange}
                                         className="mb-4 p-2 border border-gray-300 rounded w-full"
-                                        disabled
-                                    />
-                                </div>
-                                <div>
-                                    <label className="block text-gray-700">Status dokumentu</label>
-                                    <input
-                                        type="text"
-                                        name="documentStatus"
-                                        value={creditNoteData?.documentStatus || ''}
-                                        onChange={handleInputChange}
-                                        className="mb-4 p-2 border border-gray-300 rounded w-full"
-                                        disabled
-                                    />
-                                </div>
-                                <div>
-                                    <label className="block text-gray-700">Data faktury</label>
-                                    <input
-                                        type="date"
-                                        name="dataInvoice"
-                                        value={creditNoteData?.dataInvoice || ''}
-                                        onChange={handleInputChange}
-                                        className="mb-4 p-2 border border-gray-300 rounded w-full"
-                                    />
-                                </div>
-                                <div>
-                                    <label className="block text-gray-700">Data sprzedaży</label>
-                                    <input
-                                        type="date"
-                                        name="dataInvoiceSell"
-                                        value={creditNoteData?.dataInvoiceSell || ''}
-                                        onChange={handleInputChange}
-                                        className="mb-4 p-2 border border-gray-300 rounded w-full"
-                                    />
-                                </div>
-                                <div>
-                                    <label className="block text-gray-700">Termin płatności</label>
-                                    <input
-                                        type="date"
-                                        name="dueDate"
-                                        value={creditNoteData?.dueDate || ''}
-                                        onChange={handleInputChange}
-                                        className="mb-4 p-2 border border-gray-300 rounded w-full"
+                                        readOnly
                                     />
                                 </div>
                                 <div>
@@ -312,6 +330,7 @@ const InvoiceDetailManager: React.FC = () => {
                                         value={creditNoteData?.paymentTerm || ''}
                                         onChange={handleInputChange}
                                         className="mb-4 p-2 border border-gray-300 rounded w-full"
+                                        readOnly
                                     />
                                 </div>
                                 <div>
@@ -332,6 +351,7 @@ const InvoiceDetailManager: React.FC = () => {
                                         value={creditNoteData?.seller || ''}
                                         onChange={handleInputChange}
                                         className="mb-4 p-2 border border-gray-300 rounded w-full"
+
                                     />
                                 </div>
                                 <div>
@@ -342,6 +362,7 @@ const InvoiceDetailManager: React.FC = () => {
                                         value={creditNoteData?.customerName || ''}
                                         onChange={handleInputChange}
                                         className="mb-4 p-2 border border-gray-300 rounded w-full"
+
                                     />
                                 </div>
                                 <div>
@@ -362,16 +383,7 @@ const InvoiceDetailManager: React.FC = () => {
                                         value={creditNoteData?.exchangeRate || ''}
                                         onChange={handleInputChange}
                                         className="mb-4 p-2 border border-gray-300 rounded w-full"
-                                    />
-                                </div>
-                                <div>
-                                    <label className="block text-gray-700">Metoda płatności</label>
-                                    <input
-                                        type="text"
-                                        name="paymentMethod"
-                                        value={creditNoteData?.paymentMethod || ''}
-                                        onChange={handleInputChange}
-                                        className="mb-4 p-2 border border-gray-300 rounded w-full"
+                                        readOnly
                                     />
                                 </div>
                                 <div>
@@ -382,6 +394,7 @@ const InvoiceDetailManager: React.FC = () => {
                                         value={creditNoteData?.effectiveMonth || ''}
                                         onChange={handleInputChange}
                                         className="mb-4 p-2 border border-gray-300 rounded w-full"
+
                                     />
                                 </div>
                                 <div>
@@ -392,6 +405,7 @@ const InvoiceDetailManager: React.FC = () => {
                                         value={creditNoteData?.currency || ''}
                                         onChange={handleInputChange}
                                         className="mb-4 p-2 border border-gray-300 rounded w-full"
+
                                     />
                                 </div>
                             </div>

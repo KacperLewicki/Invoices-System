@@ -59,7 +59,7 @@ export interface CreditNoteData {
     exchangeRate: number;
     paymentMethod: string;
     effectiveMonth: string;
-    documentStatus: string;
+    documentStatus: "Poprawka zatwierdzona - opłacona - gotowa faktura";
     identyfikator: string;
     currency: string;
     items: CreditNoteItemData[];
