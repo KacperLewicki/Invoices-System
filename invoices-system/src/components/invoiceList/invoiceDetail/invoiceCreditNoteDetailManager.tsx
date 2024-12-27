@@ -28,7 +28,7 @@ const CreditNoteDetails: React.FC = () => {
 
                 <header className="border-b border-gray-300 pb-4 mb-4 flex justify-between items-center">
                     <h1 className="text-3xl font-bold text-purple-700">
-                        Nota Kredytowa: {creditNote.creditNote}
+                        Nota Kredytowa: {creditNote.creditNote} - {creditNote.invoiceName}
                     </h1>
                     <p className="text-lg text-gray-700"> Status:{" "}
                         <span

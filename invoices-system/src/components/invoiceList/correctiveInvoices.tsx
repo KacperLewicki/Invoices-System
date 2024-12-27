@@ -55,6 +55,7 @@ const CreditNotes: React.FC = () => {
                         <tr>
                             <th className="px-4 py-4 text-sm font-semibold text-center">Lp.</th>
                             <th className="px-4 py-4 text-sm font-semibold">Numer Credit Note</th>
+                            <th className="px-4 py-4 text-sm font-semibold">Faktura</th>
                             <th className="px-4 py-4 text-sm font-semibold">Klient</th>
                             <th className="px-4 py-4 text-sm font-semibold text-right">Wartość brutto</th>
                             <th className="px-4 py-4 text-sm font-semibold text-center">Waluta</th>
@@ -73,6 +74,7 @@ const CreditNotes: React.FC = () => {
                                     className="cursor-pointer hover:bg-purple-100 transition duration-200 ease-in-out">
                                     <td className="px-4 py-4 text-sm text-center border border-gray-200">{index + 1}</td>
                                     <td className="px-4 py-4 text-sm font-medium border border-gray-200">{creditNote.creditNote}</td>
+                                    <td className="px-4 py-4 text-sm font-medium border border-gray-200">{creditNote.invoiceName}</td>
                                     <td className="px-4 py-4 text-sm border border-gray-200">{creditNote.customerName}</td>
                                     <td className="px-4 py-4 text-sm text-right border border-gray-200">{creditNote.summaryBrutto}</td>
                                     <td className="px-4 py-4 text-sm text-center border border-gray-200">{creditNote.currency}</td>
