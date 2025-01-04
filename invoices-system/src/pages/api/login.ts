@@ -66,7 +66,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     const user = rows[0];
 
-
     // 🔑 **Weryfikacja Hasła**
 
     /**
