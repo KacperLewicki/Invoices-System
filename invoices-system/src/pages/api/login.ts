@@ -78,7 +78,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       return res.status(401).json({ message: 'Nieprawidłowe dane logowania' });
     }
 
-
     // 🔐 **Generowanie Tokena JWT**
 
     /**
@@ -90,7 +89,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       .setProtectedHeader({ alg: 'HS256' })
       .setExpirationTime('1h')
       .sign(NEXT_PUBLIC_SECRET_KEY_ADMINISTRATOR);
-
 
     // 🍪 **Ustawienie Tokena w Ciasteczku**
 
@@ -107,7 +105,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       'Set-Cookie',
       `token=${token}; HttpOnly; Path=/; Max-Age=3600; SameSite=Strict; Secure;`
     );
-
 
     // ✅ **Zwrócenie Odpowiedzi**
 
