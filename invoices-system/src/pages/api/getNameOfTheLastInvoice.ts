@@ -45,7 +45,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       return;
     }
 
-
     // 🛠️ **Zapytanie do Bazy Danych**
 
     try {
@@ -86,7 +85,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     }
   } else {
-
 
     // 🚫 **Obsługa Nieprawidłowej Metody**
 
