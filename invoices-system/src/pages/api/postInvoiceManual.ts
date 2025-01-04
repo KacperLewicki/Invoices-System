@@ -34,7 +34,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             return res.status(400).json({ error: 'Brak identyfikatora w nagłówku' });
         }
 
-
         // 📄 **Weryfikacja Danych Faktury i Pozycji**
 
         const { invoice, items }: { invoice: InvoiceData; items: ItemData[] } = req.body;
@@ -65,7 +64,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         const generatedNameInvoice = `NB/24/${newInvoiceNumberStr}`;
         invoice.nameInvoice = generatedNameInvoice;
 
-
         // 📝 **Przygotowanie Danych Faktury**
 
         const validInvoiceFields: InvoiceData = {
@@ -74,7 +72,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             identyfikator,
         };
 
-
         for (const [key, value] of Object.entries(validInvoiceFields)) {
 
             if (value === undefined || value === null) {
@@ -82,7 +79,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                 return res.status(400).send(`Pole ${key} jest wymagane.`);
             }
         }
-
 
         // 💾 **Zapis Faktury do Bazy Danych**
 

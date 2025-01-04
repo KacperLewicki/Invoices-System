@@ -2,32 +2,6 @@ import moment from 'moment';
 import { InvoiceData, ItemData } from '../../types/typesInvoice';
 
 /**
- * @function checkInvoiceExists
- * @description Sprawdza, czy faktura o podanej nazwie istnieje już w bazie danych.
- * @param {string} invoiceName - Nazwa faktury do sprawdzenia.
- * @returns {Promise<boolean>} - Zwraca true, jeśli faktura istnieje; false w przeciwnym razie.
- */
-
-const checkInvoiceExists = async (invoiceName: string): Promise<boolean> => {
-
-  const response = await fetch(`/api/getNameOfTheLastInvoice?nameInvoice=${encodeURIComponent(invoiceName)}`);
-
-  if (!response.ok) {
-
-    throw new Error('Nie udało się sprawdzić, czy faktura istnieje');
-  }
-
-  const data = await response.json();
-
-  if (typeof data.exists !== 'boolean') {
-
-    throw new Error('Nieprawidłowy format odpowiedzi');
-  }
-
-  return data.exists;
-};
-
-/**
  * @function saveInvoiceToDatabase
  * @description Zapisuje fakturę oraz jej pozycje do bazy danych.
  * @param {InvoiceData} invoiceData - Dane faktury.
@@ -91,7 +65,6 @@ export {
 
   type InvoiceData,
   type ItemData,
-  checkInvoiceExists,
   saveInvoiceToDatabase,
   formatInvoiceDates,
 };
