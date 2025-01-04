@@ -13,7 +13,6 @@ import { InvoiceContextType } from '../../types/typesInvoice';
  * Obejmuje wybraną fakturę, listę faktur oraz stan ładowania danych.
  */
 
-
 // 🛠️ **Typy i Interfejsy**
 
 /**
@@ -133,9 +132,7 @@ export const InvoiceProvider: React.FC<{ children: ReactNode }> = ({ children })
     );
 };
 
-
 // 🪝 **Hook useInvoice**
-
 
 /**
  * @function useInvoice
@@ -152,9 +149,7 @@ export const useInvoice = (): Invoice_ContextType => {
     return context;
 };
 
-
 // 📌 **Podsumowanie**
-
 
 /**
  * - **InvoiceProvider**: Zarządza stanem faktur i dostarcza dane przez kontekst.

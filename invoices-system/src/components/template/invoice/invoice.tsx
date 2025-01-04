@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from 'react';
-import { checkInvoiceExists, saveInvoiceToDatabase, formatInvoiceDates } from '../../../service/invoice/invoiceService';
+import { saveInvoiceToDatabase, formatInvoiceDates } from '../../../service/invoice/invoiceService';
 import { InvoiceData, ItemData } from '../../../types/typesInvoice';
 
 import "../../../globalCSS/globals.css";
@@ -62,18 +62,6 @@ const Invoice: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent) => {
 
     e.preventDefault();
-
-    if (formData.nameInvoice) {
-
-      const invoiceExists = await checkInvoiceExists(formData.nameInvoice);
-
-      if (invoiceExists) {
-
-        alert('Faktura z tym numerem już istnieje w bazie danych');
-
-        return;
-      }
-    }
 
     const formattedData = formatInvoiceDates(formData);
 
@@ -144,6 +132,7 @@ const Invoice: React.FC = () => {
     };
 
     setItems([...items, newItem]);
+    
     setCurrentItem({
       nameItem: '',
       quantity: 0,
@@ -175,6 +164,7 @@ const Invoice: React.FC = () => {
     const newSummaryBrutto = formData.summaryBrutto - itemToDelete.bruttoItem;
 
     setItems(newItems);
+
     setFormData({
       ...formData,
       summaryNetto: newSummaryNetto,
