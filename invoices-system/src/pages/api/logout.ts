@@ -18,7 +18,6 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
 
   res.setHeader('Set-Cookie', `token=; HttpOnly; Path=/; Max-Age=0; SameSite=Strict; Secure;`);
 
-
   // ✅ **Zwrócenie Odpowiedzi Sukcesu**
 
   return res.status(200).json({ message: 'Wylogowano pomyślnie' });

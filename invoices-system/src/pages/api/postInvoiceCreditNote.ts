@@ -8,7 +8,6 @@ import { CreditNoteData } from '../../types/typesInvoice';
 // Dane korekty są walidowane, numer dokumentu jest automatycznie generowany,
 // a powiązanie z użytkownikiem jest realizowane poprzez `identyfikator` z nagłówka HTTP.
 
-
 // 📌 **Obsługa Żądań API**
 
 /**
