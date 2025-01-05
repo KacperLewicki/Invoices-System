@@ -6,15 +6,18 @@ import { useInvoice } from '../../hooks/context/invoiceContext';
 import "../../globalCSS/globals.css";
 import { InvoiceData, CreditNoteData } from '../../types/typesInvoice';
 
+// zastanowić się nad logiką wyświetlania faktur i not kredytowych - ulepszenie - poprawka
+
 interface InvoiceWithType extends InvoiceData {
+
     id: number;
     items: any[];
     type: 'invoice';
 }
 
 interface CreditNoteWithType extends CreditNoteData {
+
     id: number;
-    items: any[];
     type: 'creditNote';
 }
 
@@ -49,16 +52,16 @@ const ApprovedInvoices: React.FC = () => {
 
     const combinedData = [...localInvoices, ...localCreditNotes];
 
-    const handleRowClick = (item: InvoiceWithType | CreditNoteWithType) => {
+    const handleRowClick = (invoices: InvoiceWithType, creditNotes: CreditNoteWithType) => {
 
-        if (item.type === 'invoice') {
+        if (invoices.type === 'invoice') {
 
-            setSelectedInvoice(item as InvoiceWithType);
+            setSelectedInvoice(invoices);
             router.push(`/invoiceList/invoiceDetails/invoice`);
 
         } else {
 
-            setSelectedCreditNote(item as CreditNoteWithType);
+            setSelectedCreditNote(creditNotes);
             router.push(`/invoiceList/invoiceDetails/creditnote`);
         }
     };
@@ -87,30 +90,30 @@ const ApprovedInvoices: React.FC = () => {
                     </thead>
                     <tbody className="text-gray-800 bg-white">
                         {combinedData.length > 0 ? (
-                            combinedData.map((item, index) => (
+                            combinedData.map((invoice, index) => (
                                 <tr
-                                    key={`${item.type}-${item.id}`}
-                                    onClick={() => handleRowClick(item)}
+                                    key={`${invoice.type}-${invoice.id}`}
+                                    onClick={() => handleRowClick(invoice as InvoiceWithType, invoice as CreditNoteWithType)}
                                     className="cursor-pointer hover:bg-purple-100 transition duration-200 ease-in-out">
                                     <td className="px-4 py-4 text-sm text-center border border-gray-200">{index + 1}</td>
                                     <td className="px-4 py-4 text-sm font-medium border border-gray-200">
-                                        {item.type === 'invoice' ? item.nameInvoice : item.creditNote}
+                                        {invoice.type === 'invoice' ? invoice.nameInvoice : invoice.creditNote}
                                     </td>
-                                    <td className="px-4 py-4 text-sm border border-gray-200">{item.customerName}</td>
-                                    <td className="px-4 py-4 text-sm text-right border border-gray-200">{item.summaryBrutto}</td>
-                                    <td className="px-4 py-4 text-sm text-center border border-gray-200">{item.currency}</td>
+                                    <td className="px-4 py-4 text-sm border border-gray-200">{invoice.customerName}</td>
+                                    <td className="px-4 py-4 text-sm text-right border border-gray-200">{invoice.summaryBrutto}</td>
+                                    <td className="px-4 py-4 text-sm text-center border border-gray-200">{invoice.currency}</td>
                                     <td className="px-4 py-4 text-sm border border-gray-200">
-                                        {new Date(item.dataInvoiceSell).toLocaleDateString()}
+                                        {new Date(invoice.dataInvoiceSell).toLocaleDateString()}
                                     </td>
                                     <td className="px-4 py-4 text-sm border border-gray-200">
-                                        {new Date(item.dueDate).toLocaleDateString()}
+                                        {new Date(invoice.dueDate).toLocaleDateString()}
                                     </td>
                                     <td className="px-4 py-4 text-sm text-center border border-gray-200">
-                                        {item.type === 'invoice' ? 'Faktura' : 'Nota kredytowa'}
+                                        {invoice.type === 'invoice' ? 'Faktura' : 'Nota kredytowa'}
                                     </td>
                                     <td className="px-4 py-4 text-sm border border-gray-200 text-center">
                                         <span className="px-3 py-1 inline-flex text-xs font-semibold rounded-full bg-green-200 text-green-800">
-                                            {item.documentStatus}
+                                            {invoice.documentStatus}
                                         </span>
                                     </td>
                                 </tr>

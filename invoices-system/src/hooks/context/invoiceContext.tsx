@@ -1,7 +1,7 @@
 "use client";
 
 import React, { createContext, useContext, useState, ReactNode, useEffect } from 'react';
-import { InvoiceData, ItemData, CreditNoteData, CreditNoteItemData } from '../../types/typesInvoice';
+import { InvoiceData, ItemData, CreditNoteData } from '../../types/typesInvoice';
 
 // 🛠️ **Typy Danych**
 
@@ -16,15 +16,9 @@ interface Invoice_Data extends InvoiceData {
     items: Item_Data[];
 }
 
-interface CreditNote_Item extends CreditNoteItemData {
-
-    id: number;
-}
-
 interface CreditNote_Data extends CreditNoteData {
 
     id: number;
-    items: CreditNote_Item[];
 }
 
 interface Invoice_ContextType {
@@ -157,8 +151,7 @@ export const InvoiceProvider: React.FC<{ children: ReactNode }> = ({ children })
                 loadingCreditNotes,
                 errorCreditNotes,
                 fetchCreditNotes,
-            }}
-        >
+            }}>
             {children}
         </InvoiceContext.Provider>
     );

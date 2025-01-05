@@ -4,7 +4,6 @@ import React, { createContext, useContext, useState, useEffect } from 'react';
 import axios from 'axios';
 import { User } from '../../types/typesInvoice';
 
-
 // 📚 **AuthContext - Kontekst Autoryzacji**
 
 // Ten hook definiuje kontekst autoryzacji dla aplikacji Next.js.
@@ -60,7 +59,7 @@ const AuthContext = createContext<AuthContextProps | undefined>(undefined);
  * @function AuthProvider
  * Opakowuje aplikację w kontekst autoryzacji.
  *
- * @param {React.ReactNode} children - Komponenty dzieci, które będą miały dostęp do kontekstu.
+ * @param {React.ReactNode} children - Komponenty children, które będą miały dostęp do kontekstu.
  *
  * @returns {JSX.Element} - Zwraca komponent React z dostępnym kontekstem autoryzacji.
  */
@@ -142,7 +141,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   // 🚪 **Funkcja Wylogowania**
 
-
   /**
    * @function logout
    * Usuwa dane autoryzacyjne z localStorage oraz resetuje stan użytkownika i tokena.
@@ -169,10 +167,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     }
   };
 
-
-
   // 📦 **Zwracanie Kontekstu**
-
 
   /**
    * Udostępnia dane i funkcje autoryzacyjne dla dzieci komponentu.
@@ -186,9 +181,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   );
 };
 
-
 // 📌 **Hook Uwierzytelnienia (useAuth)**
-
 
 /**
  * @function useAuth

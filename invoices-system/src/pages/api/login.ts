@@ -9,7 +9,6 @@ import pool from './lib/db';
 // Dane logowania są weryfikowane, a użytkownik otrzymuje token JWT,
 // który jest przechowywany w ciasteczku HTTP-only dla zwiększenia bezpieczeństwa.
 
-
 // 📌 **Konfiguracja JWT**
 
 /**

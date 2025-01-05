@@ -1,7 +1,6 @@
 import pool from './lib/db';
 import { NextApiRequest, NextApiResponse } from 'next';
 import { RowDataPacket } from 'mysql2';
-import { CreditNoteItemData } from '../../types/typesInvoice';
 
 // 📚 **Typy dla Not Kredytowych**
 
@@ -28,7 +27,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
         // 📌 2. Pobierz noty kredytowe powiązane z identyfikatorem
 
-        const [creditNotes] = await pool.query<RowDataPacket[] & CreditNoteData[]>(
+        const [creditNotes] = await pool.query<CreditNoteData[]>(
             'SELECT * FROM creditnotesinvoices WHERE identyfikator = ?',
             [identyfikator]
         );
@@ -44,7 +43,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
             creditNotes.map(async (creditNote) => {
 
-                const [items] = await pool.query<RowDataPacket[] & CreditNoteItemData[]>(
+                const [items] = await pool.query<CreditNoteData[]>(
                     'SELECT * FROM creditnoteitems WHERE creditNoteId = ?',
                     [creditNote.id]
                 );

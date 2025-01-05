@@ -6,6 +6,8 @@ import Modal from "../../modal/modal_popup";
 import { CreditNoteData, CreditNoteItemData } from "../../../types/typesInvoice";
 import { fetchInvoiceData, sendCreditNote } from "../../../service/invoiceList/invoiceListService";
 
+// zastanowić się nad logiką InvoiceDetailManager - ulepszenie - poprawka
+
 const InvoiceDetailManager: React.FC = () => {
 
     const { selectedInvoice: invoice, fetchInvoices, fetchCreditNotes } = useInvoice();

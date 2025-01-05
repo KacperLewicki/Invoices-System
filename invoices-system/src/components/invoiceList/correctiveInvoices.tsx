@@ -4,22 +4,17 @@ import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useInvoice } from '../../hooks/context/invoiceContext';
 import "../../globalCSS/globals.css";
-import { CreditNoteData, CreditNoteItemData } from '../../types/typesInvoice';
-
-interface CreditNote_Item extends CreditNoteItemData {
-
-    id: number;
-}
+import { CreditNoteData } from '../../types/typesInvoice';
 
 interface CreditNote_Data extends CreditNoteData {
 
     id: number;
-    items: CreditNote_Item[];
 }
 
 const CreditNotes: React.FC = () => {
 
     const { creditNotes, loadingCreditNotes, setSelectedCreditNote } = useInvoice();
+
     const router = useRouter();
 
     const [localCreditNotes, setLocalCreditNotes] = useState<CreditNote_Data[]>([]);
