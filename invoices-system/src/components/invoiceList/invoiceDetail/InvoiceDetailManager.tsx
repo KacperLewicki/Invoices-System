@@ -214,6 +214,73 @@ const InvoiceDetailManager: React.FC = () => {
 
     if (!invoice) return <p>Faktura nie znaleziona</p>;
 
+    const handleGeneratePDF = async () => {
+
+        try {
+
+            if (!invoice) {
+
+                throw new Error("Brak danych faktury (invoice).");
+            }
+
+            const payload = {
+
+                invoiceName: invoice.nameInvoice,
+                documentStatus: invoice.documentStatus,
+                customerName: invoice.customerName,
+                seller: invoice.seller,
+                paymentMethod: invoice.paymentMethod,
+                effectiveMonth: invoice.effectiveMonth,
+                currency: invoice.currency,
+                dataInvoice: invoice.dataInvoice,
+                dataInvoiceSell: invoice.dataInvoiceSell,
+                dueDate: invoice.dueDate,
+                comments: invoice.comments,
+                summaryNetto: invoice.summaryNetto,
+                summaryVat: invoice.summaryVat,
+                summaryBrutto: invoice.summaryBrutto,
+                items: invoice.items.map(item => ({
+                    id: item.id,
+                    itemName: item.nameItem,
+                    quantity: item.quantity,
+                    nettoItem: item.nettoItem,
+                    vatItem: item.vatItem,
+                    bruttoItem: item.bruttoItem,
+                })),
+            };
+
+            const response = await fetch("/api/invoicePDF", {
+
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(payload),
+            });
+
+            if (!response.ok) {
+
+                throw new Error("Błąd podczas generowania PDF (pdf-lib).");
+            }
+
+            const blob = await response.blob();
+            const pdfURL = URL.createObjectURL(blob);
+            const link = document.createElement("a");
+
+            link.href = pdfURL;
+            link.download = `nota-${invoice.nameInvoice}.pdf`;
+            document.body.appendChild(link);
+            link.click();
+            link.remove();
+            URL.revokeObjectURL(pdfURL);
+
+        } catch (error) {
+
+            console.error(error);
+            alert("Wystąpił problem z generowaniem PDF (pdf-lib).");
+        }
+    };
+
     return (
         <>
             {showConfirmation && (
@@ -258,6 +325,7 @@ const InvoiceDetailManager: React.FC = () => {
                         </>
                     )}
                     <button
+                        onClick={handleGeneratePDF}
                         className="bg-purple-800 text-white py-2 px-6 rounded-lg shadow-md hover:bg-purple-900 w-48">
                         Wygeneruj PDF Faktury
                     </button>
@@ -495,7 +563,7 @@ const InvoiceDetailManager: React.FC = () => {
                                                     <input
                                                         type="number"
                                                         name="quantity"
-                                                        value={item.quantity}
+                                                        value={Math.round(item.quantity)}
                                                         onChange={(e) => handleItemChange(e, index)}
                                                         className="w-full p-2 border border-gray-300 rounded"
                                                         placeholder="Ilość"
@@ -515,7 +583,7 @@ const InvoiceDetailManager: React.FC = () => {
                                                     <input
                                                         type="number"
                                                         name="vatItem"
-                                                        value={item.vatItem}
+                                                        value={Math.round(item.vatItem)}
                                                         onChange={(e) => handleItemChange(e, index)}
                                                         className="w-full p-2 border border-gray-300 rounded"
                                                         placeholder="VAT (%)"

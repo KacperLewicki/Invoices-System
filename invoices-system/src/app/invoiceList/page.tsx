@@ -41,7 +41,7 @@ export default function InvoiceList() {
         <button
           className="bg-purple-600 text-white rounded-lg py-2 px-6 hover:bg-purple-700 transition duration-300 ease-in-out transform hover:scale-105"
           onClick={showApprovedInvoice}>
-          Zatwierdzoen Faktury
+          Zatwierdzone Faktury
         </button>
         <button
           className="bg-purple-600 text-white rounded-lg py-2 px-6 hover:bg-purple-700 transition duration-300 ease-in-out transform hover:scale-105"
