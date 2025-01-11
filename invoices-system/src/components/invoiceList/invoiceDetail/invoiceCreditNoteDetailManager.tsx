@@ -36,9 +36,9 @@ const CreditNoteDetails: React.FC = () => {
                 items: creditNote.items.map(item => ({
                     id: item.id,
                     itemName: item.itemName,
-                    quantity: item.quantity,
+                    quantity: Math.round(item.quantity),
                     nettoItem: item.nettoItem,
-                    vatItem: item.vatItem,
+                    vatItem: Math.round(item.vatItem),
                     bruttoItem: item.bruttoItem,
                 })),
             };
@@ -64,7 +64,7 @@ const CreditNoteDetails: React.FC = () => {
             const link = document.createElement("a");
 
             link.href = pdfURL;
-            link.download = `nota-${creditNote.invoiceName}.pdf`;
+            link.download = `FV-${creditNote.invoiceName}.pdf`;
             document.body.appendChild(link);
             link.click();
             link.remove();
@@ -182,13 +182,13 @@ const CreditNoteDetails: React.FC = () => {
                                 >
                                     <td className="px-4 py-2 border border-gray-200">{item.itemName}</td>
                                     <td className="px-4 py-2 border border-gray-200 text-right">
-                                        {item.quantity}
+                                        {Math.round(item.quantity)}
                                     </td>
                                     <td className="px-4 py-2 border border-gray-200 text-right">
                                         {item.nettoItem} {creditNote.currency}
                                     </td>
                                     <td className="px-4 py-2 border border-gray-200 text-right">
-                                        {item.vatItem}%
+                                        {Math.round(item.vatItem)}%
                                     </td>
                                     <td className="px-4 py-2 border border-gray-200 text-right">
                                         {item.bruttoItem} {creditNote.currency}

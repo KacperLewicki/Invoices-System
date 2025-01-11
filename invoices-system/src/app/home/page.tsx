@@ -13,7 +13,7 @@ export default function HomePage() {
       <p className="mt-2 text-lg">W najbliższych aktualizacjach dojdzie zakładka Powiadomienia i Widok Administratora.</p>
       <p className="mt-2 text-lg">W ramach testów proszę o przydzielenie sobie statusów &Status dokumentu& podczas tworzenia faktury,
         najbardziej polecam wybrać status do poprawy bo wtedy można przejść cały proces odpowiedzialny za credit-note. Gdy zakładka Administrator będzie już dostępna i gotowa do użytku
-        - powiekszy się możliwość manipulowania fakturami i ich statusami. Ale to już w krótce ;D, o daslszych aktualizacjach będę iformował na stronie głównej appki i portfolio.</p>
+        - powiekszy się możliwość manipulowania fakturami i ich statusami. Ale to już w krótce ;D, o dalszych aktualizacjach będę informował na stronie głównej appki i portfolio.</p>
     </div>
   );
 }

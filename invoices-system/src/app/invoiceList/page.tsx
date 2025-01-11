@@ -35,7 +35,7 @@ export default function InvoiceList() {
 
   return (
     <div className=" flex flex-col items-center justify-center bg-white py-10">
-      <h1 className="text-3xl font-bold text-purple-700 mb-6">Lista Moich Faktur</h1>
+      <h1 className="text-3xl font-bold text-purple-700 mb-6">Moja Lista Faktur</h1>
 
       <div className="flex space-x-4 mb-8">
         <button

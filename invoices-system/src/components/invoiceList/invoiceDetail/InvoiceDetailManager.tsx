@@ -242,9 +242,9 @@ const InvoiceDetailManager: React.FC = () => {
                 items: invoice.items.map(item => ({
                     id: item.id,
                     itemName: item.nameItem,
-                    quantity: item.quantity,
+                    quantity: Math.round(item.quantity),
                     nettoItem: item.nettoItem,
-                    vatItem: item.vatItem,
+                    vatItem: Math.round(item.vatItem),
                     bruttoItem: item.bruttoItem,
                 })),
             };
@@ -268,7 +268,7 @@ const InvoiceDetailManager: React.FC = () => {
             const link = document.createElement("a");
 
             link.href = pdfURL;
-            link.download = `nota-${invoice.nameInvoice}.pdf`;
+            link.download = `FV-${invoice.nameInvoice}.pdf`;
             document.body.appendChild(link);
             link.click();
             link.remove();
@@ -287,12 +287,12 @@ const InvoiceDetailManager: React.FC = () => {
                 <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 backdrop-blur-sm">
                     <div className="bg-white rounded-lg shadow-lg p-6">
                         <h2 className="text-2xl mb-4 font-semibold text-center">Dane zostały wysłane</h2>
-                        <p className="mb-4 text-center">Twoja poprawiona faktura jest w zakładce Poprawione Faktury i jest w oczekiwaniu na akceptację przez administratora</p>
+                        <p className="mb-4 text-center">Twoja poprawiona faktura jest w zakładce Poprawione Faktury i oczekuje na akceptację przez administratora</p>
                         <div className="flex justify-center">
                             <button
                                 onClick={handleBackToInvoiceList}
                                 className="bg-purple-800 text-white py-2 px-6 rounded-lg shadow-md hover:bg-purple-900">
-                                Powrót do widoku faktury
+                                Powrót do Listy faktur
                             </button>
                         </div>
                     </div>
@@ -301,8 +301,8 @@ const InvoiceDetailManager: React.FC = () => {
             {
                 showComment && (
                     <div className="bg-yellow-100 text-yellow-800 p-4 rounded-lg shadow-md mb-4">
-                        <h2 className="text-lg font-semibold">Komentarz:</h2>
-                        <p>{"Brak"}</p>
+                        <h2 className="text-lg font-semibold">Komentarz Administratora:</h2>
+                        <p>{"Proszę poprawić fakure - pola puste - test"}</p>
                     </div>
                 )
             }
@@ -399,9 +399,9 @@ const InvoiceDetailManager: React.FC = () => {
                                 {invoice.items.map((item) => (
                                     <tr key={item.id} className="hover:bg-purple-100 transition duration-200 ease-in-out">
                                         <td className="px-4 py-2 border border-gray-200">{item.nameItem}</td>
-                                        <td className="px-4 py-2 border border-gray-200 text-right">{item.quantity}</td>
+                                        <td className="px-4 py-2 border border-gray-200 text-right">{Math.round(item.quantity)}</td>
                                         <td className="px-4 py-2 border border-gray-200 text-right">{item.nettoItem} {invoice.currency}</td>
-                                        <td className="px-4 py-2 border border-gray-200 text-right">{item.vatItem}%</td>
+                                        <td className="px-4 py-2 border border-gray-200 text-right">{Math.round(item.vatItem)}%</td>
                                         <td className="px-4 py-2 border border-gray-200 text-right">{item.bruttoItem} {invoice.currency}</td>
                                         <td className="px-4 py-2 border border-gray-200">{item.comment || "Brak"}</td>
                                     </tr>

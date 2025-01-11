@@ -390,7 +390,7 @@ export default async function handler(req, res) {
     const pdfBytes = await pdfDoc.save();
 
     res.setHeader("Content-Type", "application/pdf");
-    res.setHeader("Content-Disposition", `attachment; filename="fv-${invoiceName}.pdf"`);
+    res.setHeader("Content-Disposition", `attachment; filename="FV-${invoiceName}.pdf"`);
     res.status(200).send(Buffer.from(pdfBytes));
 
   } catch (err) {
