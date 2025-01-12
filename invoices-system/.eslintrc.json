@@ -10,8 +10,13 @@
     "src/pages/api/dowolandDetailInvoice.ts",
     "src/pages/api/login.ts",
     "src/pages/api/logout.ts",
-    "src/pages/api/changePassword.ts",
+    "src/pages/api/postChangePassword.ts",
     "src/pages/api/user.ts",
-    "middleware.js"
+    "src/pages/api/creditNoteSend.ts",
+    "src/pages/api/invoiceCreditNotePDF.js",
+    "src/pages/api/invoicePDF.js",
+    "middleware.js",
+    "src/pages/api/getCreditNoteInvoiceData.ts"
   ]
 }
+

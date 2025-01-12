@@ -16,7 +16,7 @@ const Navigation = () => {
 
   const pathname = usePathname();
 
-  const initials = user ? user.name.split(' ').map((n) => n[0]).join('').toUpperCase() : '';
+  const initials = user && typeof user.name === 'string' ? user.name.split(' ').map((n) => n[0]).join('').toUpperCase() : '';
 
   const toggleMenu = () => { setShowMenu(!showMenu) };
 
@@ -27,7 +27,6 @@ const Navigation = () => {
   const openSettings = () => { setShowMenu(false), setIsSettingsOpen(true) };
 
   return (
-
     <>
       <nav className="flex justify-between items-center bg-purple-700 p-4 rounded-lg shadow-lg">
         <ul className="flex space-x-6 text-white font-semibold">
@@ -77,34 +76,33 @@ const Navigation = () => {
           <div className="relative">
             <button
               onClick={toggleMenu}
-              className="w-10 h-10 bg-white text-purple-700 rounded-full flex items-center justify-center"
-            >
+              className="w-10 h-10 bg-white text-purple-700 rounded-full flex items-center justify-center">
               {initials}
             </button>
             {showMenu && (
-              <div className="absolute right-0 mt-2 w-48 bg-white rounded shadow-lg">
+              <div
+                className="absolute right-0 mt-2 w-48 bg-white rounded shadow-lg z-50"
+                style={{ zIndex: 9999 }}>
                 <button
                   onClick={openAccountInfo}
-                  className="block w-full text-left px-4 py-2 hover:bg-purple-100"
-                >
+                  className="block w-full text-left px-4 py-2 hover:bg-purple-100">
                   Informacje o koncie
                 </button>
                 <button
                   onClick={openSettings}
-                  className="block w-full text-left px-4 py-2 hover:bg-purple-100"
-                >
+                  className="block w-full text-left px-4 py-2 hover:bg-purple-100">
                   Ustawienia
                 </button>
                 <button
                   onClick={handleLogout}
-                  className="block w-full text-left px-4 py-2 hover:bg-purple-100"
-                >
+                  className="block w-full text-left px-4 py-2 hover:bg-purple-100">
                   Wyloguj
                 </button>
               </div>
             )}
           </div>
         )}
+
       </nav>
 
       <AccountInfoModal

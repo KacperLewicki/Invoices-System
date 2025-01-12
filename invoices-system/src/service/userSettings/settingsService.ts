@@ -8,11 +8,12 @@ export const changePassword = async (
 
     currentPassword: string,
     newPassword: string
+
 ): Promise<ChangePasswordResponse> => {
 
     try {
 
-        const res = await fetch('/api/changePassword', {
+        const res = await fetch('/api/postChangePassword', {
 
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },

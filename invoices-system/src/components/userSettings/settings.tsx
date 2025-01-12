@@ -28,8 +28,7 @@ const Settings = ({ isOpen, onClose }: SettingsModalProps) => {
                 <div className="flex flex-col items-center">
                     <button
                         onClick={openChangePassword}
-                        className="bg-purple-700 text-white py-2 px-6 rounded hover:bg-purple-600 transition duration-200"
-                    >
+                        className="bg-purple-700 text-white py-2 px-6 rounded hover:bg-purple-600 transition duration-200">
                         Zmień hasło
                     </button>
                 </div>

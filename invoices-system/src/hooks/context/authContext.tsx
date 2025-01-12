@@ -1,135 +1,204 @@
 'use client';
 
-import React, { createContext, useState, useEffect, useContext } from 'react';
-import { User, AuthContextProps } from '../../types/typesInvoice';
+import React, { createContext, useContext, useState, useEffect } from 'react';
+import axios from 'axios';
+import { User } from '../../types/typesInvoice';
+
+// 📚 **AuthContext - Kontekst Autoryzacji**
+
+// Ten hook definiuje kontekst autoryzacji dla aplikacji Next.js.
+// Umożliwia globalne zarządzanie stanem użytkownika i tokenem autoryzacyjnym.
+// Dzięki temu komponenty mogą uzyskiwać dostęp do informacji o użytkowniku
+// i funkcji związanych z autoryzacją bez przekazywania ich przez propsy.
+
+// 📌 **Typy i Interfejsy**
 
 /**
- * Kontekst autoryzacji użytkownika.
- * Umożliwia dostęp do informacji o zalogowanym użytkowniku, stanu ładowania, 
- * a także funkcji logowania i wylogowania w całej aplikacji bez konieczności 
- * przekazywania ich przez propsy.
+ * @interface User
+ * Reprezentuje dane użytkownika.
+ *
+ * @property {string} id - Unikalny identyfikator użytkownika z bazy danych.
+ * @property {string} name - Imię i nazwisko użytkownika.
+ * @property {string} email - Adres e-mail użytkownika.
+ * @property {string} identyfikator - Token autoryzacyjny lub unikalny identyfikator.
  */
-const AuthContext = createContext<AuthContextProps>({
-  user: null,
-  loading: true,
-  login: async () => {},
-  logout: async () => {},
-});
 
 /**
- * Komponent `AuthProvider`:
+ * @interface AuthContextProps
+ * Określa strukturę wartości kontekstu autoryzacji.
  *
- * Dostarcza obiekt kontekstu `AuthContext` do potomnych komponentów.
- * Zapewnia dane dotyczące aktualnie zalogowanego użytkownika, 
- * informacji o stanie ładowania, oraz dwie asynchroniczne funkcje:
- * - `login(email, password)` do logowania użytkownika,
- * - `logout()` do wylogowania użytkownika.
- *
- * Podczas pierwszego renderu pobierane są dane użytkownika z API (`/api/user`),
- * co pozwala określić, czy użytkownik jest zalogowany, oraz ustawić `loading` na `false`
- * po zakończeniu tego procesu.
+ * @property {User | null} user - Dane aktualnie zalogowanego użytkownika.
+ * @property {string | null} token - Token autoryzacyjny użytkownika.
+ * @property {(email: string, password: string) => Promise<void>} login - Funkcja logowania.
+ * @property {() => void} logout - Funkcja wylogowania.
  */
+
+interface AuthContextProps {
+
+  user: User | null;
+  token: string | null;
+  login: (email: string, password: string) => Promise<void>;
+  logout: () => void;
+}
+
+// 📌 **Tworzenie Kontekstu Autoryzacji**
+
+/**
+ * @constant AuthContext
+ * Tworzy kontekst autoryzacji.
+ *
+ * @default undefined - Kontekst domyślnie ma wartość `undefined`,
+ * co pomaga w zapewnieniu, że zostanie użyty tylko w opakowaniu `AuthProvider`.
+ */
+
+const AuthContext = createContext<AuthContextProps | undefined>(undefined);
+
+// 📌 **Dostawca Kontekstu (AuthProvider)**
+
+/**
+ * @function AuthProvider
+ * Opakowuje aplikację w kontekst autoryzacji.
+ *
+ * @param {React.ReactNode} children - Komponenty children, które będą miały dostęp do kontekstu.
+ *
+ * @returns {JSX.Element} - Zwraca komponent React z dostępnym kontekstem autoryzacji.
+ */
+
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
-  // Przechowuje dane zalogowanego użytkownika lub `null` jeśli nikt nie jest zalogowany
+
+  // 📌 Stan tokena autoryzacyjnego
+
+  const [token, setToken] = useState<string | null>(null);
+
+  // 📌 Stan danych użytkownika
   const [user, setUser] = useState<User | null>(null);
-  
-  // Wskazuje, czy w danej chwili trwa ładowanie danych o użytkowniku 
-  // (np. przy pierwszym renderze, przed otrzymaniem odpowiedzi z API)
-  const [loading, setLoading] = useState(true);
+
+  // 🔄 **Ładowanie Danych z localStorage**
 
   /**
-   * Asynchroniczna funkcja pobierająca dane użytkownika z `/api/user`.
-   * Jeśli pobranie zakończy się sukcesem, dane użytkownika zostaną zapisane w stanie `user`.
-   * W przeciwnym razie `user` zostanie ustawiony na `null`.
-   * Po zakończeniu pobierania stan `loading` jest ustawiany na `false`.
+   * @function useEffect
+   * Ładuje token i dane użytkownika z localStorage podczas inicjalizacji aplikacji.
+   *
+   * Ustawia również domyślne nagłówki Axios.
    */
-  const fetchUser = async () => {
-    try {
-      const res = await fetch('/api/user', {
-        method: 'GET',
-        headers: { 'Content-Type': 'application/json' },
-        credentials: 'include', // Umożliwia pobranie ciasteczek lub tokenów sesji
-      });
 
-      if (res.ok) {
-        const data = await res.json();
-        setUser(data.user);
-      } else {
-        // Jeśli serwer nie zwróci 200, zakładamy brak zalogowanego użytkownika.
-        setUser(null);
-      }
-    } catch (error) {
-      console.error('Błąd podczas pobierania danych użytkownika:', error);
-      setUser(null);
-    } finally {
-      // Koniec ładowania - niezależnie od wyniku
-      setLoading(false);
-    }
-  };
-
-  // Użycie `useEffect` do automatycznego pobrania danych użytkownika 
-  // po pierwszym renderze komponentu.
   useEffect(() => {
-    fetchUser();
+
+    const storedToken = localStorage.getItem('token');
+    const storedUser = localStorage.getItem('user');
+
+    if (storedToken && storedUser) {
+
+      const parsedUser = JSON.parse(storedUser);
+      setToken(storedToken);
+      setUser(parsedUser);
+
+      axios.defaults.headers.common['Authorization'] = `Bearer ${storedToken}`;
+
+      if (parsedUser?.identyfikator) {
+
+        axios.defaults.headers.common['identyfikator'] = parsedUser.identyfikator;
+
+      } else {
+
+        console.warn('Brak identyfikatora w danych użytkownika');
+      }
+    }
   }, []);
 
-  /**
-   * Funkcja logowania użytkownika.
-   * Wysyła dane logowania (email i hasło) do `/api/login`.
-   * Jeśli logowanie się powiedzie, ponownie pobiera dane użytkownika, 
-   * aby odświeżyć stan i ustalić, że jest zalogowany.
-   * W razie błędu - rzuca wyjątek z wiadomością.
-   * 
-   * @param email Adres e-mail użytkownika
-   * @param password Hasło użytkownika
-   * @throws {Error} W przypadku niepowodzenia logowania
-   */
-  const login = async (email: string, password: string) => {
-    const res = await fetch('/api/login', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email, password }),
-    });
+  // 🔑 **Funkcja Logowania**
 
-    if (res.ok) {
-      // Jeśli udało się zalogować, ponownie pobieramy dane użytkownika
-      await fetchUser();
-    } else {
-      const data = await res.json();
-      throw new Error(data.message);
+  /**
+   * @function login
+   * Loguje użytkownika i zapisuje dane w stanie oraz localStorage.
+   *
+   * @param {string} email - Adres e-mail użytkownika.
+   * @param {string} password - Hasło użytkownika.
+   */
+
+  const login = async (email: string, password: string) => {
+
+    const response = await axios.post('/api/login', { email, password });
+    const { id, name, email: userEmail, identyfikator } = response.data;
+
+    const userData: User = {
+
+      id,
+      name,
+      email: userEmail,
+      identyfikator,
+    };
+
+    localStorage.setItem('token', identyfikator);
+    localStorage.setItem('user', JSON.stringify(userData));
+
+    setToken(identyfikator);
+    setUser(userData);
+
+    axios.defaults.headers.common['Authorization'] = `Bearer ${identyfikator}`;
+    axios.defaults.headers.common['identyfikator'] = identyfikator;
+  };
+
+  // 🚪 **Funkcja Wylogowania**
+
+  /**
+   * @function logout
+   * Usuwa dane autoryzacyjne z localStorage oraz resetuje stan użytkownika i tokena.
+   */
+
+  const logout = async () => {
+
+    try {
+
+      await axios.post('/api/logout');
+
+      localStorage.removeItem('token');
+      localStorage.removeItem('user');
+      setToken(null);
+      setUser(null);
+
+      delete axios.defaults.headers.common['Authorization'];
+      delete axios.defaults.headers.common['identyfikator'];
+
+    } catch (error) {
+
+      //console.error('Błąd podczas wylogowywania:', error);
+
     }
   };
 
+  // 📦 **Zwracanie Kontekstu**
+
   /**
-   * Funkcja wylogowania użytkownika.
-   * Wysyła żądanie do `/api/logout` i ustawia `user` na `null`.
+   * Udostępnia dane i funkcje autoryzacyjne dla dzieci komponentu.
    */
-  const logout = async () => {
-    await fetch('/api/logout', { method: 'POST' });
-    setUser(null);
-  };
 
   return (
-    <AuthContext.Provider value={{ user, loading, login, logout }}>
+
+    <AuthContext.Provider value={{ user, token, login, logout }}>
       {children}
     </AuthContext.Provider>
   );
 };
 
+// 📌 **Hook Uwierzytelnienia (useAuth)**
+
 /**
- * Custom hook `useAuth`:
- * 
- * Pozwala na dostęp do wartości `AuthContext` z dowolnego komponentu potomnego `AuthProvider`.
- * 
- * Użycie:
- * ```typescript
- * const { user, loading, login, logout } = useAuth();
- * ```
- * 
- * @returns Obiekt zawierający: 
- *  - `user`: dane zalogowanego użytkownika lub `null`, 
- *  - `loading`: boolean wskazujący, czy dane są jeszcze ładowane,
- *  - `login(email, password)`: funkcję do logowania użytkownika,
- *  - `logout()`: funkcję do wylogowania użytkownika.
+ * @function useAuth
+ * Zwraca dostęp do kontekstu autoryzacji.
+ *
+ * @returns {AuthContextProps} - Zwraca obiekt zawierający dane i funkcje autoryzacyjne.
+ *
+ * @throws {Error} - Rzuca błąd, jeśli hook jest używany poza `AuthProvider`.
  */
-export const useAuth = () => useContext(AuthContext);
+
+export const useAuth = () => {
+
+  const context = useContext(AuthContext);
+
+  if (!context) {
+
+    throw new Error('useAuth must be used within an AuthProvider');
+  }
+  return context;
+};

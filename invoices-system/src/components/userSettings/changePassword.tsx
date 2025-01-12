@@ -35,7 +35,7 @@ const ChangePassword: React.FC<ChangePasswordProps> = ({ isOpen, onClose }) => {
 
         <Modal isOpen={isOpen} onClose={onClose} >
             <h2 className="text-2xl mb-6 font-semibold text-center">Zmień Hasło</h2>
-            {message && <p className="mb-4 text-center text-red-500">{message}</p>}
+            {message && <p className="mb-4 text-center text-violet-500">{message}</p>}
             <div className="space-y-4">
                 <div>
                     <label className="block mb-1 font-medium">Obecne Hasło</label>
@@ -69,8 +69,7 @@ const ChangePassword: React.FC<ChangePasswordProps> = ({ isOpen, onClose }) => {
                 </div>
                 <button
                     onClick={handleChangePassword}
-                    className="w-full bg-purple-700 text-white py-2 rounded hover:bg-purple-600 transition duration-200 mt-4"
-                >
+                    className="w-full bg-purple-700 text-white py-2 rounded hover:bg-purple-600 transition duration-200 mt-4">
                     Zmień Hasło
                 </button>
             </div>
