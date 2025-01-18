@@ -61,7 +61,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
         const newInvoiceNumber = lastInvoiceName + 1;
         const newInvoiceNumberStr = newInvoiceNumber.toString().padStart(4, '0');
-        const generatedNameInvoice = `NB/24/${newInvoiceNumberStr}`;
+        const currentYear = new Date().getFullYear().toString();
+        const shortYear = currentYear.split('').slice(-2).join('');
+        const generatedNameInvoice = `NB/${shortYear}/${newInvoiceNumberStr}`;
         invoice.nameInvoice = generatedNameInvoice;
 
         // 📝 **Przygotowanie Danych Faktury**
