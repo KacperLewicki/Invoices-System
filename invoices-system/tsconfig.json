@@ -36,7 +36,7 @@
     ".next/types/**/*.ts",
     ".next/types/app/createInvoice/page.tsx",
     "src/settings/middleware.ts"
-, "src/pages/api/invoiceCreditNotePDF.js"  ],
+, "src/api/invoiceCreditNotePDF.js"  ],
   "exclude": [
     "node_modules"
   ]
