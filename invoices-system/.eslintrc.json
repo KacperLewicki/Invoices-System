@@ -1,21 +1,21 @@
 {
   "extends": "next/core-web-vitals",
   "ignorePatterns": [
-    "src/api/lib/db.js",
-    "src/api/saveInvoiceItems.ts",
-    "src/api/saveInvoiceManual.ts",
-    "src/api/updateInvoiceManual.ts",
-    "src/api/checkInvoiceManualName.ts",
-    "src/api/dowolandInvoiceDataToInvoicePage.ts",
-    "src/api/dowolandDetailInvoice.ts",
-    "src/api/login.ts",
-    "src/api/logout.ts",
-    "src/api/postChangePassword.ts",
-    "src/api/user.ts",
-    "src/api/creditNoteSend.ts",
-    "src/api/invoiceCreditNotePDF.js",
-    "src/api/invoicePDF.js",
+    "src/pages/api/lib/db.js",
+    "src/pages/api/saveInvoiceItems.ts",
+    "src/pages/api/saveInvoiceManual.ts",
+    "src/pages/api/updateInvoiceManual.ts",
+    "src/pages/api/checkInvoiceManualName.ts",
+    "src/pages/api/dowolandInvoiceDataToInvoicePage.ts",
+    "src/pages/api/dowolandDetailInvoice.ts",
+    "src/pages/api/login.ts",
+    "src/pages/api/logout.ts",
+    "src/pages/api/postChangePassword.ts",
+    "src/pages/api/user.ts",
+    "src/pages/api/creditNoteSend.ts",
+    "src/pages/api/invoiceCreditNotePDF.js",
+    "src/pages/api/invoicePDF.js",
     "middleware.js",
-    "src/api/getCreditNoteInvoiceData.ts"
+    "src/pages/api/getCreditNoteInvoiceData.ts"
   ]
 }

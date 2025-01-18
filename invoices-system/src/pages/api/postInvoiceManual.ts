@@ -1,7 +1,7 @@
 import connection from './lib/db';
 import { NextApiRequest, NextApiResponse } from 'next';
 import { RowDataPacket } from 'mysql2';
-import { InvoiceData, ItemData } from '../types/typesInvoice';
+import { InvoiceData, ItemData } from '../../types/typesInvoice';
 
 // 📚 **Handler Dodawania Faktury z Identyfikatorem**
 

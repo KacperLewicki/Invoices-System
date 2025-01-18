@@ -1,6 +1,6 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import pool from './lib/db';
-import { CreditNoteData } from '../types/typesInvoice';
+import { CreditNoteData } from '../../types/typesInvoice';
 
 // 📚 **Handler Tworzenia Korekty Faktury (Credit Note)**
 
