@@ -14,7 +14,7 @@ const CreditNoteDetails: React.FC = () => {
 
             if (!creditNote) {
 
-                throw new Error("Brak danych faktury (creditNote).");
+                throw new Error("No invoice data (creditNote).");
             }
 
             const payload = {
@@ -56,7 +56,7 @@ const CreditNoteDetails: React.FC = () => {
 
             if (!response.ok) {
 
-                throw new Error("Błąd podczas generowania PDF (pdf-lib).");
+                throw new Error("There was a problem with PDF generation.");
             }
 
             const blob = await response.blob();
@@ -73,7 +73,7 @@ const CreditNoteDetails: React.FC = () => {
         } catch (error) {
 
             console.error(error);
-            alert("Wystąpił problem z generowaniem PDF (pdf-lib).");
+            alert("There was a problem with PDF generation.");
         }
     };
 
@@ -81,7 +81,7 @@ const CreditNoteDetails: React.FC = () => {
 
         return (
             <p className="text-center mt-10 text-lg text-gray-600">
-                Nota kredytowa nie została znaleziona.
+                The credit note was not found.
             </p>
         );
     }
@@ -91,95 +91,92 @@ const CreditNoteDetails: React.FC = () => {
             <div className="flex flex-col items-start">
                 <button
                     onClick={handleGeneratePDF}
-                    className="bg-purple-800 text-white py-2 px-6 rounded-lg shadow-md hover:bg-purple-900 mb-4"
-                >
-                    Wygeneruj PDF Faktury
+                    className="bg-purple-800 text-white py-2 px-6 rounded-lg shadow-md hover:bg-purple-900 mb-4">
+                    Generate Invoice PDF
                 </button>
             </div>
 
             <div className="w-full max-w-7xl bg-white p-8 shadow-lg rounded-lg border border-gray-200">
                 <header className="border-b border-gray-300 pb-4 mb-4 flex justify-between items-center">
                     <h1 className="text-3xl font-bold text-purple-700">
-                        Nota Kredytowa: {creditNote.creditNote} - {creditNote.invoiceName}
+                        Credit Note: {creditNote.creditNote} - {creditNote.invoiceName}
                     </h1>
                     <p className="text-lg text-gray-700">
-                        Status:{" "}
+                        Status: {" "}
                         <span
                             className={`px-3 py-1 inline-flex text-xs font-semibold rounded-full ${creditNote.documentStatus ===
-                                "Poprawka zatwierdzona - opłacona - gotowa faktura"
+                                "Correction Approved - Paid - Final Invoice"
                                 ? "bg-green-200 text-green-800"
                                 : "bg-green-200 text-green-800"
-                                }`}
-                        >
+                                }`}>
                             {creditNote.documentStatus}
                         </span>
                     </p>
                 </header>
 
                 <section className="mb-6 text-gray-900">
-                    <h2 className="text-lg font-semibold mb-2 text-purple-700">Dane Klienta</h2>
+                    <h2 className="text-lg font-semibold mb-2 text-purple-700">Client Details</h2>
                     <div className="grid grid-cols-2 gap-4">
                         <p>
-                            <strong>Klient:</strong> {creditNote.customerName}
+                            <strong>Client:</strong> {creditNote.customerName}
                         </p>
                         <p>
-                            <strong>Sprzedawca:</strong> {creditNote.seller}
+                            <strong>Seller:</strong> {creditNote.seller}
                         </p>
                         <p>
-                            <strong>Metoda płatności:</strong> {creditNote.paymentMethod}
+                            <strong>Payment Method:</strong> {creditNote.paymentMethod}
                         </p>
                         <p>
-                            <strong>Miesiąc:</strong> {creditNote.effectiveMonth}
+                            <strong>Month:</strong> {creditNote.effectiveMonth}
                         </p>
                         <p>
-                            <strong>Waluta:</strong> {creditNote.currency}
+                            <strong>Currency:</strong> {creditNote.currency}
                         </p>
                     </div>
                 </section>
 
                 <section className="mb-6 text-gray-900">
                     <h2 className="text-lg font-semibold mb-2 text-purple-700">
-                        Szczegóły Noty Kredytowej
+                        Credit Note Details
                     </h2>
                     <div className="grid grid-cols-2 gap-4">
                         <p>
-                            <strong>Data wystawienia:</strong>{" "}
+                            <strong>Issue Date:</strong>{" "}
                             {new Date(creditNote.dataInvoice).toLocaleDateString()}
                         </p>
                         <p>
-                            <strong>Data sprzedaży:</strong>{" "}
+                            <strong>Sale Date:</strong>{" "}
                             {new Date(creditNote.dataInvoiceSell).toLocaleDateString()}
                         </p>
                         <p>
-                            <strong>Termin płatności:</strong>{" "}
+                            <strong>Payment Due Date:</strong>{" "}
                             {new Date(creditNote.dueDate).toLocaleDateString()}
                         </p>
                         <p>
-                            <strong>Komentarz:</strong> {creditNote.comments || "Brak"}
+                            <strong>Comment:</strong> {creditNote.comments || "None"}
                         </p>
                     </div>
                 </section>
 
                 <section className="mb-6 text-gray-900">
                     <h2 className="text-lg font-semibold mb-2 text-purple-700">
-                        Pozycje Noty Kredytowej
+                        Credit Note Items
                     </h2>
                     <table className="w-full text-left border-collapse bg-white">
                         <thead>
                             <tr className="bg-purple-800 text-white">
-                                <th className="px-4 py-2 border border-gray-200">Nazwa</th>
-                                <th className="px-4 py-2 border border-gray-200 text-right">Ilość</th>
-                                <th className="px-4 py-2 border border-gray-200 text-right">Netto</th>
+                                <th className="px-4 py-2 border border-gray-200">Name</th>
+                                <th className="px-4 py-2 border border-gray-200 text-right">Quantity</th>
+                                <th className="px-4 py-2 border border-gray-200 text-right">Net</th>
                                 <th className="px-4 py-2 border border-gray-200 text-right">VAT</th>
-                                <th className="px-4 py-2 border border-gray-200 text-right">Brutto</th>
+                                <th className="px-4 py-2 border border-gray-200 text-right">Gross</th>
                             </tr>
                         </thead>
                         <tbody>
                             {creditNote.items.map((item) => (
                                 <tr
                                     key={item.id}
-                                    className="hover:bg-purple-100 transition duration-200 ease-in-out"
-                                >
+                                    className="hover:bg-purple-100 transition duration-200 ease-in-out">
                                     <td className="px-4 py-2 border border-gray-200">{item.itemName}</td>
                                     <td className="px-4 py-2 border border-gray-200 text-right">
                                         {Math.round(item.quantity)}
@@ -201,13 +198,13 @@ const CreditNoteDetails: React.FC = () => {
 
                 <section className="mt-6 text-right border-t border-gray-300 pt-4 text-gray-900">
                     <p className="text-lg">
-                        <strong>Razem Netto:</strong> {creditNote.summaryNetto} {creditNote.currency}
+                        <strong>Total Net:</strong> {creditNote.summaryNetto} {creditNote.currency}
                     </p>
                     <p className="text-lg">
-                        <strong>Razem VAT:</strong> {creditNote.summaryVat} {creditNote.currency}
+                        <strong>Total VAT:</strong> {creditNote.summaryVat} {creditNote.currency}
                     </p>
                     <p className="text-lg font-bold text-purple-700">
-                        <strong>Razem Brutto:</strong> {creditNote.summaryBrutto}{" "}
+                        <strong>Total Gross:</strong> {creditNote.summaryBrutto}{" "}
                         {creditNote.currency}
                     </p>
                 </section>

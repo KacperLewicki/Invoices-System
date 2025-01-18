@@ -39,7 +39,7 @@ const CreditNotes: React.FC = () => {
 
     if (loadingCreditNotes) {
 
-        return <p className="text-center mt-10 text-lg text-gray-600">Ładowanie danych...</p>;
+        return <p className="text-center mt-10 text-lg text-gray-600">Data loading...</p>;
     }
 
     return (
@@ -48,15 +48,15 @@ const CreditNotes: React.FC = () => {
                 <table className="w-full table-auto border-collapse">
                     <thead className="bg-purple-800 text-white">
                         <tr>
-                            <th className="px-4 py-4 text-sm font-semibold text-center">Lp.</th>
-                            <th className="px-4 py-4 text-sm font-semibold">Numer Credit Note</th>
-                            <th className="px-4 py-4 text-sm font-semibold">Faktura</th>
-                            <th className="px-4 py-4 text-sm font-semibold">Klient</th>
-                            <th className="px-4 py-4 text-sm font-semibold text-right">Wartość brutto</th>
-                            <th className="px-4 py-4 text-sm font-semibold text-center">Waluta</th>
-                            <th className="px-4 py-4 text-sm font-semibold">Data wystawienia</th>
-                            <th className="px-4 py-4 text-sm font-semibold">Termin płatności</th>
-                            <th className="px-4 py-4 text-sm font-semibold">Miesiąc</th>
+                            <th className="px-4 py-4 text-sm font-semibold text-center">No.</th>
+                            <th className="px-4 py-4 text-sm font-semibold">Credit Note Number</th>
+                            <th className="px-4 py-4 text-sm font-semibold">Invoice</th>
+                            <th className="px-4 py-4 text-sm font-semibold">Client</th>
+                            <th className="px-4 py-4 text-sm font-semibold text-right">Gross Value</th>
+                            <th className="px-4 py-4 text-sm font-semibold text-center">Currency</th>
+                            <th className="px-4 py-4 text-sm font-semibold">Issue Date</th>
+                            <th className="px-4 py-4 text-sm font-semibold">Payment Due Date</th>
+                            <th className="px-4 py-4 text-sm font-semibold">Month</th>
                             <th className="px-4 py-4 text-sm font-semibold text-center">Status</th>
                         </tr>
                     </thead>
@@ -82,7 +82,7 @@ const CreditNotes: React.FC = () => {
                                     <td className="px-4 py-4 text-sm border border-gray-200">{creditNote.effectiveMonth}</td>
                                     <td className="px-4 py-4 text-sm border border-gray-200 text-center">
                                         <span
-                                            className={`px-3 py-1 inline-flex text-xs font-semibold rounded-full ${creditNote.documentStatus === 'Poprawka zatwierdzona - opłacona - gotowa faktura'
+                                            className={`px-3 py-1 inline-flex text-xs font-semibold rounded-full ${creditNote.documentStatus === 'Correction Approved - Paid - Final Invoice'
                                                 ? 'bg-green-200 text-green-800'
                                                 : 'bg-yellow-200 text-yellow-800'
                                                 }`}>
@@ -94,7 +94,7 @@ const CreditNotes: React.FC = () => {
                         ) : (
                             <tr>
                                 <td colSpan={9} className="px-4 py-4 text-center text-sm text-gray-600">
-                                    Brak dostępnych not kredytowych do wyświetlenia.
+                                    No available credit notes to display.
                                 </td>
                             </tr>
                         )}

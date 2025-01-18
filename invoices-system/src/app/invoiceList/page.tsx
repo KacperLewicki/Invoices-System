@@ -34,24 +34,24 @@ export default function InvoiceList() {
   }
 
   return (
-    <div className=" flex flex-col items-center justify-center bg-white py-10">
-      <h1 className="text-3xl font-bold text-purple-700 mb-6">Moja Lista Faktur</h1>
+    <div className="flex flex-col items-center justify-center bg-white py-10">
+      <h1 className="text-3xl font-bold text-purple-700 mb-6">My Invoice List</h1>
 
       <div className="flex space-x-4 mb-8">
         <button
           className="bg-purple-600 text-white rounded-lg py-2 px-6 hover:bg-purple-700 transition duration-300 ease-in-out transform hover:scale-105"
           onClick={showApprovedInvoice}>
-          Zatwierdzone Faktury
+          Approved Invoices
         </button>
         <button
           className="bg-purple-600 text-white rounded-lg py-2 px-6 hover:bg-purple-700 transition duration-300 ease-in-out transform hover:scale-105"
           onClick={showInvoice}>
-          Stworzone Faktury
+          Created Invoices
         </button>
         <button
           className="bg-purple-600 text-white rounded-lg py-2 px-6 hover:bg-purple-700 transition duration-300 ease-in-out transform hover:scale-105"
           onClick={showCreditNote}>
-          Poprawione Faktury
+          Corrected Invoices
         </button>
 
       </div>

@@ -35,7 +35,7 @@ const ApprovedInvoices: React.FC = () => {
 
             setLocalInvoices(
                 invoices
-                    .filter((invoice) => invoice.documentStatus?.trim() === 'Opłacona - Gotowa faktura')
+                    .filter((invoice) => invoice.documentStatus?.trim() === 'Paid - Final Invoice')
                     .map((invoice) => ({ ...invoice, type: 'invoice' }))
             );
         }
@@ -44,7 +44,7 @@ const ApprovedInvoices: React.FC = () => {
 
             setLocalCreditNotes(
                 creditNotes
-                    .filter((creditNote) => creditNote.documentStatus?.trim() === 'Poprawka zatwierdzona - opłacona - gotowa faktura')
+                    .filter((creditNote) => creditNote.documentStatus?.trim() === 'Correction Approved - Paid - Final Invoice')
                     .map((creditNote) => ({ ...creditNote, type: 'creditNote' }))
             );
         }
@@ -68,7 +68,7 @@ const ApprovedInvoices: React.FC = () => {
 
     if (loading || loadingCreditNotes) {
 
-        return <p className="text-center mt-10 text-lg text-gray-600">Ładowanie danych...</p>;
+        return <p className="text-center mt-10 text-lg text-gray-600">Data loading...</p>;
     }
 
     return (
@@ -77,14 +77,14 @@ const ApprovedInvoices: React.FC = () => {
                 <table className="w-full table-auto border-collapse">
                     <thead className="bg-purple-800 text-white">
                         <tr>
-                            <th className="px-4 py-4 text-sm font-semibold text-center">Lp.</th>
-                            <th className="px-4 py-4 text-sm font-semibold">Numer faktury</th>
-                            <th className="px-4 py-4 text-sm font-semibold">Klient</th>
-                            <th className="px-4 py-4 text-sm font-semibold text-right">Wartość brutto</th>
-                            <th className="px-4 py-4 text-sm font-semibold text-center">Waluta</th>
-                            <th className="px-4 py-4 text-sm font-semibold">Data wystawienia</th>
-                            <th className="px-4 py-4 text-sm font-semibold">Termin płatności</th>
-                            <th className="px-4 py-4 text-sm font-semibold text-center">Typ</th>
+                            <th className="px-4 py-4 text-sm font-semibold text-center">No.</th>
+                            <th className="px-4 py-4 text-sm font-semibold">Invoice Number</th>
+                            <th className="px-4 py-4 text-sm font-semibold">Client</th>
+                            <th className="px-4 py-4 text-sm font-semibold text-right">Gross Value</th>
+                            <th className="px-4 py-4 text-sm font-semibold text-center">Currency</th>
+                            <th className="px-4 py-4 text-sm font-semibold">Issue Date</th>
+                            <th className="px-4 py-4 text-sm font-semibold">Payment Due Date</th>
+                            <th className="px-4 py-4 text-sm font-semibold text-center">Type</th>
                             <th className="px-4 py-4 text-sm font-semibold text-center">Status</th>
                         </tr>
                     </thead>
@@ -109,7 +109,7 @@ const ApprovedInvoices: React.FC = () => {
                                         {new Date(invoice.dueDate).toLocaleDateString()}
                                     </td>
                                     <td className="px-4 py-4 text-sm text-center border border-gray-200">
-                                        {invoice.type === 'invoice' ? 'Faktura' : 'Nota kredytowa'}
+                                        {invoice.type === 'invoice' ? 'Invoice' : 'Credit Note'}
                                     </td>
                                     <td className="px-4 py-4 text-sm border border-gray-200 text-center">
                                         <span className="px-3 py-1 inline-flex text-xs font-semibold rounded-full bg-green-200 text-green-800">
@@ -121,7 +121,7 @@ const ApprovedInvoices: React.FC = () => {
                         ) : (
                             <tr>
                                 <td colSpan={9} className="px-4 py-4 text-center text-sm text-gray-600">
-                                    Brak dostępnych faktur lub not kredytowych do wyświetlenia.
+                                    No available invoices or credit notes to display.
                                 </td>
                             </tr>
                         )}

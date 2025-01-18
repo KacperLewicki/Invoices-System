@@ -30,15 +30,15 @@ export default function LoginPage() {
 
       if (err.response?.status === 401) {
 
-        setError(err.response.data.message || 'Podano błędny email lub hasło.');
+        setError(err.response.data.message || 'An incorrect email or password was entered.');
 
       } else if (err.response?.status === 500) {
 
-        setError('Wystąpił błąd serwera. Spróbuj ponownie później.');
+        setError('A server error has occurred, please try again later.');
 
       } else {
 
-        setError('Wystąpił nieoczekiwany błąd.');
+        setError('An unexpected error occurred.');
       }
     }
   };
@@ -49,10 +49,9 @@ export default function LoginPage() {
   };
 
   return (
-
     <div className="flex items-center justify-center">
       <form onSubmit={handleSubmit} className="bg-white p-8 rounded shadow-md w-96">
-        <h2 className="text-2xl mb-6 text-center">Logowanie</h2>
+        <h2 className="text-2xl mb-6 text-center">Login</h2>
         {error && <p className="text-red-500 mb-4">{error}</p>}
 
         <div className="mb-4">
@@ -66,7 +65,7 @@ export default function LoginPage() {
         </div>
 
         <div className="mb-6">
-          <label className="block mb-2">Hasło</label>
+          <label className="block mb-2">Password</label>
           <input
             type="password"
             className="w-full p-2 border rounded"
@@ -78,16 +77,16 @@ export default function LoginPage() {
         <button
           type="submit"
           className="w-full bg-purple-700 text-white py-2 rounded hover:bg-purple-600">
-          Zaloguj się
+          Log In
         </button>
 
         <div className="mt-4 text-center">
-          <p className="mb-2">Nie masz konta?</p>
+          <p className="mb-2">Dont have an account?</p>
           <button
             type="button"
             onClick={handleRegisterRedirect}
             className="text-purple-700 hover:underline">
-            Zarejestruj się
+            Register
           </button>
         </div>
       </form>

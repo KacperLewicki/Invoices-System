@@ -32,34 +32,34 @@ const Navigation = () => {
         <ul className="flex space-x-6 text-white font-semibold">
 
           {!user &&
-            <p className="hover:bg-purple-500 px-3 py-2 rounded-md transition duration-200 cursor-default" onClick={() => window.location.href = '/'}>Invoice System - Kacper Lewicki - Logowanie</p>
+            <p className="hover:bg-purple-500 px-3 py-2 rounded-md transition duration-200 cursor-default" onClick={() => window.location.href = '/'}>Invoice System - Kacper Lewicki - Login</p>
           }
 
           {user && (
             <>
               <li>
                 <Link href="/home" className="hover:bg-purple-500 px-3 py-2 rounded-md transition duration-200">
-                  Strona Główna
+                  Home
                 </Link>
               </li>
               <li>
                 <Link href="/news" className="hover:bg-purple-500 px-3 py-2 rounded-md transition duration-200">
-                  Powiadomienia
+                  Notifications
                 </Link>
               </li>
               <li>
                 <Link href="/invoiceList" className="hover:bg-purple-500 px-3 py-2 rounded-md transition duration-200">
-                  Lista Faktur
+                  Invoice List
                 </Link>
               </li>
               <li>
                 <Link href="/createInvoice" className="hover:bg-purple-500 px-3 py-2 rounded-md transition duration-200">
-                  Stwórz Fakturę
+                  Create Invoice
                 </Link>
               </li>
               <li>
                 <Link href="/admin" className="hover:bg-purple-500 px-3 py-2 rounded-md transition duration-200">
-                  Administrator
+                  Admin
                 </Link>
               </li>
             </>
@@ -70,7 +70,7 @@ const Navigation = () => {
           <div>
             <Link href="/login">
               <button className="bg-white text-purple-700 font-semibold py-2 px-4 rounded hover:bg-purple-100 transition duration-200">
-                Zaloguj
+                Login
               </button>
             </Link>
           </div>
@@ -90,17 +90,17 @@ const Navigation = () => {
                 <button
                   onClick={openAccountInfo}
                   className="block w-full text-left px-4 py-2 hover:bg-purple-100">
-                  Informacje o koncie
+                  Account Info
                 </button>
                 <button
                   onClick={openSettings}
                   className="block w-full text-left px-4 py-2 hover:bg-purple-100">
-                  Ustawienia
+                  Settings
                 </button>
                 <button
                   onClick={handleLogout}
                   className="block w-full text-left px-4 py-2 hover:bg-purple-100">
-                  Wyloguj
+                  Logout
                 </button>
               </div>
             )}

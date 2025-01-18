@@ -180,7 +180,6 @@ const Invoice: React.FC = () => {
   const isFormDisabled = !!formData.nameInvoice;
 
   return (
-
     <div className="flex items-center justify-center min-h-screen bg-white p-6">
       <div className="bg-white shadow-xl rounded-lg p-8 w-full max-w-7xl border border-gray-200 transform transition-all duration-300 hover:shadow-2xl">
         <h1 className="text-3xl font-bold text-purple-700 text-center mb-6">Faktura KL</h1>
@@ -192,13 +191,13 @@ const Invoice: React.FC = () => {
               type="button"
               onClick={handleNewForm}
               className="bg-purple-600 text-white rounded-lg py-2 px-4 hover:bg-purple-700 transition duration-300 ease-in-out transform hover:shadow-md">
-              Nowy Formularz
+              New Form
             </button>
           </div>
 
           <div className="col-span-full p-4 rounded-lg border border-gray-300 transition transform duration-300 hover:shadow-lg">
             <h2 className="text-xl font-semibold text-gray-700 hover:text-purple-700 transition duration-300">
-              Informacje podstawowe
+              Basic Information
             </h2>
 
             <div className="grid gap-4 grid-cols-1 md:grid-cols-3 mt-4">
@@ -207,57 +206,52 @@ const Invoice: React.FC = () => {
                 name="nameInvoice"
                 type="text"
                 disabled
-                placeholder="Wygenerowany numer faktury"
+                placeholder="Generated Invoice Number"
                 title='Wygenerowany numer faktury'
                 value={formData.nameInvoice}
-                onChange={handleChange}
-              />
+                onChange={handleChange} />
               <input
                 className="border border-purple-300 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-purple-500"
                 name="dataInvoice"
                 type="date"
                 required
-                placeholder="Data wydania"
+                placeholder="Issue Date"
                 title='Data wydania'
                 value={formData.dataInvoice}
                 onChange={handleChange}
-                disabled={isFormDisabled}
-              />
+                disabled={isFormDisabled} />
               <input
                 className="border border-purple-300 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-purple-500"
                 name="dataInvoiceSell"
                 type="date"
-                placeholder="Data wystawienia faktury"
+                placeholder="Invoice Issuance Date"
                 title='Data wystawienia faktury'
                 required
                 value={formData.dataInvoiceSell}
                 onChange={handleChange}
-                disabled={isFormDisabled}
-              />
+                disabled={isFormDisabled} />
               <input
                 className="border border-purple-300 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-purple-500"
                 name="seller"
                 type="text"
-                placeholder="Sprzedawca"
+                placeholder="Seller"
                 title='Sprzedawca'
                 value={formData.seller}
                 onChange={handleChange}
-                disabled={isFormDisabled}
-              />
+                disabled={isFormDisabled} />
               <input
                 className="border border-purple-300 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-purple-500"
                 name="customerName"
                 type="text"
                 title='Klient'
-                placeholder="Klient"
+                placeholder="Client"
                 value={formData.customerName}
                 onChange={handleChange}
-                disabled={isFormDisabled}
-              />
+                disabled={isFormDisabled} />
               <textarea
                 className="border border-purple-300 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-purple-500"
                 name="description"
-                placeholder="Opis"
+                placeholder="Description"
                 title='Opis'
                 value={formData.description}
                 onChange={handleChange}
@@ -270,19 +264,19 @@ const Invoice: React.FC = () => {
                 value={formData.effectiveMonth}
                 onChange={handleChange}
                 disabled={isFormDisabled}>
-                <option hidden>Obowiązujący miesiąc</option>
-                <option>Styczeń</option>
-                <option>Luty</option>
-                <option>Marzec</option>
-                <option>Kwiecień</option>
-                <option>Maj</option>
-                <option>Czerwiec</option>
-                <option>Lipiec</option>
-                <option>Sierpień</option>
-                <option>Wrzesień</option>
-                <option>Październik</option>
-                <option>Listopad</option>
-                <option>Grudzień</option>
+                <option hidden>Effective Month</option>
+                <option>January</option>
+                <option>February</option>
+                <option>March</option>
+                <option>April</option>
+                <option>May</option>
+                <option>June</option>
+                <option>July</option>
+                <option>August</option>
+                <option>September</option>
+                <option>October</option>
+                <option>November</option>
+                <option>December</option>
               </select>
             </div>
           </div>
@@ -290,7 +284,7 @@ const Invoice: React.FC = () => {
           {!formData.nameInvoice && (
             <div className="col-span-full p-4 rounded-lg border border-gray-300 transition transform duration-300 hover:shadow-lg">
               <h2 className="text-xl font-semibold text-gray-700 hover:text-purple-700 transition duration-300">
-                Dodaj przedmiot do faktury
+                Add Item to Invoice
               </h2>
 
               <div className="grid gap-4 grid-cols-1 md:grid-cols-3 mt-4">
@@ -298,20 +292,18 @@ const Invoice: React.FC = () => {
                   className="border border-purple-300 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-purple-500"
                   name="nameItem"
                   type="text"
-                  placeholder="Nazwa Przedmiotu"
+                  placeholder="Item Name"
                   title='Nazwa Przedmiotu'
                   value={currentItem.nameItem}
-                  onChange={handleItemChange}
-                />
+                  onChange={handleItemChange} />
                 <input
                   className="border border-purple-300 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-purple-500"
                   name="quantity"
                   type="number"
-                  placeholder="Ilość"
+                  placeholder="Quantity"
                   title='Ilość'
                   value={currentItem.quantity}
-                  onChange={handleItemChange}
-                />
+                  onChange={handleItemChange} />
                 <input
                   className="border border-purple-300 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-purple-500"
                   name="vatItem"
@@ -319,26 +311,23 @@ const Invoice: React.FC = () => {
                   placeholder="VAT"
                   title='VAT'
                   value={currentItem.vatItem}
-                  onChange={handleItemChange}
-                />
+                  onChange={handleItemChange} />
                 <input
                   className="border border-purple-300 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-purple-500"
                   name="nettoItem"
                   type="number"
-                  placeholder="Netto"
+                  placeholder="Net"
                   title='Netto'
                   value={currentItem.nettoItem}
-                  onChange={handleItemChange}
-                />
+                  onChange={handleItemChange} />
                 <input
                   className="border border-purple-300 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-purple-500"
                   name="comment"
                   type="text"
-                  placeholder="Komentarz"
+                  placeholder="Comment"
                   title='Komentarz'
                   value={currentItem.comment}
-                  onChange={handleItemChange}
-                />
+                  onChange={handleItemChange} />
               </div>
 
               <div className="flex justify-center mt-4">
@@ -346,7 +335,7 @@ const Invoice: React.FC = () => {
                   type="button"
                   onClick={addItem}
                   className="bg-purple-600 text-white rounded-lg py-2 px-6 hover:bg-purple-700 transition duration-300 ease-in-out transform hover:scale-105">
-                  Dodaj Przedmiot
+                  Add Item
                 </button>
               </div>
             </div>
@@ -354,19 +343,19 @@ const Invoice: React.FC = () => {
 
           <div className="col-span-full p-4 rounded-lg border border-gray-300 transition transform duration-300 hover:shadow-lg">
             <h2 className="text-xl font-semibold text-gray-700 hover:text-purple-700 transition duration-300">
-              Przedmioty dodane do faktury
+              Items Added to Invoice
             </h2>
 
             <table className="w-full border border-gray-300 mt-4 rounded-lg overflow-hidden">
               <thead>
                 <tr className="bg-purple-800 text-white">
-                  <th className="p-2">Nazwa</th>
-                  <th>Ilość</th>
-                  <th>Vat</th>
-                  <th>Netto</th>
-                  <th>Brutto</th>
-                  <th>Komentarz</th>
-                  <th>Akcje</th>
+                  <th className="p-2">Name</th>
+                  <th>Quantity</th>
+                  <th>VAT</th>
+                  <th>Net</th>
+                  <th>Gross</th>
+                  <th>Comment</th>
+                  <th>Actions</th>
                 </tr>
               </thead>
               <tbody>
@@ -379,7 +368,7 @@ const Invoice: React.FC = () => {
                     <td className="p-2 text-center">{item.bruttoItem}</td>
                     <td className="p-2 text-center">{item.comment}</td>
                     <td className="p-2 text-center">
-                      <button onClick={() => deleteItem(index)} className="text-red-500 hover:underline">Usuń</button>
+                      <button onClick={() => deleteItem(index)} className="text-red-500 hover:underline">Delete</button>
                     </td>
                   </tr>
                 ))}
@@ -389,7 +378,7 @@ const Invoice: React.FC = () => {
 
           <div className="col-span-full p-4 rounded-lg border border-gray-300 transition transform duration-300 hover:shadow-lg">
             <h2 className="text-xl font-semibold text-gray-700 hover:text-purple-700 transition duration-300">
-              Suma
+              Total
             </h2>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
@@ -398,11 +387,10 @@ const Invoice: React.FC = () => {
                 name="summaryNetto"
                 type="number"
                 disabled
-                placeholder="Netto"
+                placeholder="Net"
                 title='Suma Netto'
                 value={formData.summaryNetto}
-                onChange={handleChange}
-              />
+                onChange={handleChange} />
               <input
                 className="border border-purple-300 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-purple-500"
                 name="summaryVat"
@@ -411,18 +399,16 @@ const Invoice: React.FC = () => {
                 placeholder="VAT"
                 title='Suma VAT'
                 value={formData.summaryVat}
-                onChange={handleChange}
-              />
+                onChange={handleChange} />
               <input
                 className="border border-purple-300 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-purple-500"
                 name="summaryBrutto"
                 type="number"
                 disabled
-                placeholder="Brutto"
+                placeholder="Gross"
                 title='Suma Brutto'
                 value={formData.summaryBrutto}
-                onChange={handleChange}
-              />
+                onChange={handleChange} />
               <select
                 className="border border-purple-300 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-purple-500"
                 name="currency"
@@ -430,7 +416,7 @@ const Invoice: React.FC = () => {
                 onChange={handleChange}
                 title='Waluta'
                 disabled={isFormDisabled}>
-                <option hidden>Wybierz Walutę</option>
+                <option hidden>Select Currency</option>
                 <option>PLN</option>
                 <option>EUR</option>
                 <option>USD</option>
@@ -440,7 +426,7 @@ const Invoice: React.FC = () => {
 
           <div className="col-span-full p-4 rounded-lg border border-gray-300 transition transform duration-300 hover:shadow-lg">
             <h2 className="text-xl font-semibold text-gray-700 hover:text-purple-700 transition duration-300">
-              Szczegóły
+              Details
             </h2>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
@@ -448,33 +434,30 @@ const Invoice: React.FC = () => {
                 className="border border-purple-300 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-purple-500"
                 name="dueDate"
                 type="date"
-                placeholder="Termin wykonania"
+                placeholder="Due Date"
                 title='Termin wykonania'
                 required
                 value={formData.dueDate}
                 onChange={handleChange}
-                disabled={isFormDisabled}
-              />
+                disabled={isFormDisabled} />
               <input
                 className="border border-purple-300 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-purple-500"
                 name="paymentMethod"
                 type="text"
-                placeholder="Metoda płatności"
+                placeholder="Payment Method"
                 title='Metoda płatności'
                 value={formData.paymentMethod}
                 onChange={handleChange}
-                readOnly
-              />
+                readOnly />
               <input
                 className="border border-purple-300 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-purple-500"
                 name="exchangeRate"
                 title='Kurs'
                 type="number"
-                placeholder="Kurs"
+                placeholder="Exchange Rate"
                 value={formData.exchangeRate}
                 onChange={handleChange}
-                readOnly
-              />
+                readOnly />
               <select
                 className="border border-purple-300 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-purple-500"
                 name="documentStatus"
@@ -482,32 +465,30 @@ const Invoice: React.FC = () => {
                 title='Status dokumentu'
                 onChange={handleChange}
                 disabled={isFormDisabled}>
-                <option hidden>Status dokumentu</option>
-                <option>W trakcie akceptacji</option>
-                <option>Opłacona - Gotowa faktura</option>
-                <option>Częściowo opłacone</option>
-                <option>Do poprawy</option>
+                <option hidden>Document Status</option>
+                <option>Under Review</option>
+                <option>Paid - Final Invoice</option>
+                <option>Partially Paid</option>
+                <option>Requires Correction</option>
               </select>
               <input
                 className="border border-purple-300 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-purple-500"
                 name="paymentTerm"
                 type="date"
-                placeholder="Termin płatności"
+                placeholder="Payment Due Date"
                 title='Termin płatności'
                 required
                 value={formData.paymentTerm}
                 onChange={handleChange}
-                disabled={isFormDisabled}
-              />
+                disabled={isFormDisabled} />
               <textarea
                 className="border border-purple-300 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-purple-500"
                 name="comments"
                 title='Uwagi'
-                placeholder="Uwagi"
+                placeholder="Comments"
                 value={formData.comments}
                 onChange={handleChange}
-                disabled={isFormDisabled}
-              />
+                disabled={isFormDisabled} />
             </div>
           </div>
 
@@ -516,7 +497,7 @@ const Invoice: React.FC = () => {
               <button
                 type="submit"
                 className="bg-purple-600 text-white rounded-lg py-2 px-6 hover:bg-purple-700 transition duration-300 ease-in-out transform hover:scale-105">
-                Wyślij Fakturę do weryfikacji
+                Submit Invoice for Review
               </button>)}
           </div>
 

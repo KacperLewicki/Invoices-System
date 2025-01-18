@@ -6,7 +6,7 @@ import Modal from "../../modal/modal_popup";
 import { CreditNoteData, CreditNoteItemData } from "../../../types/typesInvoice";
 import { fetchInvoiceData, sendCreditNote } from "../../../service/invoiceList/invoiceListService";
 
-// zastanowić się nad logiką InvoiceDetailManager - ulepszenie - poprawka
+// Rethinking the logic for displaying invoices - an improvement - a fix
 
 const InvoiceDetailManager: React.FC = () => {
 
@@ -151,7 +151,7 @@ const InvoiceDetailManager: React.FC = () => {
 
             if (!creditNoteData[field]) {
 
-                alert(`Pole "${label}" jest wymagane.`);
+                alert(`The “${label}” field is required.`);
 
                 return false;
             }
@@ -203,7 +203,7 @@ const InvoiceDetailManager: React.FC = () => {
         } catch (error) {
 
             console.error('Error creating credit note:', error);
-            alert('Wystąpił błąd podczas przesyłania poprawionej faktury.');
+            alert('An error occurred while uploading the corrected invoice.');
         }
     };
 
@@ -212,7 +212,7 @@ const InvoiceDetailManager: React.FC = () => {
         window.location.href = '/invoiceList';
     };
 
-    if (!invoice) return <p>Faktura nie znaleziona</p>;
+    if (!invoice) return <p>The invoice was not found.</p>;
 
     const handleGeneratePDF = async () => {
 
@@ -220,7 +220,7 @@ const InvoiceDetailManager: React.FC = () => {
 
             if (!invoice) {
 
-                throw new Error("Brak danych faktury (invoice).");
+                throw new Error("No invoice (invoice) details.");
             }
 
             const payload = {
@@ -260,7 +260,7 @@ const InvoiceDetailManager: React.FC = () => {
 
             if (!response.ok) {
 
-                throw new Error("Błąd podczas generowania PDF (pdf-lib).");
+                throw new Error("There was a problem with PDF generation.");
             }
 
             const blob = await response.blob();
@@ -277,7 +277,7 @@ const InvoiceDetailManager: React.FC = () => {
         } catch (error) {
 
             console.error(error);
-            alert("Wystąpił problem z generowaniem PDF (pdf-lib).");
+            alert("There was a problem with PDF generation.");
         }
     };
 
@@ -286,13 +286,13 @@ const InvoiceDetailManager: React.FC = () => {
             {showConfirmation && (
                 <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 backdrop-blur-sm">
                     <div className="bg-white rounded-lg shadow-lg p-6">
-                        <h2 className="text-2xl mb-4 font-semibold text-center">Dane zostały wysłane</h2>
-                        <p className="mb-4 text-center">Twoja poprawiona faktura jest w zakładce Poprawione Faktury i oczekuje na akceptację przez administratora</p>
+                        <h2 className="text-2xl mb-4 font-semibold text-center">Data has been sent</h2>
+                        <p className="mb-4 text-center">Your corrected invoice is in the Corrected Invoices tab and awaits administrator approval</p>
                         <div className="flex justify-center">
                             <button
                                 onClick={handleBackToInvoiceList}
                                 className="bg-purple-800 text-white py-2 px-6 rounded-lg shadow-md hover:bg-purple-900">
-                                Powrót do Listy faktur
+                                Back to Invoice List
                             </button>
                         </div>
                     </div>
@@ -301,8 +301,8 @@ const InvoiceDetailManager: React.FC = () => {
             {
                 showComment && (
                     <div className="bg-yellow-100 text-yellow-800 p-4 rounded-lg shadow-md mb-4">
-                        <h2 className="text-lg font-semibold">Komentarz Administratora:</h2>
-                        <p>{"Proszę poprawić fakure - pola puste - test"}</p>
+                        <h2 className="text-lg font-semibold">Administrator Comment:</h2>
+                        <p>{"Please correct the invoice - empty fields - test"}</p>
                     </div>
                 )
             }
@@ -310,24 +310,24 @@ const InvoiceDetailManager: React.FC = () => {
             <div className="flex flex-col lg:flex-row gap-6 py-10 px-4">
 
                 <div className="flex flex-col items-start">
-                    {invoice.documentStatus === 'Do poprawy' && (
+                    {invoice.documentStatus === 'Requires Correction' && (
                         <>
                             <button
                                 className="mb-4 bg-purple-800 text-white py-2 px-6 rounded-lg shadow-md hover:bg-purple-900 w-48"
                                 onClick={() => setShowComment(!showComment)}>
-                                Pokaż Komentarz
+                                Show Comment
                             </button>
                             <button
                                 onClick={createCreditNote}
                                 className="mb-4 bg-purple-800 text-white py-2 px-6 rounded-lg shadow-md hover:bg-purple-900 w-48">
-                                Popraw Fakturę
+                                Correct Invoice
                             </button>
                         </>
                     )}
                     <button
                         onClick={handleGeneratePDF}
                         className="bg-purple-800 text-white py-2 px-6 rounded-lg shadow-md hover:bg-purple-900 w-48">
-                        Wygeneruj PDF Faktury
+                        Generate Invoice PDF
                     </button>
                 </div>
 
@@ -335,16 +335,16 @@ const InvoiceDetailManager: React.FC = () => {
 
                     <header className="border-b border-gray-300 pb-4 mb-4 flex justify-between items-center">
                         <h1 className="text-3xl font-bold text-purple-700">
-                            Faktura: {invoice.nameInvoice}
+                            Invoice: {invoice.nameInvoice}
                         </h1>
                         <p className="text-lg text-gray-700">
-                            Status:{" "}
+                            Status: {" "}
                             <span
-                                className={`px-3 py-1 inline-flex text-xs font-semibold rounded-full ${invoice.documentStatus === 'Opłacona - Gotowa faktura'
+                                className={`px-3 py-1 inline-flex text-xs font-semibold rounded-full ${invoice.documentStatus === 'Paid - Final Invoice'
                                     ? 'bg-green-200 text-green-800'
-                                    : invoice.documentStatus === 'Do poprawy'
+                                    : invoice.documentStatus === 'Requires Correction'
                                         ? 'bg-red-200 text-red-800'
-                                        : invoice.documentStatus === 'W trakcie akceptacji'
+                                        : invoice.documentStatus === 'Under Review'
                                             ? 'bg-yellow-200 text-yellow-800'
                                             : 'bg-orange-100 text-orange-600'
                                     }`}>
@@ -354,45 +354,45 @@ const InvoiceDetailManager: React.FC = () => {
                     </header>
 
                     <section className="mb-6 text-gray-900">
-                        <h2 className="text-lg font-semibold mb-2 text-purple-700">Dane Klienta</h2>
+                        <h2 className="text-lg font-semibold mb-2 text-purple-700">Client Details</h2>
                         <div className="grid grid-cols-2 gap-8">
                             <div>
-                                <p><strong>Klient:</strong> {invoice.customerName}</p>
-                                <p><strong>Metoda płatności:</strong> {invoice.paymentMethod}</p>
-                                <p><strong>Waluta:</strong> {invoice.currency}</p>
+                                <p><strong>Client:</strong> {invoice.customerName}</p>
+                                <p><strong>Payment Method:</strong> {invoice.paymentMethod}</p>
+                                <p><strong>Currency:</strong> {invoice.currency}</p>
                             </div>
                             <div className="pl-6">
-                                <p><strong>Sprzedawca:</strong> {invoice.seller}</p>
-                                <p><strong>Miesiąc efektywności:</strong> {invoice.effectiveMonth}</p>
+                                <p><strong>Seller:</strong> {invoice.seller}</p>
+                                <p><strong>Effective Month:</strong> {invoice.effectiveMonth}</p>
                             </div>
                         </div>
                     </section>
 
                     <section className="mb-6 text-gray-900">
-                        <h2 className="text-lg font-semibold mb-2 text-purple-700">Szczegóły Faktury</h2>
+                        <h2 className="text-lg font-semibold mb-2 text-purple-700">Invoice Details</h2>
                         <div className="grid grid-cols-2 gap-8">
                             <div>
-                                <p><strong>Data wystawienia:</strong> {new Date(invoice.dataInvoice).toLocaleDateString()}</p>
-                                <p><strong>Termin płatności:</strong> {new Date(invoice.dueDate).toLocaleDateString()}</p>
+                                <p><strong>Issue Date:</strong> {new Date(invoice.dataInvoice).toLocaleDateString()}</p>
+                                <p><strong>Payment Due Date:</strong> {new Date(invoice.dueDate).toLocaleDateString()}</p>
                             </div>
                             <div className="pl-6">
-                                <p><strong>Data sprzedaży:</strong> {new Date(invoice.dataInvoiceSell).toLocaleDateString()}</p>
-                                <p><strong>Komentarz:</strong> {invoice.comments || "Brak"}</p>
+                                <p><strong>Sale Date:</strong> {new Date(invoice.dataInvoiceSell).toLocaleDateString()}</p>
+                                <p><strong>Comment:</strong> {invoice.comments || "None"}</p>
                             </div>
                         </div>
                     </section>
 
                     <section className="mb-6 text-gray-900">
-                        <h2 className="text-lg font-semibold mb-2 text-purple-700">Pozycje Faktury</h2>
+                        <h2 className="text-lg font-semibold mb-2 text-purple-700">Invoice Items</h2>
                         <table className="w-full text-left border-collapse bg-white">
                             <thead>
                                 <tr className="bg-purple-800 text-white">
-                                    <th className="px-4 py-2 border border-gray-200">Nazwa</th>
-                                    <th className="px-4 py-2 border border-gray-200 text-right">Ilość</th>
-                                    <th className="px-4 py-2 border border-gray-200 text-right">Netto</th>
+                                    <th className="px-4 py-2 border border-gray-200">Name</th>
+                                    <th className="px-4 py-2 border border-gray-200 text-right">Quantity</th>
+                                    <th className="px-4 py-2 border border-gray-200 text-right">Net</th>
                                     <th className="px-4 py-2 border border-gray-200 text-right">VAT</th>
-                                    <th className="px-4 py-2 border border-gray-200 text-right">Brutto</th>
-                                    <th className="px-4 py-2 border border-gray-200">Komentarz</th>
+                                    <th className="px-4 py-2 border border-gray-200 text-right">Gross</th>
+                                    <th className="px-4 py-2 border border-gray-200">Comment</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -403,7 +403,7 @@ const InvoiceDetailManager: React.FC = () => {
                                         <td className="px-4 py-2 border border-gray-200 text-right">{item.nettoItem} {invoice.currency}</td>
                                         <td className="px-4 py-2 border border-gray-200 text-right">{Math.round(item.vatItem)}%</td>
                                         <td className="px-4 py-2 border border-gray-200 text-right">{item.bruttoItem} {invoice.currency}</td>
-                                        <td className="px-4 py-2 border border-gray-200">{item.comment || "Brak"}</td>
+                                        <td className="px-4 py-2 border border-gray-200">{item.comment || "None"}</td>
                                     </tr>
                                 ))}
                             </tbody>
@@ -411,9 +411,9 @@ const InvoiceDetailManager: React.FC = () => {
                     </section>
 
                     <section className="mt-6 text-right border-t border-gray-300 pt-4 text-gray-900">
-                        <p className="text-lg"><strong>Razem Netto:</strong> {invoice.summaryNetto} {invoice.currency}</p>
-                        <p className="text-lg"><strong>Razem VAT:</strong> {invoice.summaryVat} {invoice.currency}</p>
-                        <p className="text-lg font-bold text-purple-700"><strong>Razem Brutto:</strong> {invoice.summaryBrutto} {invoice.currency}</p>
+                        <p className="text-lg"><strong>Total Net:</strong> {invoice.summaryNetto} {invoice.currency}</p>
+                        <p className="text-lg"><strong>Total VAT:</strong> {invoice.summaryVat} {invoice.currency}</p>
+                        <p className="text-lg font-bold text-purple-700"><strong>Total Gross:</strong> {invoice.summaryBrutto} {invoice.currency}</p>
                     </section>
                 </div>
             </div>
@@ -422,108 +422,95 @@ const InvoiceDetailManager: React.FC = () => {
                 isModalOpen && (
                     <Modal isOpen={isModalOpen} onClose={closeModal}>
                         <div className="bg-white rounded-lg p-6 max-h-[80vh] overflow-y-auto">
-                            <h2 className="text-2xl mb-6 font-semibold text-center">Popraw Fakturę</h2>
+                            <h2 className="text-2xl mb-6 font-semibold text-center">Correct Invoice</h2>
                             <div className="grid grid-cols-3 gap-4 w-full">
                                 <div>
-                                    <label className="block text-gray-700">Nazwa faktury</label>
+                                    <label className="block text-gray-700">Invoice Name</label>
                                     <input
                                         type="text"
                                         name="invoiceName"
                                         value={creditNoteData?.invoiceName || ''}
                                         onChange={handleInputChange}
                                         className="mb-4 p-2 border border-gray-300 rounded w-full"
-                                        readOnly
-                                    />
+                                        readOnly />
                                 </div>
                                 <div>
-                                    <label className="block text-gray-700">Warunki płatności</label>
+                                    <label className="block text-gray-700">Payment Terms</label>
                                     <input
                                         type="text"
                                         name="paymentTerm"
                                         value={creditNoteData?.paymentTerm || ''}
                                         onChange={handleInputChange}
                                         className="mb-4 p-2 border border-gray-300 rounded w-full"
-                                        readOnly
-                                    />
+                                        readOnly />
                                 </div>
                                 <div>
-                                    <label className="block text-gray-700">Komentarze</label>
+                                    <label className="block text-gray-700">Comments</label>
                                     <input
                                         type="text"
                                         name="comments"
                                         value={creditNoteData?.comments || ''}
                                         onChange={handleInputChange}
-                                        className="mb-4 p-2 border border-gray-300 rounded w-full"
-                                    />
+                                        className="mb-4 p-2 border border-gray-300 rounded w-full" />
                                 </div>
                                 <div>
-                                    <label className="block text-gray-700">Sprzedawca</label>
+                                    <label className="block text-gray-700">Seller</label>
                                     <input
                                         type="text"
                                         name="seller"
                                         value={creditNoteData?.seller || ''}
                                         onChange={handleInputChange}
-                                        className="mb-4 p-2 border border-gray-300 rounded w-full"
-
-                                    />
+                                        className="mb-4 p-2 border border-gray-300 rounded w-full" />
                                 </div>
                                 <div>
-                                    <label className="block text-gray-700">Nazwa klienta</label>
+                                    <label className="block text-gray-700">Client Name</label>
                                     <input
                                         type="text"
                                         name="customerName"
                                         value={creditNoteData?.customerName || ''}
                                         onChange={handleInputChange}
-                                        className="mb-4 p-2 border border-gray-300 rounded w-full"
-
-                                    />
+                                        className="mb-4 p-2 border border-gray-300 rounded w-full" />
                                 </div>
                                 <div>
-                                    <label className="block text-gray-700">Opis</label>
+                                    <label className="block text-gray-700">Description</label>
                                     <input
                                         type="text"
                                         name="description"
                                         value={creditNoteData?.description || ''}
                                         onChange={handleInputChange}
-                                        className="mb-4 p-2 border border-gray-300 rounded w-full"
-                                    />
+                                        className="mb-4 p-2 border border-gray-300 rounded w-full" />
                                 </div>
                                 <div>
-                                    <label className="block text-gray-700">Kurs wymiany</label>
+                                    <label className="block text-gray-700">Exchange Rate</label>
                                     <input
                                         type="number"
                                         name="exchangeRate"
                                         value={creditNoteData?.exchangeRate || ''}
                                         onChange={handleInputChange}
                                         className="mb-4 p-2 border border-gray-300 rounded w-full"
-                                        readOnly
-                                    />
+                                        readOnly />
                                 </div>
                                 <div>
-                                    <label className="block text-gray-700">Miesiąc efektywny</label>
+                                    <label className="block text-gray-700">Effective Month</label>
                                     <input
                                         type="text"
                                         name="effectiveMonth"
                                         value={creditNoteData?.effectiveMonth || ''}
                                         onChange={handleInputChange}
-                                        className="mb-4 p-2 border border-gray-300 rounded w-full"
-
-                                    />
+                                        className="mb-4 p-2 border border-gray-300 rounded w-full" />
                                 </div>
                                 <div>
-                                    <label className="block text-gray-700">Waluta</label>
+                                    <label className="block text-gray-700">Currency</label>
                                     <input
                                         type="text"
                                         name="currency"
                                         value={creditNoteData?.currency || ''}
                                         onChange={handleInputChange}
-                                        className="mb-4 p-2 border border-gray-300 rounded w-full"
-
-                                    />
+                                        className="mb-4 p-2 border border-gray-300 rounded w-full" />
                                 </div>
                             </div>
 
-                            <h2 className="text-2xl font-semibold text-center">Pozycje Faktury</h2>
+                            <h2 className="text-2xl font-semibold text-center">Invoice Items</h2>
                             <div className="relative w-full ustify-end">
                                 <div className="flex justify-end">
                                     <button
@@ -533,17 +520,17 @@ const InvoiceDetailManager: React.FC = () => {
                                             calculateTotals([...creditNoteItems, newItem]);
                                         }}
                                         className="bg-purple-600 text-white py-1 px-3 rounded hover:bg-green-700">
-                                        Dodaj pozycję
+                                        Add Item
                                     </button>
                                 </div>
                                 <table className="w-full text-left border-collapse bg-white mt-4">
                                     <thead>
                                         <tr className="bg-purple-800 text-white">
-                                            <th className="px-4 py-2 border border-gray-200">Nazwa</th>
-                                            <th className="px-4 py-2 border border-gray-200 text-right">Ilość</th>
-                                            <th className="px-4 py-2 border border-gray-200 text-right">Netto</th>
+                                            <th className="px-4 py-2 border border-gray-200">Name</th>
+                                            <th className="px-4 py-2 border border-gray-200 text-right">Quantity</th>
+                                            <th className="px-4 py-2 border border-gray-200 text-right">Net</th>
                                             <th className="px-4 py-2 border border-gray-200 text-right">VAT (%)</th>
-                                            <th className="px-4 py-2 border border-gray-200 text-right">Brutto</th>
+                                            <th className="px-4 py-2 border border-gray-200 text-right">Gross</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -556,8 +543,7 @@ const InvoiceDetailManager: React.FC = () => {
                                                         value={item.itemName}
                                                         onChange={(e) => handleItemChange(e, index)}
                                                         className="w-full p-2 border border-gray-300 rounded"
-                                                        placeholder="Nazwa przedmiotu"
-                                                    />
+                                                        placeholder="Item Name" />
                                                 </td>
                                                 <td className="px-4 py-2 border border-gray-200 text-right">
                                                     <input
@@ -566,8 +552,7 @@ const InvoiceDetailManager: React.FC = () => {
                                                         value={Math.round(item.quantity)}
                                                         onChange={(e) => handleItemChange(e, index)}
                                                         className="w-full p-2 border border-gray-300 rounded"
-                                                        placeholder="Ilość"
-                                                    />
+                                                        placeholder="Quantity" />
                                                 </td>
                                                 <td className="px-4 py-2 border border-gray-200 text-right">
                                                     <input
@@ -576,8 +561,7 @@ const InvoiceDetailManager: React.FC = () => {
                                                         value={item.nettoItem}
                                                         onChange={(e) => handleItemChange(e, index)}
                                                         className="w-full p-2 border border-gray-300 rounded"
-                                                        placeholder="Netto"
-                                                    />
+                                                        placeholder="Net" />
                                                 </td>
                                                 <td className="px-4 py-2 border border-gray-200 text-right">
                                                     <input
@@ -586,8 +570,7 @@ const InvoiceDetailManager: React.FC = () => {
                                                         value={Math.round(item.vatItem)}
                                                         onChange={(e) => handleItemChange(e, index)}
                                                         className="w-full p-2 border border-gray-300 rounded"
-                                                        placeholder="VAT (%)"
-                                                    />
+                                                        placeholder="VAT (%)" />
                                                 </td>
                                                 <td className="px-4 py-2 border border-gray-200 text-right">
                                                     <input
@@ -596,15 +579,14 @@ const InvoiceDetailManager: React.FC = () => {
                                                         value={item.bruttoItem}
                                                         onChange={(e) => handleItemChange(e, index)}
                                                         className="w-full p-2 border border-gray-300 rounded"
-                                                        placeholder="Brutto"
-                                                        readOnly
-                                                    />
+                                                        placeholder="Gross"
+                                                        readOnly />
                                                 </td>
                                                 <td className="px-4 py-2 border border-gray-200 text-right">
                                                     <button
                                                         onClick={() => handleItemDelete(index)}
                                                         className="bg-red-600 text-white px-3 py-1 rounded hover:bg-red-700">
-                                                        Usuń
+                                                        Delete
                                                     </button>
                                                 </td>
                                             </tr>
@@ -615,43 +597,40 @@ const InvoiceDetailManager: React.FC = () => {
 
                             <div className="grid grid-cols-3 gap-4 w-full mt-6">
                                 <div>
-                                    <label className="block text-gray-700">Razem Netto</label>
+                                    <label className="block text-gray-700">Total Net</label>
                                     <input
                                         type="number"
                                         name="summaryNetto"
                                         value={creditNoteData?.summaryNetto || ''}
                                         onChange={handleInputChange}
                                         className="mb-4 p-2 border border-gray-300 rounded w-full"
-                                        readOnly
-                                    />
+                                        readOnly />
                                 </div>
                                 <div>
-                                    <label className="block text-gray-700">Razem VAT</label>
+                                    <label className="block text-gray-700">Total VAT</label>
                                     <input
                                         type="number"
                                         name="summaryVat"
                                         value={creditNoteData?.summaryVat || ''}
                                         onChange={handleInputChange}
                                         className="mb-4 p-2 border border-gray-300 rounded w-full"
-                                        readOnly
-                                    />
+                                        readOnly />
                                 </div>
                                 <div>
-                                    <label className="block text-gray-700">Razem Brutto</label>
+                                    <label className="block text-gray-700">Total Gross</label>
                                     <input
                                         type="number"
                                         name="summaryBrutto"
                                         value={creditNoteData?.summaryBrutto || ''}
                                         onChange={handleInputChange}
                                         className="mb-4 p-2 border border-gray-300 rounded w-full"
-                                        readOnly
-                                    />
+                                        readOnly />
                                 </div>
                             </div>
 
                             <div className="flex justify-center mt-6">
                                 <button onClick={submitCorrection} className="bg-purple-800 text-white py-2 px-6 rounded hover:bg-purple-900">
-                                    Wyślij Fakturę
+                                    Submit Invoice
                                 </button>
                             </div>
                         </div>

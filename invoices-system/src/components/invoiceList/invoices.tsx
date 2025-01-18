@@ -47,7 +47,7 @@ const Invoices: React.FC = () => {
 
     if (loading) {
 
-        return <p className="text-center mt-10 text-lg text-gray-600">Ładowanie danych...</p>;
+        return <p className="text-center mt-10 text-lg text-gray-600">Data loading...</p>;
     }
 
     return (
@@ -56,14 +56,14 @@ const Invoices: React.FC = () => {
                 <table className="w-full table-auto border-collapse">
                     <thead className="bg-purple-800 text-white">
                         <tr>
-                            <th className="px-4 py-4 text-sm font-semibold text-center">Lp.</th>
-                            <th className="px-4 py-4 text-sm font-semibold">Numer faktury</th>
-                            <th className="px-4 py-4 text-sm font-semibold">Klient</th>
-                            <th className="px-4 py-4 text-sm font-semibold text-right">Wartość brutto</th>
-                            <th className="px-4 py-4 text-sm font-semibold text-center">Waluta</th>
-                            <th className="px-4 py-4 text-sm font-semibold">Data wystawienia</th>
-                            <th className="px-4 py-4 text-sm font-semibold">Termin płatności</th>
-                            <th className="px-4 py-4 text-sm font-semibold">Miesiąc</th>
+                            <th className="px-4 py-4 text-sm font-semibold text-center">No.</th>
+                            <th className="px-4 py-4 text-sm font-semibold">Invoice Number</th>
+                            <th className="px-4 py-4 text-sm font-semibold">Client</th>
+                            <th className="px-4 py-4 text-sm font-semibold text-right">Gross Value</th>
+                            <th className="px-4 py-4 text-sm font-semibold text-center">Currency</th>
+                            <th className="px-4 py-4 text-sm font-semibold">Issue Date</th>
+                            <th className="px-4 py-4 text-sm font-semibold">Payment Due Date</th>
+                            <th className="px-4 py-4 text-sm font-semibold">Month</th>
                             <th className="px-4 py-4 text-sm font-semibold text-center">Status</th>
                         </tr>
                     </thead>
@@ -88,11 +88,11 @@ const Invoices: React.FC = () => {
                                     <td className="px-4 py-4 text-sm border border-gray-200">{invoice.effectiveMonth}</td>
                                     <td className="px-4 py-4 text-sm border border-gray-200 text-center">
                                         <span
-                                            className={`px-3 py-1 inline-flex text-xs font-semibold rounded-full ${invoice.documentStatus === 'Opłacona - Gotowa faktura'
+                                            className={`px-3 py-1 inline-flex text-xs font-semibold rounded-full ${invoice.documentStatus === 'Paid - Final Invoice'
                                                 ? 'bg-green-200 text-green-800'
-                                                : invoice.documentStatus === 'Do poprawy'
+                                                : invoice.documentStatus === 'Requires Correction'
                                                     ? 'bg-red-200 text-red-800'
-                                                    : invoice.documentStatus === 'W trakcie akceptacji'
+                                                    : invoice.documentStatus === 'Under Review'
                                                         ? 'bg-yellow-200 text-yellow-800'
                                                         : 'bg-orange-100 text-orange-600'
                                                 }`}>
@@ -104,7 +104,7 @@ const Invoices: React.FC = () => {
                         ) : (
                             <tr>
                                 <td colSpan={9} className="px-4 py-4 text-center text-sm text-gray-600">
-                                    Brak dostępnych faktur do wyświetlenia.
+                                    No available invoices to display.
                                 </td>
                             </tr>
                         )}

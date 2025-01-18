@@ -101,7 +101,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
       } else {
 
-        console.warn('Brak identyfikatora w danych użytkownika');
+        console.warn('No identifier in user data');
       }
     }
   }, []);
