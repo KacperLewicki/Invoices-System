@@ -27,7 +27,7 @@ const Invoice: React.FC = () => {
     exchangeRate: 1,
     paymentMethod: 'Bank Transfer',
     effectiveMonth: '',
-    documentStatus: 'W trakcie akceptacji',
+    documentStatus: '',
     currency: 'PLN',
     identyfikator: '',
     customerName: ''
@@ -101,7 +101,7 @@ const Invoice: React.FC = () => {
       summaryVat: 0,
       summaryBrutto: 0,
       exchangeRate: 1,
-      paymentMethod: '',
+      paymentMethod: 'Bank Transfer',
       effectiveMonth: '',
       documentStatus: '',
       currency: '',
@@ -182,7 +182,7 @@ const Invoice: React.FC = () => {
   return (
     <div className="flex items-center justify-center min-h-screen bg-white p-6">
       <div className="bg-white shadow-xl rounded-lg p-8 w-full max-w-7xl border border-gray-200 transform transition-all duration-300 hover:shadow-2xl">
-        <h1 className="text-3xl font-bold text-purple-700 text-center mb-6">Faktura KL</h1>
+        <h1 className="text-3xl font-bold text-purple-700 text-center mb-6">Invoice KL</h1>
 
         <form onSubmit={handleSubmit} className="grid gap-6 grid-cols-1 md:grid-cols-3">
 
@@ -236,6 +236,7 @@ const Invoice: React.FC = () => {
                 type="text"
                 placeholder="Seller"
                 title='Sprzedawca'
+                required
                 value={formData.seller}
                 onChange={handleChange}
                 disabled={isFormDisabled} />
@@ -245,6 +246,7 @@ const Invoice: React.FC = () => {
                 type="text"
                 title='Klient'
                 placeholder="Client"
+                required
                 value={formData.customerName}
                 onChange={handleChange}
                 disabled={isFormDisabled} />
@@ -463,13 +465,14 @@ const Invoice: React.FC = () => {
                 name="documentStatus"
                 value={formData.documentStatus}
                 title='Status dokumentu'
+                required
                 onChange={handleChange}
                 disabled={isFormDisabled}>
-                <option hidden>Document Status</option>
-                <option>Under Review</option>
-                <option>Paid - Final Invoice</option>
-                <option>Partially Paid</option>
-                <option>Requires Correction</option>
+                <option value="" hidden>Document Status</option>
+                <option value="Under Review">Under Review</option>
+                <option value="Paid - Final Invoice">Paid - Final Invoice</option>
+                <option value="Partially Paid">Partially Paid</option>
+                <option value="Requires Correction">Requires Correction</option>
               </select>
               <input
                 className="border border-purple-300 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-purple-500"
