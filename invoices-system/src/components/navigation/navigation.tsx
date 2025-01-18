@@ -62,7 +62,7 @@ const Navigation = () => {
           )}
         </ul>
 
-        {!user && pathname === '/home' && (
+        {!user && pathname === '/' && (
           <div>
             <Link href="/login">
               <button className="bg-white text-purple-700 font-semibold py-2 px-4 rounded hover:bg-purple-100 transition duration-200">
