@@ -75,6 +75,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             const year = new Date().getFullYear().toString().slice(-2);
             const newCreditNoteNumber = `CN/${year}/${String(maxId + 1).padStart(4, '0')}`;
 
+            let documentStatus = "Correction Approved - Paid - Final Invoice";
+
             // 📝 **Save Credit Note to Database**
 
             /**

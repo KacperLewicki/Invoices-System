@@ -77,12 +77,12 @@ const Invoice: React.FC = () => {
       await fetchInvoices();
       await fetchCreditNotes();
 
-      alert(`Faktura ${generatedInvoiceName} została zapisana pomyślnie`);
+      alert(`Invoice ${generatedInvoiceName} was saved successfully`);
 
     } catch (error) {
 
       console.error('Error:', error);
-      alert('Wystąpił błąd podczas zapisywania faktury');
+      alert('An error occurred while saving the invoice');
     }
   };
 
@@ -111,7 +111,7 @@ const Invoice: React.FC = () => {
 
     setItems([]);
 
-    alert('Stworzono nowy formularz');
+    alert('A new form has been created');
 
   };
 
@@ -121,7 +121,7 @@ const Invoice: React.FC = () => {
 
     if (!nameItem || !quantity || !vatItem || !nettoItem) {
 
-      alert('Aby móc dodać przedmiot, należy wypełnić nastepuące pola: Nazwa przedmiotu, Ilość, VAT, Netto');
+      alert('In order to be able to add an item, you need to fill in the following fields: Item name, Quantity, VAT, Net');
 
       return;
     }
