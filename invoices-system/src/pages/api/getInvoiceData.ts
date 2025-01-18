@@ -86,7 +86,7 @@ if (!identyfikator) {
 
   } catch (error: any) {
     
-    console.error('Error fetching invoices:', error);
-    res.status(500).json({ error: 'Wystąpił błąd podczas pobierania faktur' });
+    // console.error('Error fetching invoices:', error);
+    // res.status(500).json({ error: 'Wystąpił błąd podczas pobierania faktur' });
   }
 }

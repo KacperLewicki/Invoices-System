@@ -6,7 +6,7 @@ import { useInvoice } from '../../hooks/context/invoiceContext';
 import "../../globalCSS/globals.css";
 import { InvoiceData, CreditNoteData } from '../../types/typesInvoice';
 
-// zastanowić się nad logiką wyświetlania faktur i not kredytowych - ulepszenie - poprawka
+// Rethinking the logic for displaying invoices and credit notes - an improvement - a fix
 
 interface InvoiceWithType extends InvoiceData {
 

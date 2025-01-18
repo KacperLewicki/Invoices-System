@@ -57,7 +57,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     } catch (error: any) {
 
-        console.error('❌ Error fetching credit notes:', error);
-        res.status(500).json({ error: 'Wystąpił błąd podczas pobierania not kredytowych' });
+        // console.error('❌ Error fetching credit notes:', error);
+        // res.status(500).json({ error: 'Wystąpił błąd podczas pobierania not kredytowych' });
     }
 }

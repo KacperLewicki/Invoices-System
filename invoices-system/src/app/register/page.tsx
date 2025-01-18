@@ -47,8 +47,7 @@ export default function RegisterPage() {
             className="w-full p-2 border rounded"
             value={name}
             onChange={(e) => setName(e.target.value)}
-            required
-          />
+            required />
         </div>
 
         <div className="mb-4">
@@ -58,8 +57,7 @@ export default function RegisterPage() {
             className="w-full p-2 border rounded"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            required
-          />
+            required />
         </div>
 
         <div className="mb-6">
@@ -69,14 +67,12 @@ export default function RegisterPage() {
             className="w-full p-2 border rounded"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            required
-          />
+            required />
         </div>
 
         <button
           type="submit"
-          className="w-full bg-purple-700 text-white py-2 rounded hover:bg-purple-600"
-        >
+          className="w-full bg-purple-700 text-white py-2 rounded hover:bg-purple-600">
           Zarejestruj się
         </button>
       </form>

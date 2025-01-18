@@ -90,7 +90,7 @@ export const InvoiceProvider: React.FC<{ children: ReactNode }> = ({ children })
 
         } catch (error: any) {
 
-            setError(error.message || 'Błąd podczas pobierania faktur');
+            // setError(error.message || 'Błąd podczas pobierania faktur');
 
         } finally {
 
@@ -121,7 +121,7 @@ export const InvoiceProvider: React.FC<{ children: ReactNode }> = ({ children })
 
         } catch (error: any) {
 
-            setErrorCreditNotes(error.message || 'Błąd podczas pobierania not kredytowych');
+            // setErrorCreditNotes(error.message || 'Błąd podczas pobierania not kredytowych');
 
         } finally {
 
