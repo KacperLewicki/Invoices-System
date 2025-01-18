@@ -3,10 +3,10 @@ import { InvoiceData, ItemData } from '../../types/typesInvoice';
 
 /**
  * @function saveInvoiceToDatabase
- * @description Zapisuje fakturę oraz jej pozycje do bazy danych.
- * @param {InvoiceData} invoiceData - Dane faktury.
- * @param {ItemData[]} itemsData - Lista pozycji faktury.
- * @returns {Promise<string>} - Zwraca nazwę zapisanej faktury.
+ * @description Saves the invoice and its items to the database.
+ * @param {InvoiceData} invoiceData - Invoice data.
+ * @param {ItemData[]} itemsData - List of invoice items.
+ * @returns {Promise<string>} - Returns the name of the saved invoice.
  */
 
 const saveInvoiceToDatabase = async (invoiceData: InvoiceData, itemsData: ItemData[]): Promise<string> => {
@@ -29,8 +29,8 @@ const saveInvoiceToDatabase = async (invoiceData: InvoiceData, itemsData: ItemDa
     if (!response.ok) {
 
       const errorText = await response.text();
-      console.error('Błąd odpowiedzi API:', errorText);
-      throw new Error('Nie udało się zapisać faktury');
+      console.error('API response error:', errorText);
+      throw new Error('Failed to save the invoice');
     }
 
     const responseData = await response.json();
@@ -38,16 +38,16 @@ const saveInvoiceToDatabase = async (invoiceData: InvoiceData, itemsData: ItemDa
 
   } catch (error: any) {
 
-    console.error('Wystąpił błąd podczas zapisywania faktury:', error.message);
-    throw new Error('Nie udało się zapisać faktury');
+    console.error('An error occurred while saving the invoice:', error.message);
+    throw new Error('Failed to save the invoice');
   }
 };
 
 /**
  * @function formatInvoiceDates
- * @description Formatuje daty faktury do formatu zgodnego z bazą danych.
- * @param {InvoiceData} invoiceData - Dane faktury z datami do sformatowania.
- * @returns {InvoiceData} - Faktura z sformatowanymi datami.
+ * @description Formats the invoice dates to a database-compatible format.
+ * @param {InvoiceData} invoiceData - Invoice data with dates to format.
+ * @returns {InvoiceData} - Invoice with formatted dates.
  */
 
 const formatInvoiceDates = (invoiceData: InvoiceData): InvoiceData => {

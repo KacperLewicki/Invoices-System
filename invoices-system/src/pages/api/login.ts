@@ -3,85 +3,85 @@ import { SignJWT } from 'jose';
 import bcrypt from 'bcrypt';
 import pool from './lib/db';
 
-// 📚 **Logowanie Użytkownika i Generowanie Tokena JWT**
+// 📚 **User Login and JWT Token Generation**
 
-// Ten endpoint obsługuje proces logowania użytkownika.
-// Dane logowania są weryfikowane, a użytkownik otrzymuje token JWT,
-// który jest przechowywany w ciasteczku HTTP-only dla zwiększenia bezpieczeństwa.
+// This endpoint handles the user login process.
+// Login credentials are verified, and the user receives a JWT token,
+// which is stored in an HTTP-only cookie for enhanced security.
 
-// 📌 **Konfiguracja JWT**
+// 📌 **JWT Configuration**
 
 /**
  * @constant NEXT_PUBLIC_SECRET_KEY_ADMINISTRATOR
- * Sekret używany do podpisywania tokena JWT.
+ * Secret key used to sign the JWT token.
  */
 
 const NEXT_PUBLIC_SECRET_KEY_ADMINISTRATOR = new TextEncoder().encode(
   process.env.NEXT_PUBLIC_SECRET_KEY_ADMINISTRATOR!
 );
 
-// 📌 **Handler API**
+// 📌 **API Handler**
 
 /**
  * @function handler
- * Obsługuje logowanie użytkownika i generuje token JWT.
+ * Handles user login and generates a JWT token.
  *
- * @param {NextApiRequest} req - Obiekt żądania HTTP.
- * @param {NextApiResponse} res - Obiekt odpowiedzi HTTP.
+ * @param {NextApiRequest} req - HTTP request object.
+ * @param {NextApiResponse} res - HTTP response object.
  */
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
 
-  // 🔑 **Obsługa Metody POST**
+  // 🔑 **Handle POST Method**
 
   if (req.method !== 'POST') {
 
-    return res.status(405).json({ message: 'Metoda niedozwolona' });
+    return res.status(405).json({ message: 'Method not allowed' });
   }
 
-  // 📌 **Pobranie Danych Logowania**
+  // 📌 **Retrieve Login Data**
 
   /**
-   * Oczekiwane pola:
-   * @property {string} email - Adres e-mail użytkownika.
-   * @property {string} password - Hasło użytkownika.
+   * Expected fields:
+   * @property {string} email - User's email address.
+   * @property {string} password - User's password.
    */
   const { email, password } = req.body;
 
-  // 🛠️ **Weryfikacja Użytkownika w Bazie Danych**
+  // 🛠️ **Verify User in Database**
 
   try {
 
     /**
-     * Pobierz użytkownika z bazy danych na podstawie e-maila.
+     * Fetch the user from the database based on the email.
      */
 
     const [rows]: any = await pool.query('SELECT * FROM login WHERE email = ?', [email]);
 
     if (rows.length === 0) {
 
-      return res.status(401).json({ message: 'Nieprawidłowe dane logowania' });
+      return res.status(401).json({ message: 'Invalid login credentials' });
     }
 
     const user = rows[0];
 
-    // 🔑 **Weryfikacja Hasła**
+    // 🔑 **Password Verification**
 
     /**
-     * Porównaj hasło podane przez użytkownika z zaszyfrowanym hasłem w bazie.
+     * Compare the user-provided password with the encrypted password in the database.
      */
 
     const isPasswordValid = await bcrypt.compare(password, user.password);
 
     if (!isPasswordValid) {
-      return res.status(401).json({ message: 'Nieprawidłowe dane logowania' });
+      return res.status(401).json({ message: 'Invalid login credentials' });
     }
 
-    // 🔐 **Generowanie Tokena JWT**
+    // 🔐 **JWT Token Generation**
 
     /**
-     * Token zawiera unikalny identyfikator użytkownika (`identyfikator`).
-     * Czas wygaśnięcia tokena: 1 godzina.
+     * The token contains the user's unique identifier (`identyfikator`).
+     * Token expiration time: 1 hour.
      */
 
     const token = await new SignJWT({ id: user.identyfikator })
@@ -89,15 +89,15 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       .setExpirationTime('1h')
       .sign(NEXT_PUBLIC_SECRET_KEY_ADMINISTRATOR);
 
-    // 🍪 **Ustawienie Tokena w Ciasteczku**
+    // 🍪 **Set Token in Cookie**
 
     /**
-     * Token JWT jest ustawiany w ciasteczku z właściwościami:
-     * - HttpOnly: Zabezpiecza przed dostępem z poziomu JavaScript.
-     * - Path: Dostępne w całej aplikacji.
-     * - Max-Age: Wygasa po 1 godzinie.
-     * - SameSite: Strict - tylko żądania z tej samej domeny.
-     * - Secure: Wymaga HTTPS.
+     * The JWT token is set in a cookie with the following properties:
+     * - HttpOnly: Secures it from JavaScript access.
+     * - Path: Available throughout the application.
+     * - Max-Age: Expires in 1 hour.
+     * - SameSite: Strict - only requests from the same domain.
+     * - Secure: Requires HTTPS.
      */
 
     res.setHeader(
@@ -105,15 +105,15 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       `token=${token}; HttpOnly; Path=/; Max-Age=3600; SameSite=Strict; Secure;`
     );
 
-    // ✅ **Zwrócenie Odpowiedzi**
+    // ✅ **Return Response**
 
     /**
-     * Zwraca podstawowe dane użytkownika w odpowiedzi JSON.
+     * Returns basic user information in the JSON response.
      */
 
     return res.status(200).json({
 
-      message: 'Zalogowano pomyślnie',
+      message: 'Logged in successfully',
       id: user.id,
       name: user.name,
       email: user.email,
@@ -122,9 +122,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
   } catch (error) {
 
-    // ❌ **Obsługa Błędów**
+    // ❌ **Error Handling**
 
-    console.error('Błąd logowania użytkownika:', error);
-    return res.status(500).json({ message: 'Wystąpił błąd serwera' });
+    console.error('User login error:', error);
+    return res.status(500).json({ message: 'Server error occurred' });
   }
 }

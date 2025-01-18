@@ -4,33 +4,33 @@ import React, { createContext, useContext, useState, useEffect } from 'react';
 import axios from 'axios';
 import { User } from '../../types/typesInvoice';
 
-// 📚 **AuthContext - Kontekst Autoryzacji**
+// 📚 **AuthContext - Authorization Context**
 
-// Ten hook definiuje kontekst autoryzacji dla aplikacji Next.js.
-// Umożliwia globalne zarządzanie stanem użytkownika i tokenem autoryzacyjnym.
-// Dzięki temu komponenty mogą uzyskiwać dostęp do informacji o użytkowniku
-// i funkcji związanych z autoryzacją bez przekazywania ich przez propsy.
+// This hook defines an authorization context for a Next.js application.
+// It enables global management of the user's state and authorization token.
+// Components can access user information and authorization-related functions
+// without passing them through props.
 
-// 📌 **Typy i Interfejsy**
+// 📌 **Types and Interfaces**
 
 /**
  * @interface User
- * Reprezentuje dane użytkownika.
+ * Represents user data.
  *
- * @property {string} id - Unikalny identyfikator użytkownika z bazy danych.
- * @property {string} name - Imię i nazwisko użytkownika.
- * @property {string} email - Adres e-mail użytkownika.
- * @property {string} identyfikator - Token autoryzacyjny lub unikalny identyfikator.
+ * @property {string} id - Unique identifier of the user from the database.
+ * @property {string} name - User's full name.
+ * @property {string} email - User's email address.
+ * @property {string} identyfikator - Authorization token or unique identifier.
  */
 
 /**
  * @interface AuthContextProps
- * Określa strukturę wartości kontekstu autoryzacji.
+ * Defines the structure of the authorization context values.
  *
- * @property {User | null} user - Dane aktualnie zalogowanego użytkownika.
- * @property {string | null} token - Token autoryzacyjny użytkownika.
- * @property {(email: string, password: string) => Promise<void>} login - Funkcja logowania.
- * @property {() => void} logout - Funkcja wylogowania.
+ * @property {User | null} user - Data of the currently logged-in user.
+ * @property {string | null} token - User's authorization token.
+ * @property {(email: string, password: string) => Promise<void>} login - Login function.
+ * @property {() => void} logout - Logout function.
  */
 
 interface AuthContextProps {
@@ -41,45 +41,45 @@ interface AuthContextProps {
   logout: () => void;
 }
 
-// 📌 **Tworzenie Kontekstu Autoryzacji**
+// 📌 **Creating the Authorization Context**
 
 /**
  * @constant AuthContext
- * Tworzy kontekst autoryzacji.
+ * Creates the authorization context.
  *
- * @default undefined - Kontekst domyślnie ma wartość `undefined`,
- * co pomaga w zapewnieniu, że zostanie użyty tylko w opakowaniu `AuthProvider`.
+ * @default undefined - Context is initially `undefined`,
+ * ensuring it is used only within the `AuthProvider` wrapper.
  */
 
 const AuthContext = createContext<AuthContextProps | undefined>(undefined);
 
-// 📌 **Dostawca Kontekstu (AuthProvider)**
+// 📌 **Context Provider (AuthProvider)**
 
 /**
  * @function AuthProvider
- * Opakowuje aplikację w kontekst autoryzacji.
+ * Wraps the application in the authorization context.
  *
- * @param {React.ReactNode} children - Komponenty children, które będą miały dostęp do kontekstu.
+ * @param {React.ReactNode} children - Child components with access to the context.
  *
- * @returns {JSX.Element} - Zwraca komponent React z dostępnym kontekstem autoryzacji.
+ * @returns {JSX.Element} - Returns a React component with the authorization context available.
  */
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
-  // 📌 Stan tokena autoryzacyjnego
+  // 📌 Authorization Token State
 
   const [token, setToken] = useState<string | null>(null);
 
-  // 📌 Stan danych użytkownika
+  // 📌 User Data State
   const [user, setUser] = useState<User | null>(null);
 
-  // 🔄 **Ładowanie Danych z localStorage**
+  // 🔄 **Loading Data from localStorage**
 
   /**
    * @function useEffect
-   * Ładuje token i dane użytkownika z localStorage podczas inicjalizacji aplikacji.
+   * Loads token and user data from localStorage during application initialization.
    *
-   * Ustawia również domyślne nagłówki Axios.
+   * Also sets default Axios headers.
    */
 
   useEffect(() => {
@@ -106,14 +106,14 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     }
   }, []);
 
-  // 🔑 **Funkcja Logowania**
+  // 🔑 **Login Function**
 
   /**
    * @function login
-   * Loguje użytkownika i zapisuje dane w stanie oraz localStorage.
+   * Logs in the user and stores data in the state and localStorage.
    *
-   * @param {string} email - Adres e-mail użytkownika.
-   * @param {string} password - Hasło użytkownika.
+   * @param {string} email - User's email address.
+   * @param {string} password - User's password.
    */
 
   const login = async (email: string, password: string) => {
@@ -139,11 +139,11 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     axios.defaults.headers.common['identyfikator'] = identyfikator;
   };
 
-  // 🚪 **Funkcja Wylogowania**
+  // 🚪 **Logout Function**
 
   /**
    * @function logout
-   * Usuwa dane autoryzacyjne z localStorage oraz resetuje stan użytkownika i tokena.
+   * Removes authorization data from localStorage and resets user and token states.
    */
 
   const logout = async () => {
@@ -162,15 +162,15 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
     } catch (error) {
 
-      //console.error('Błąd podczas wylogowywania:', error);
+      //console.error('Error during logout:', error);
 
     }
   };
 
-  // 📦 **Zwracanie Kontekstu**
+  // 📦 **Returning Context**
 
   /**
-   * Udostępnia dane i funkcje autoryzacyjne dla dzieci komponentu.
+   * Provides authentication data and functions to child components.
    */
 
   return (
@@ -181,15 +181,15 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   );
 };
 
-// 📌 **Hook Uwierzytelnienia (useAuth)**
+// 📌 **Authentication Hook (useAuth)**
 
 /**
  * @function useAuth
- * Zwraca dostęp do kontekstu autoryzacji.
+ * Returns access to the authorization context.
  *
- * @returns {AuthContextProps} - Zwraca obiekt zawierający dane i funkcje autoryzacyjne.
+ * @returns {AuthContextProps} - Returns an object containing authentication data and functions.
  *
- * @throws {Error} - Rzuca błąd, jeśli hook jest używany poza `AuthProvider`.
+ * @throws {Error} - Throws an error if the hook is used outside of `AuthProvider`.
  */
 
 export const useAuth = () => {

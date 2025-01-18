@@ -1,24 +1,24 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 
-// 📚 **Wylogowanie Użytkownika (Usunięcie Tokena)**
+// 📚 **User Logout (Token Removal)**
 
-// 📌 **Handler API**
+// 📌 **API Handler**
 
 /**
  * @function handler
- * Usuwa ciasteczko tokena JWT, wylogowując użytkownika.
+ * Removes the JWT token cookie, logging out the user.
  *
- * @param {NextApiRequest} req - Obiekt żądania HTTP.
- * @param {NextApiResponse} res - Obiekt odpowiedzi HTTP.
+ * @param {NextApiRequest} req - HTTP request object.
+ * @param {NextApiResponse} res - HTTP response object.
  */
 
 export default function handler(req: NextApiRequest, res: NextApiResponse) {
 
-  // 🔑 **Usunięcie Tokena z Ciasteczek**
+  // 🔑 **Remove Token from Cookies**
 
   res.setHeader('Set-Cookie', `token=; HttpOnly; Path=/; Max-Age=0; SameSite=Strict; Secure;`);
 
-  // ✅ **Zwrócenie Odpowiedzi Sukcesu**
+  // ✅ **Return Success Response**
 
-  return res.status(200).json({ message: 'Wylogowano pomyślnie' });
+  return res.status(200).json({ message: 'Logged out successfully' });
 }

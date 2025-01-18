@@ -1,9 +1,9 @@
-"use client";
+'use client';
 
 import React, { createContext, useContext, useState, ReactNode, useEffect } from 'react';
 import { InvoiceData, ItemData, CreditNoteData } from '../../types/typesInvoice';
 
-// 🛠️ **Typy Danych**
+// 🛠️ **Data Types**
 
 interface Item_Data extends ItemData {
 
@@ -23,7 +23,7 @@ interface CreditNote_Data extends CreditNoteData {
 
 interface Invoice_ContextType {
 
-    // Faktury
+    // Invoices
 
     selectedInvoice: Invoice_Data | null;
     setSelectedInvoice: (invoice: Invoice_Data | null) => void;
@@ -32,7 +32,7 @@ interface Invoice_ContextType {
     error: string | null;
     fetchInvoices: () => Promise<void>;
 
-    // Noty Kredytowe
+    // Credit Notes
 
     selectedCreditNote: CreditNote_Data | null;
     setSelectedCreditNote: (creditNote: CreditNote_Data | null) => void;
@@ -42,32 +42,32 @@ interface Invoice_ContextType {
     fetchCreditNotes: () => Promise<void>;
 }
 
-// 🌐 **Tworzenie Kontekstu**
+// 🌐 **Creating Context**
 
 const InvoiceContext = createContext<Invoice_ContextType | undefined>(undefined);
 
 /** 
  * @component InvoiceProvider
- * Zarządzanie stanem faktur i not kredytowych.
+ * Manages state for invoices and credit notes.
  */
 
 export const InvoiceProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
 
-    // 📝 **Stan Faktur**
+    // 📝 **Invoice State**
 
     const [selectedInvoice, setSelectedInvoice] = useState<Invoice_Data | null>(null);
     const [invoices, setInvoices] = useState<Invoice_Data[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
 
-    // 📝 **Stan Not Kredytowych**
+    // 📝 **Credit Notes State**
 
     const [selectedCreditNote, setSelectedCreditNote] = useState<CreditNote_Data | null>(null);
     const [creditNotes, setCreditNotes] = useState<CreditNote_Data[]>([]);
     const [loadingCreditNotes, setLoadingCreditNotes] = useState<boolean>(true);
     const [errorCreditNotes, setErrorCreditNotes] = useState<string | null>(null);
 
-    /** Pobierz Faktury */
+    /** Fetch Invoices */
 
     const fetchInvoices = async () => {
 
@@ -82,7 +82,7 @@ export const InvoiceProvider: React.FC<{ children: ReactNode }> = ({ children })
                 headers: { 'Authorization': `Bearer ${token}`, 'identyfikator': token },
             });
 
-            if (!response.ok) throw new Error(`Błąd: ${response.status}`);
+            if (!response.ok) throw new Error(`Error: ${response.status}`);
 
             const data = await response.json();
 
@@ -90,7 +90,7 @@ export const InvoiceProvider: React.FC<{ children: ReactNode }> = ({ children })
 
         } catch (error: any) {
 
-            // setError(error.message || 'Błąd podczas pobierania faktur');
+            setError(error.message || 'Error fetching invoices');
 
         } finally {
 
@@ -98,7 +98,7 @@ export const InvoiceProvider: React.FC<{ children: ReactNode }> = ({ children })
         }
     };
 
-    /** Pobierz Noty Kredytowe */
+    /** Fetch Credit Notes */
 
     const fetchCreditNotes = async () => {
 
@@ -113,7 +113,7 @@ export const InvoiceProvider: React.FC<{ children: ReactNode }> = ({ children })
                 headers: { 'Authorization': `Bearer ${token}`, 'identyfikator': token },
             });
 
-            if (!response.ok) throw new Error(`Błąd: ${response.status}`);
+            if (!response.ok) throw new Error(`Error: ${response.status}`);
 
             const data = await response.json();
 
@@ -121,7 +121,7 @@ export const InvoiceProvider: React.FC<{ children: ReactNode }> = ({ children })
 
         } catch (error: any) {
 
-            // setErrorCreditNotes(error.message || 'Błąd podczas pobierania not kredytowych');
+            setErrorCreditNotes(error.message || 'Error fetching credit notes');
 
         } finally {
 
@@ -159,7 +159,7 @@ export const InvoiceProvider: React.FC<{ children: ReactNode }> = ({ children })
 
 /** 
  * @function useInvoice
- * Dostarcza kontekst dla faktur i not kredytowych.
+ * Provides context for invoices and credit notes.
  */
 
 export const useInvoice = (): Invoice_ContextType => {

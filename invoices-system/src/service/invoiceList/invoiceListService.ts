@@ -15,13 +15,13 @@ export const fetchInvoices = async (): Promise<InvoiceData[]> => {
 
         } else {
 
-            console.error("Oczekiwana tablica, otrzymano:", data);
+            console.error("The expected array, received:", data);
             return [];
         }
 
     } catch (error) {
 
-        console.error('Błąd podczas pobierania faktur:', error);
+        console.error('Error while downloading invoices:', error);
         return [];
     }
 };

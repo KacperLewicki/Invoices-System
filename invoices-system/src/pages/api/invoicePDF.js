@@ -6,7 +6,7 @@ export default async function handler(req, res) {
 
     if (req.method !== "POST") {
 
-      return res.status(405).json({ error: "Metoda niedozwolona" });
+      return res.status(405).json({ error: "Method not allowed" });
     }
 
     const {
@@ -28,7 +28,7 @@ export default async function handler(req, res) {
 
     } = req.body;
 
-    // Funkcja do mapowania polskich znaków na ASCII
+    // Function to map Polish characters to ASCII
 
     const mapPolishChars = (text) =>
       text
@@ -49,11 +49,11 @@ export default async function handler(req, res) {
     const fontRegular = await pdfDoc.embedFont(StandardFonts.Helvetica);
     const fontBold = await pdfDoc.embedFont(StandardFonts.HelveticaBold);
 
-    // A4 pionowo
+    // A4 portrait
 
     const page = pdfDoc.addPage([595, 842]);
 
-    // Kolory i marginesy
+    // Colors and margins
 
     const purpleColor = rgb(0.3, 0.12, 0.58);
     const blackColor = rgb(0, 0, 0);
@@ -62,7 +62,7 @@ export default async function handler(req, res) {
     const marginRight = 545;
     let currentY = 780;
 
-    // logo na górze po prawej stronie
+    // Logo at the top right corner
 
     page.drawCircle({
 
@@ -81,7 +81,7 @@ export default async function handler(req, res) {
       color: rgb(1, 1, 1),
     });
 
-    // Funkcja do rysowania nagłówków sekcji
+    // Function to draw section headers
 
     function drawSectionHeader(text, x, y) {
 
@@ -100,7 +100,7 @@ export default async function handler(req, res) {
 
       let y = startY;
 
-      // Nagłówki tabeli
+      // Table headers
 
       let x = startX;
 
@@ -128,7 +128,7 @@ export default async function handler(req, res) {
       });
       y -= 25;
 
-      // Wiersze tabeli
+      // Table rows
 
       rows.forEach((row) => {
         x = startX;
@@ -141,7 +141,7 @@ export default async function handler(req, res) {
             color: blackColor,
           });
 
-          // Rysowanie obramowania
+          // Draw border
 
           page.drawRectangle({
             x,
@@ -215,12 +215,12 @@ export default async function handler(req, res) {
       return y;
     }
 
-    // Funkcja do rysowania tabeli
+    // Function to draw table
 
     function drawTable(headers, rows, widths, startY) {
       let y = startY;
 
-      // Nagłówki tabeli
+      // Table headers
 
       let x = marginLeft;
       headers.forEach((header, index) => {
@@ -251,7 +251,7 @@ export default async function handler(req, res) {
 
       y -= 25;
 
-      // Wiersze tabeli
+      // Table rows
 
       rows.forEach((row) => {
         x = marginLeft;
@@ -266,7 +266,7 @@ export default async function handler(req, res) {
             color: blackColor,
           });
 
-          // Rysowanie obramowania
+          // Draw border
 
           page.drawRectangle({
 
@@ -288,9 +288,9 @@ export default async function handler(req, res) {
       return y;
     }
 
-    // Nagłówek dokumentu
+    // Document header
 
-    page.drawText(mapPolishChars(`Faktura: ${invoiceName}`), {
+    page.drawText(mapPolishChars(`Invoice: ${invoiceName}`), {
 
       x: marginLeft,
       y: currentY,
@@ -302,24 +302,24 @@ export default async function handler(req, res) {
 
     currentY -= 40;
 
-    // Dane klienta i Szczegóły noty kredytowej
+    // Customer data and Invoice Details
 
-    drawSectionHeader("Dane Klienta", marginLeft, currentY);
-    drawSectionHeader("Szczegoly Faktury", 300, currentY);
+    drawSectionHeader("Customer Data", marginLeft, currentY);
+    drawSectionHeader("Invoice Details", 300, currentY);
 
     currentY = drawTwoColumnData(
       [
-        { label: "Klient", value: customerName },
-        { label: "Sprzedawca", value: seller },
-        { label: "Metoda platnosci", value: paymentMethod },
-        { label: "Miesiac", value: effectiveMonth },
-        { label: "Waluta", value: currency },
+        { label: "Customer", value: customerName },
+        { label: "Seller", value: seller },
+        { label: "Payment Method", value: paymentMethod },
+        { label: "Month", value: effectiveMonth },
+        { label: "Currency", value: currency },
       ],
       [
-        { label: "Data wystawienia", value: new Date(dataInvoice).toLocaleDateString() },
-        { label: "Data sprzedazy", value: new Date(dataInvoiceSell).toLocaleDateString() },
-        { label: "Termin platnosci", value: new Date(dueDate).toLocaleDateString() },
-        { label: "Komentarz", value: comments || "Brak" },
+        { label: "Issue Date", value: new Date(dataInvoice).toLocaleDateString() },
+        { label: "Sale Date", value: new Date(dataInvoiceSell).toLocaleDateString() },
+        { label: "Due Date", value: new Date(dueDate).toLocaleDateString() },
+        { label: "Comments", value: comments || "None" },
       ],
       marginLeft,
       300,
@@ -328,13 +328,13 @@ export default async function handler(req, res) {
 
     currentY -= 40;
 
-    // Tabela z pozycjami
+    // Table with items
 
-    drawSectionHeader("Pozycje Fakrtury", marginLeft, currentY);
+    drawSectionHeader("Invoice Items", marginLeft, currentY);
 
     currentY = drawTable(
 
-      ["Nazwa", "Ilość", "Netto", "VAT", "Brutto"],
+      ["Name", "Quantity", "Net", "VAT", "Gross"],
 
       items.map((item) => [
 
@@ -350,31 +350,31 @@ export default async function handler(req, res) {
 
     currentY -= 40;
 
-    // tabela podsumowanie
+    // Summary table
 
     const miniTableStartX = 210;
-    drawSectionHeader("Podsumowanie", miniTableStartX, currentY);
+    drawSectionHeader("Summary", miniTableStartX, currentY);
 
     currentY = drawMiniTable(
 
-      ["", "Kwota"],
+      ["", "Amount"],
       [
-        ["Razem Netto", `${summaryNetto} ${currency}`],
-        ["Razem VAT", `${summaryVat} ${currency}`],
-        ["Razem Brutto", `${summaryBrutto} ${currency}`],
+        ["Total Net", `${summaryNetto} ${currency}`],
+        ["Total VAT", `${summaryVat} ${currency}`],
+        ["Total Gross", `${summaryBrutto} ${currency}`],
       ],
       [200, 100],
       miniTableStartX,
       currentY - 20
     );
 
-    // tekst na środku na dole
+    // Footer text at the bottom center
 
     page.drawText(
 
       mapPolishChars(
 
-        "Faktura została wygenerowana automatycznie. Wszelkie prawa zastrzeżone."
+        "Invoice generated automatically. All rights reserved."
       ),
       {
         x: 297.5 - 150,
@@ -385,7 +385,7 @@ export default async function handler(req, res) {
       }
     );
 
-    // Zapisanie dokumentu PDF
+    // Save PDF document
 
     const pdfBytes = await pdfDoc.save();
 
@@ -395,7 +395,7 @@ export default async function handler(req, res) {
 
   } catch (err) {
 
-    console.error("Błąd pdf-lib:", err);
+    console.error("PDF generation error:", err);
     res.status(500).json({ error: err.message });
   }
 }

@@ -3,27 +3,27 @@ import { NextApiRequest, NextApiResponse } from 'next';
 import { RowDataPacket } from 'mysql2';
 import { InvoiceData, ItemData } from '../../types/typesInvoice';
 
-// 📚 **Handler Dodawania Faktury z Identyfikatorem**
+// 📚 **Handler for Adding Invoice with Identifier**
 
 /**
  * @function handler
- * Obsługuje zapis faktury do bazy danych z powiązaniem do identyfikatora użytkownika.
+ * Handles saving an invoice to the database, associating it with the user's identifier.
  *
- * @param {NextApiRequest} req - Żądanie HTTP.
- * @param {NextApiResponse} res - Odpowiedź HTTP.
+ * @param {NextApiRequest} req - HTTP Request.
+ * @param {NextApiResponse} res - HTTP Response.
  */
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse): Promise<void> {
 
-    // 📌 1. Weryfikacja metody
+    // 📌 1. Verify the Request Method
 
     if (req.method !== 'POST') {
-        return res.status(405).send('Metoda niedozwolona');
+        return res.status(405).send('Method not allowed');
     }
 
     try {
 
-        // 🛡️ **Weryfikacja i Pobranie Identyfikatora**
+        // 🛡️ **Verify and Retrieve Identifier**
 
         const identyfikatorHeader = req.headers['identyfikator'];
 
@@ -31,21 +31,21 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
         if (!identyfikator) {
 
-            return res.status(400).json({ error: 'Brak identyfikatora w nagłówku' });
+            return res.status(400).json({ error: 'Identifier is missing in the header' });
         }
 
-        // 📄 **Weryfikacja Danych Faktury i Pozycji**
+        // 📄 **Verify Invoice and Item Data**
 
         const { invoice, items }: { invoice: InvoiceData; items: ItemData[] } = req.body;
 
         if (!invoice || !items || !Array.isArray(items)) {
 
-            return res.status(400).send('Nieprawidłowe dane wejściowe');
+            return res.status(400).send('Invalid input data');
         }
 
         const db = connection;
 
-        // 🔢 **Generowanie Numeru Faktury**
+        // 🔢 **Generate Invoice Number**
 
         const getLastInvoiceQuery = 'SELECT nameInvoice FROM invoicemanual ORDER BY id DESC LIMIT 1';
         const [lastInvoiceResult]: [RowDataPacket[], any] = await db.execute(getLastInvoiceQuery);
@@ -66,7 +66,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         const generatedNameInvoice = `NB/${shortYear}/${newInvoiceNumberStr}`;
         invoice.nameInvoice = generatedNameInvoice;
 
-        // 📝 **Przygotowanie Danych Faktury**
+        // 📝 **Prepare Invoice Data**
 
         const validInvoiceFields: InvoiceData = {
             ...invoice,
@@ -78,11 +78,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
             if (value === undefined || value === null) {
 
-                return res.status(400).send(`Pole ${key} jest wymagane.`);
+                return res.status(400).send(`Field ${key} is required.`);
             }
         }
 
-        // 💾 **Zapis Faktury do Bazy Danych**
+        // 💾 **Save Invoice to Database**
 
         const fields = Object.keys(validInvoiceFields);
         const placeholders = fields.map(() => '?').join(', ');
@@ -92,7 +92,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
         await db.execute(saveInvoiceQuery, values);
 
-        // 📦 **Zapis Pozycji Faktury do Bazy Danych**
+        // 📦 **Save Invoice Items to Database**
 
         if (items.length > 0) {
 
@@ -115,13 +115,13 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             await db.query(sqlItems, [itemsValues]);
         }
 
-        // ✅ **Zwrócenie Odpowiedzi**
+        // ✅ **Return Response**
 
         res.status(200).json({ nameInvoice: invoice.nameInvoice });
 
     } catch (error: any) {
 
-        console.error('Błąd podczas zapisywania faktury:', error.message);
-        res.status(500).json({ error: `Błąd podczas przetwarzania żądania: ${error.message}` });
+        console.error('Error while saving invoice:', error.message);
+        res.status(500).json({ error: `Error processing the request: ${error.message}` });
     }
 }

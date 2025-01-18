@@ -3,6 +3,7 @@ import type { NextRequest } from 'next/server';
 import middlewareAuth from '../middleware_auth';
 
 export default function middleware(request: NextRequest) {
+  
   const { pathname } = request.nextUrl;
 
   if (

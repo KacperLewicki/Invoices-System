@@ -3,87 +3,84 @@ import pool from './lib/db';
 import bcrypt from 'bcrypt';
 import { v4 as uuidv4 } from 'uuid';
 
-// 📚 **Rejestracja Nowego Użytkownika**
+// 📚 **User Registration**
 
-// Ten endpoint API obsługuje proces rejestracji użytkownika.
-// Dane wejściowe są walidowane, hasło jest szyfrowane przed zapisaniem w bazie danych,
-// a użytkownik otrzymuje unikalny `identyfikator`.
+// This API endpoint handles the user registration process.
+// Input data is validated, the password is hashed before being saved to the database,
+// and the user receives a unique `identifier`.
 
-// 📌 **Handler API**
+// 📌 **API Handler**
 
 /**
  * @function handler
- * Rejestruje nowego użytkownika w systemie.
+ * Registers a new user in the system.
  *
- * @param {NextApiRequest} req - Obiekt żądania HTTP.
- * @param {NextApiResponse} res - Obiekt odpowiedzi HTTP.
+ * @param {NextApiRequest} req - HTTP request object.
+ * @param {NextApiResponse} res - HTTP response object.
  */
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
 
-  // 🔑 **Obsługa Metody POST**
+  // 🔑 **Handle POST Method**
 
   if (req.method === 'POST') {
 
-    // 📌 1. Pobieranie danych z żądania
+    // 📌 1. Retrieve data from the request
 
     const { name, email, password } = req.body;
 
     try {
 
-      // 🛡️ **Sprawdzenie Istnienia Użytkownika**
+      // 🛡️ **Check for Existing User**
 
       /**
-       * Sprawdź, czy użytkownik z podanym e-mailem już istnieje.
+       * Check if a user with the provided email already exists.
        */
 
       const [existingUsers]: any = await pool.query('SELECT * FROM login WHERE email = ?', [email]);
 
       if (existingUsers.length > 0) {
-        return res.status(400).json({ message: 'Użytkownik z tym emailem już istnieje' });
+        return res.status(400).json({ message: 'A user with this email already exists' });
       }
 
-
-      // 🔑 **Szyfrowanie Hasła**
+      // 🔑 **Password Hashing**
 
       /**
-       * Zaszyfruj hasło użytkownika przed zapisaniem w bazie danych.
+       * Hash the user's password before saving it to the database.
        */
 
       const hashedPassword = await bcrypt.hash(password, 10);
 
-      // 🆔 **Generowanie Unikalnego Identyfikatora**
+      // 🆔 **Generate Unique Identifier**
 
       const identyfikator = uuidv4();
 
-
-      // 🛠️ **Zapis Użytkownika do Bazy Danych**
+      // 🛠️ **Save User to Database**
 
       await pool.query(
         'INSERT INTO login (name, email, password, identyfikator) VALUES (?, ?, ?, ?)',
         [name, email, hashedPassword, identyfikator]
       );
 
+      // ✅ **Return Success Response**
 
-      // ✅ **Zwrócenie Odpowiedzi Sukcesu**
-
-      return res.status(201).json({ message: 'Rejestracja zakończona sukcesem' });
+      return res.status(201).json({ message: 'Registration successful' });
     } catch (error) {
 
-      // ❌ **Obsługa Błędów Serwera**
+      // ❌ **Server Error Handling**
 
-      console.error('Błąd serwera podczas rejestracji:', error);
-      return res.status(500).json({ message: 'Błąd serwera' });
+      console.error('Server error during registration:', error);
+      return res.status(500).json({ message: 'Server error' });
     }
   } else {
 
-    // 🚫 **Obsługa Nieprawidłowej Metody**
+    // 🚫 **Handle Invalid Method**
 
     /**
-     * Jeśli metoda żądania nie jest `POST`, zwracamy błąd 405.
+     * If the request method is not `POST`, return a 405 error.
      */
 
     res.setHeader('Allow', ['POST']);
-    return res.status(405).end(`Metoda ${req.method} nie jest obsługiwana`);
+    return res.status(405).end(`Method ${req.method} is not supported`);
   }
 }

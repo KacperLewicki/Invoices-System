@@ -2,7 +2,7 @@ import pool from './lib/db';
 import { NextApiRequest, NextApiResponse } from 'next';
 import { RowDataPacket } from 'mysql2';
 
-// 📚 **Typy dla Not Kredytowych**
+// 📚 **Types for Credit Notes**
 
 interface CreditNoteData extends RowDataPacket {
 
@@ -11,21 +11,21 @@ interface CreditNoteData extends RowDataPacket {
 
 /**
  * @function handler
- * Pobiera noty kredytowe powiązane z aktualnie zalogowanym użytkownikiem.
+ * Fetches credit notes associated with the currently logged-in user.
  *
- * @param {NextApiRequest} req - Obiekt żądania.
- * @param {NextApiResponse} res - Obiekt odpowiedzi.
+ * @param {NextApiRequest} req - Request object.
+ * @param {NextApiResponse} res - Response object.
  */
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse): Promise<void> {
 
     try {
 
-        // 📌 1. Pobierz identyfikator z nagłówków
+        // 📌 1. Fetch the identifier from headers
 
         const identyfikator = req.headers['identyfikator'] as string;
 
-        // 📌 2. Pobierz noty kredytowe powiązane z identyfikatorem
+        // 📌 2. Fetch credit notes associated with the identifier
 
         const [creditNotes] = await pool.query<CreditNoteData[]>(
             'SELECT * FROM creditnotesinvoices WHERE identyfikator = ?',
@@ -34,10 +34,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
         if (creditNotes.length === 0) {
 
-            return res.status(200).json({ message: 'Brak not kredytowych powiązanych z tym identyfikatorem' });
+            return res.status(200).json({ message: 'No credit notes associated with this identifier' });
         }
 
-        // 📌 3. Pobierz powiązane elementy not kredytowych
+        // 📌 3. Fetch associated credit note items
 
         const creditNoteData = await Promise.all(
 
@@ -51,13 +51,13 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             })
         );
 
-        // 📌 4. Zwróć dane not kredytowych
+        // 📌 4. Return credit note data
 
         res.status(200).json(creditNoteData);
 
     } catch (error: any) {
 
-        // console.error('❌ Error fetching credit notes:', error);
-        // res.status(500).json({ error: 'Wystąpił błąd podczas pobierania not kredytowych' });
+        console.error('❌ Error fetching credit notes:', error);
+        res.status(500).json({ error: 'An error occurred while fetching credit notes' });
     }
 }

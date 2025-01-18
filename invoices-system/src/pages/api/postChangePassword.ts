@@ -3,122 +3,122 @@ import { jwtVerify } from 'jose';
 import bcrypt from 'bcrypt';
 import pool from './lib/db';
 
-// 📚 **Zmiana Hasła Użytkownika**
+// 📚 **User Password Change**
 
-// Ten endpoint API obsługuje zmianę hasła użytkownika.
-// Uwierzytelnienie odbywa się za pomocą tokena JWT przechowywanego w ciasteczkach.
-// Hasło jest walidowane i szyfrowane przed zapisaniem w bazie danych.
+// This API endpoint handles changing a user's password.
+// Authentication is done via a JWT token stored in cookies.
+// The password is validated and hashed before saving to the database.
 
-// 📌 **Konfiguracja JWT**
+// 📌 **JWT Configuration**
 
 /**
  * @constant NEXT_PUBLIC_SECRET_KEY_ADMINISTRATOR
- * Sekret klucza JWT do weryfikacji tokena użytkownika.
+ * Secret key for JWT verification of the user token.
  */
 
 const NEXT_PUBLIC_SECRET_KEY_ADMINISTRATOR = new TextEncoder().encode(
   process.env.NEXT_PUBLIC_SECRET_KEY_ADMINISTRATOR
 );
 
-// 📌 **Handler API**
+// 📌 **API Handler**
 
 /**
  * @function handler
- * Zmienia hasło zalogowanego użytkownika.
+ * Changes the password of the logged-in user.
  *
- * @param {NextApiRequest} req - Obiekt żądania HTTP.
- * @param {NextApiResponse} res - Obiekt odpowiedzi HTTP.
+ * @param {NextApiRequest} req - HTTP request object.
+ * @param {NextApiResponse} res - HTTP response object.
  */
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
 
-  // 🔑 **Obsługa Metody POST**
+  // 🔑 **Handle POST Method**
 
   if (req.method !== 'POST') {
 
-    return res.status(405).json({ message: 'Metoda niedozwolona' });
+    return res.status(405).json({ message: 'Method not allowed' });
   }
 
-  // 🔑 **Weryfikacja Tokena JWT**
+  // 🔑 **JWT Token Verification**
 
   /**
-   * Token jest pobierany z ciasteczek.
-   * Jeśli token nie istnieje, użytkownik jest nieautoryzowany.
+   * The token is retrieved from cookies.
+   * If the token does not exist, the user is unauthorized.
    */
 
   const token = req.cookies.token;
 
   if (!token) {
 
-    return res.status(401).json({ message: 'Nieautoryzowany' });
+    return res.status(401).json({ message: 'Unauthorized' });
   }
 
   try {
 
-    // 📌 1. Weryfikacja Tokena JWT
+    // 📌 1. Verify JWT Token
 
     const decoded: any = await jwtVerify(token, NEXT_PUBLIC_SECRET_KEY_ADMINISTRATOR);
     const userId = decoded.payload.id;
 
-    // 📌 2. Pobranie Danych z Żądania
+    // 📌 2. Retrieve Data from Request
 
     const { currentPassword, newPassword } = req.body;
 
     if (!currentPassword || !newPassword) {
 
-      return res.status(400).json({ message: 'Obecne i nowe hasło są wymagane' });
+      return res.status(400).json({ message: 'Current and new passwords are required' });
     }
 
-    // 🛠️ **Pobranie Użytkownika z Bazy Danych**
+    // 🛠️ **Fetch User from Database**
 
     /**
-     * Pobierz użytkownika na podstawie ID uzyskanego z tokena.
+     * Fetch the user based on the ID obtained from the token.
      */
 
     const [rows]: any = await pool.query('SELECT * FROM login WHERE identyfikator = ?', [userId]);
 
     if (rows.length === 0) {
 
-      return res.status(404).json({ message: 'Użytkownik nie znaleziony' });
+      return res.status(404).json({ message: 'User not found' });
     }
 
     const user = rows[0];
 
-    // 🔑 **Weryfikacja Aktualnego Hasła**
+    // 🔑 **Verify Current Password**
 
     /**
-     * Porównanie obecnego hasła podanego przez użytkownika z zaszyfrowanym hasłem w bazie.
+     * Compare the current password provided by the user with the hashed password in the database.
      */
 
     const isPasswordValid = await bcrypt.compare(currentPassword, user.password);
 
     if (!isPasswordValid) {
 
-      return res.status(401).json({ message: 'Obecne hasło jest niepoprawne' });
+      return res.status(401).json({ message: 'Current password is incorrect' });
     }
 
-    // 🔑 **Szyfrowanie Nowego Hasła**
+    // 🔑 **Hash New Password**
 
     /**
-     * Nowe hasło jest szyfrowane przed zapisaniem w bazie danych.
+     * The new password is hashed before saving to the database.
      */
 
     const hashedPassword = await bcrypt.hash(newPassword, 10);
 
-    // 🛠️ **Aktualizacja Hasła w Bazie Danych**
+    // 🛠️ **Update Password in Database**
 
     await pool.query('UPDATE login SET password = ? WHERE identyfikator = ?', [hashedPassword, userId]);
 
 
-    // ✅ **Zwrócenie Odpowiedzi Sukcesu**
+    // ✅ **Return Success Response**
 
-    return res.status(200).json({ message: 'Hasło zostało zmienione pomyślnie' });
+    return res.status(200).json({ message: 'Password has been changed successfully' });
 
   } catch (error) {
 
-    // ❌ **Obsługa Błędów**
+    // ❌ **Error Handling**
 
-    console.error('Błąd zmiany hasła:', error);
-    return res.status(500).json({ message: 'Wystąpił błąd serwera' });
+    console.error('Password change error:', error);
+    return res.status(500).json({ message: 'Server error occurred' });
   }
 }

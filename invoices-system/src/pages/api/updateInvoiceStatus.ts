@@ -3,18 +3,18 @@ import pool from './lib/db';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
 
-    // Sprawdzenie metody żądania
+    // Verify the request method
 
     if (req.method !== 'POST') {
 
         return res.status(405).json({ error: 'Method Not Allowed' });
     }
 
-    // Pobranie parametru invoiceName z ciała żądania
+    // Retrieve the invoiceName parameter from the request body
 
     const { invoiceName } = req.body;
 
-    // Walidacja obecności invoiceName
+    // Validate the presence of invoiceName
 
     if (!invoiceName) {
 
@@ -22,29 +22,29 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     }
 
     try {
-        // Zapytanie SQL do aktualizacji statusu dokumentu
+        // SQL query to update the document status
 
         const query = `
             UPDATE invoicemanual 
-            SET documentStatus = 'Faktura - poprawka (CN) zatwierdzona przez administratora'
+            SET documentStatus = 'Invoice correction (CN) approved by administrator'
             WHERE nameInvoice = ?;`;
 
         const [result]: any = await pool.execute(query, [invoiceName]);
 
-        // Sprawdzenie, czy rekord został zaktualizowany
+        // Check if a record was updated
 
         if (result.affectedRows === 0) {
 
             return res.status(404).json({ error: 'Invoice not found' });
         }
 
-        // Sukces aktualizacji
+        // Successful update
 
         return res.status(200).json({ message: 'Document status updated successfully' });
 
     } catch (error) {
 
-        // Logowanie błędu do konsoli serwera
+        // Log the error to the server console
 
         console.error('Database Error:', error);
         return res.status(500).json({ error: 'Internal Server Error' });

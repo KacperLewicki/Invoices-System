@@ -2,28 +2,28 @@ import { NextApiRequest, NextApiResponse } from 'next';
 import pool from './lib/db';
 import { CreditNoteData } from '../../types/typesInvoice';
 
-// 📚 **Handler Tworzenia Korekty Faktury (Credit Note)**
+// 📚 **Handler for Creating Invoice Credit Note**
 
-// Ten endpoint obsługuje tworzenie korekty faktury (Credit Note).
-// Dane korekty są walidowane, numer dokumentu jest automatycznie generowany,
-// a powiązanie z użytkownikiem jest realizowane poprzez `identyfikator` z nagłówka HTTP.
+// This API endpoint handles the creation of an invoice credit note.
+// Credit note data is validated, the document number is auto-generated,
+// and it is linked to the user via the `identyfikator` from the HTTP header.
 
-// 📌 **Obsługa Żądań API**
+// 📌 **API Request Handling**
 
 /**
  * @function handler
- * Tworzy nową korektę faktury i automatycznie przypisuje `identyfikator` użytkownika.
+ * Creates a new invoice credit note and automatically assigns the user's `identyfikator`.
  *
- * @param {NextApiRequest} req - Obiekt żądania HTTP.
- * @param {NextApiResponse} res - Obiekt odpowiedzi HTTP.
+ * @param {NextApiRequest} req - HTTP request object.
+ * @param {NextApiResponse} res - HTTP response object.
  */
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
 
-    // 📌 1. Sprawdź metodę żądania
+    // 📌 1. Check Request Method
 
     if (req.method === 'POST') {
 
-        // 📌 2. Destrukturyzacja danych z ciała żądania
+        // 📌 2. Destructure Data from Request Body
 
         const {
             invoiceName,
@@ -46,28 +46,28 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             items
         }: CreditNoteData = req.body;
 
-        // 📌 3. Pobierz `identyfikator` z nagłówka
+        // 📌 3. Retrieve `identyfikator` from Headers
 
         const identyfikator = req.headers['identyfikator'];
 
         if (!identyfikator) {
-            return res.status(400).json({ message: 'Brak identyfikatora użytkownika' });
+            return res.status(400).json({ message: 'User identifier is missing' });
         }
 
-        // 📌 4. Nawiąż połączenie z bazą danych
+        // 📌 4. Establish Database Connection
 
         const connection = await pool.getConnection();
 
         try {
-            // 📌 5. Rozpocznij transakcję
+            // 📌 5. Begin Transaction
 
             await connection.beginTransaction();
 
-            // 🔑 **Generowanie Numeru Korekty Faktury**
+            // 🔑 **Generate Credit Note Number**
 
             /**
-             * Pobierz ostatnie ID z tabeli `creditnotesinvoices`
-             * i wygeneruj nowy numer korekty w formacie: CN/24/0001
+             * Fetch the last ID from the `creditnotesinvoices` table
+             * and generate a new credit note number in the format: CN/24/0001
              */
 
             const [rows]: any = await connection.query('SELECT MAX(id) as maxId FROM creditnotesinvoices');
@@ -75,13 +75,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             const year = new Date().getFullYear().toString().slice(-2);
             const newCreditNoteNumber = `CN/${year}/${String(maxId + 1).padStart(4, '0')}`;
 
-            let documentStatus = "Poprawka zatwierdzona - opłacona - gotowa faktura";
-
-            // 📝 **Zapis Korekty Faktury do Bazy Danych**
+            // 📝 **Save Credit Note to Database**
 
             /**
-             * Zapisz główne informacje o korekcie faktury do tabeli `creditnotesinvoices`.
-             * Automatycznie dodaj `identyfikator` użytkownika.
+             * Save main credit note information to the `creditnotesinvoices` table.
+             * Automatically add the user's `identyfikator`.
              */
 
             const [result]: any = await connection.query(
@@ -116,10 +114,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
             const creditNoteId = result.insertId;
 
-            // 📦 **Zapis Pozycji Korekty Faktury**
+            // 📦 **Save Credit Note Items**
 
             /**
-             * Iteruj po tablicy `items` i zapisuj każdą pozycję korekty w tabeli `creditnoteitems`.
+             * Iterate over the `items` array and save each credit note item
+             * to the `creditnoteitems` table.
              */
 
             for (const item of items) {
@@ -140,7 +139,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                 );
             }
 
-            // ✅ **Zakończenie Transakcji**
+            // ✅ **Commit Transaction**
 
             await connection.commit();
 
@@ -148,40 +147,40 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
                 id: creditNoteId,
                 creditNote: newCreditNoteNumber,
-                message: 'Korekta faktury utworzona pomyślnie',
+                message: 'Invoice credit note created successfully',
             });
 
         } catch (error) {
 
-            // ❌ **Obsługa Błędów**
+            // ❌ **Error Handling**
 
             /**
-             * W przypadku błędu wycofaj transakcję i zwróć komunikat błędu.
+             * Roll back the transaction and return an error message in case of failure.
              */
 
             await connection.rollback();
-            console.error('Błąd podczas tworzenia korekty faktury:', error);
-            res.status(500).json({ message: 'Wewnętrzny błąd serwera' });
+            console.error('Error creating invoice credit note:', error);
+            res.status(500).json({ message: 'Internal server error' });
 
         } finally {
 
-            // 🔄 **Zakończenie Połączenia**
+            // 🔄 **End Connection**
 
             /**
-             * Zwolnij połączenie z bazą danych.
+             * Release the database connection.
              */
 
             connection.release();
         }
     } else {
 
-        // 🚫 **Nieprawidłowa Metoda**
+        // 🚫 **Invalid Method**
 
         /**
-         * Jeśli metoda żądania nie jest `POST`, zwróć błąd 405.
+         * If the request method is not `POST`, return a 405 error.
          */
 
         res.setHeader('Allow', ['POST']);
-        res.status(405).end(`Metoda ${req.method} nie jest dozwolona`);
+        res.status(405).end(`Method ${req.method} not allowed`);
     }
 }

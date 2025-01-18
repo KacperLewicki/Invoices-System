@@ -25,16 +25,16 @@ export const changePassword = async (
 
         if (res.ok) {
 
-            return { success: true, message: 'Hasło zmienione pomyślnie.' };
+            return { success: true, message: 'Password changed successfully.' };
 
         } else {
 
-            return { success: false, message: data.message || 'Wystąpił błąd podczas zmiany hasła.' };
+            return { success: false, message: data.message || 'An error occurred while changing the password.' };
         }
 
     } catch (error) {
 
-        console.error('Błąd podczas zmiany hasła:', error);
-        return { success: false, message: 'Wystąpił błąd podczas zmiany hasła.' };
+        console.error('Error while changing password:', error);
+        return { success: false, message: 'An error occurred while changing the password.' };
     }
 };
