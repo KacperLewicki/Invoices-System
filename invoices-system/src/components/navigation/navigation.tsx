@@ -31,7 +31,7 @@ const Navigation = () => {
       <nav className="flex justify-between items-center bg-purple-700 p-4 rounded-lg shadow-lg">
         <ul className="flex space-x-6 text-white font-semibold">
           <li>
-            <Link href="/home" className="hover:bg-purple-500 px-3 py-2 rounded-md transition duration-200">
+            <Link href="/" className="hover:bg-purple-500 px-3 py-2 rounded-md transition duration-200">
               Strona Główna
             </Link>
           </li>
