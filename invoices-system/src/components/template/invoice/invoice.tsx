@@ -9,7 +9,7 @@ import "../../../globalCSS/globals.css";
 
 const Invoice: React.FC = () => {
 
-  const { fetchInvoices, fetchCreditNotes } = useInvoice();
+  const { fetchInvoices } = useInvoice();
 
   const [formData, setFormData] = useState<InvoiceData>({
 
@@ -75,7 +75,6 @@ const Invoice: React.FC = () => {
       setFormData({ ...formData, nameInvoice: generatedInvoiceName });
 
       await fetchInvoices();
-      await fetchCreditNotes();
 
       alert(`Invoice ${generatedInvoiceName} was saved successfully`);
 
