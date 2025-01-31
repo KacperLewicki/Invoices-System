@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import Modal from '../modal/modal_popup';
+import Modal from '../components/modal/modal_popup';
 import ChangePassword from './changePassword';
 
 interface SettingsModalProps {

@@ -1,96 +1,34 @@
 "use client";
 
 import React from "react";
-import { useInvoice } from "../../../hooks/context/invoiceContext";
-import "../../../globalCSS/globals.css";
+import "../../globalCSS/globals.css";
+import { CreditNoteData } from "../../types/typesInvoice";
 
-const CreditNoteDetails: React.FC = () => {
 
-    const { selectedCreditNote: creditNote } = useInvoice();
+interface CreditNoteDataExtended extends CreditNoteData {
 
-    const handleGeneratePDF = async () => {
+    id?: number;
+}
 
-        try {
+interface selectCreditNoteProps {
 
-            if (!creditNote) {
+    creditNote: CreditNoteDataExtended;
+    onGeneratePDF: () => void;
+}
 
-                throw new Error("No invoice data (creditNote).");
-            }
+const selectCreditNote: React.FC<selectCreditNoteProps> = ({
 
-            const payload = {
-                creditNote: creditNote.creditNote,
-                invoiceName: creditNote.invoiceName,
-                documentStatus: creditNote.documentStatus,
-                customerName: creditNote.customerName,
-                seller: creditNote.seller,
-                paymentMethod: creditNote.paymentMethod,
-                effectiveMonth: creditNote.effectiveMonth,
-                currency: creditNote.currency,
-                dataInvoice: creditNote.dataInvoice,
-                dataInvoiceSell: creditNote.dataInvoiceSell,
-                dueDate: creditNote.dueDate,
-                comments: creditNote.comments,
-                summaryNetto: creditNote.summaryNetto,
-                summaryVat: creditNote.summaryVat,
-                summaryBrutto: creditNote.summaryBrutto,
-                items: creditNote.items.map(item => ({
-                    id: item.id,
-                    itemName: item.itemName,
-                    quantity: Math.round(item.quantity),
-                    nettoItem: item.nettoItem,
-                    vatItem: Math.round(item.vatItem),
-                    bruttoItem: item.bruttoItem,
-                })),
-            };
+    creditNote,
+    onGeneratePDF,
 
-            const response = await fetch("/api/invoiceCreditNotePDF", {
-
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-
-                body: JSON.stringify(payload),
-
-            });
-
-            if (!response.ok) {
-
-                throw new Error("There was a problem with PDF generation.");
-            }
-
-            const blob = await response.blob();
-            const pdfURL = URL.createObjectURL(blob);
-            const link = document.createElement("a");
-
-            link.href = pdfURL;
-            link.download = `FV-${creditNote.invoiceName}.pdf`;
-            document.body.appendChild(link);
-            link.click();
-            link.remove();
-            URL.revokeObjectURL(pdfURL);
-
-        } catch (error) {
-
-            console.error(error);
-            alert("There was a problem with PDF generation.");
-        }
-    };
-
-    if (!creditNote) {
-
-        return (
-            <p className="text-center mt-10 text-lg text-gray-600">
-                The credit note was not found.
-            </p>
-        );
-    }
+}) => {
 
     return (
+
         <div className="flex flex-col lg:flex-row gap-6 py-10 px-4">
             <div className="flex flex-col items-start">
                 <button
-                    onClick={handleGeneratePDF}
+                    onClick={onGeneratePDF}
                     className="bg-purple-800 text-white py-2 px-6 rounded-lg shadow-md hover:bg-purple-900 mb-4">
                     Generate Invoice PDF
                 </button>
@@ -102,12 +40,12 @@ const CreditNoteDetails: React.FC = () => {
                         Credit Note: {creditNote.creditNote} - {creditNote.invoiceName}
                     </h1>
                     <p className="text-lg text-gray-700">
-                        Status: {" "}
+                        Status:{" "}
                         <span
                             className={`px-3 py-1 inline-flex text-xs font-semibold rounded-full ${creditNote.documentStatus ===
-                                "Correction Approved - Paid - Final Invoice"
-                                ? "bg-green-200 text-green-800"
-                                : "bg-green-200 text-green-800"
+                                    "Correction Approved - Paid - Final Invoice"
+                                    ? "bg-green-200 text-green-800"
+                                    : "bg-green-200 text-green-800"
                                 }`}>
                             {creditNote.documentStatus}
                         </span>
@@ -115,7 +53,9 @@ const CreditNoteDetails: React.FC = () => {
                 </header>
 
                 <section className="mb-6 text-gray-900">
-                    <h2 className="text-lg font-semibold mb-2 text-purple-700">Client Details</h2>
+                    <h2 className="text-lg font-semibold mb-2 text-purple-700">
+                        Client Details
+                    </h2>
                     <div className="grid grid-cols-2 gap-4">
                         <p>
                             <strong>Client:</strong> {creditNote.customerName}
@@ -166,10 +106,18 @@ const CreditNoteDetails: React.FC = () => {
                         <thead>
                             <tr className="bg-purple-800 text-white">
                                 <th className="px-4 py-2 border border-gray-200">Name</th>
-                                <th className="px-4 py-2 border border-gray-200 text-right">Quantity</th>
-                                <th className="px-4 py-2 border border-gray-200 text-right">Net</th>
-                                <th className="px-4 py-2 border border-gray-200 text-right">VAT</th>
-                                <th className="px-4 py-2 border border-gray-200 text-right">Gross</th>
+                                <th className="px-4 py-2 border border-gray-200 text-right">
+                                    Quantity
+                                </th>
+                                <th className="px-4 py-2 border border-gray-200 text-right">
+                                    Net
+                                </th>
+                                <th className="px-4 py-2 border border-gray-200 text-right">
+                                    VAT
+                                </th>
+                                <th className="px-4 py-2 border border-gray-200 text-right">
+                                    Gross
+                                </th>
                             </tr>
                         </thead>
                         <tbody>
@@ -177,7 +125,9 @@ const CreditNoteDetails: React.FC = () => {
                                 <tr
                                     key={item.id}
                                     className="hover:bg-purple-100 transition duration-200 ease-in-out">
-                                    <td className="px-4 py-2 border border-gray-200">{item.itemName}</td>
+                                    <td className="px-4 py-2 border border-gray-200">
+                                        {item.itemName}
+                                    </td>
                                     <td className="px-4 py-2 border border-gray-200 text-right">
                                         {Math.round(item.quantity)}
                                     </td>
@@ -198,10 +148,12 @@ const CreditNoteDetails: React.FC = () => {
 
                 <section className="mt-6 text-right border-t border-gray-300 pt-4 text-gray-900">
                     <p className="text-lg">
-                        <strong>Total Net:</strong> {creditNote.summaryNetto} {creditNote.currency}
+                        <strong>Total Net:</strong> {creditNote.summaryNetto}{" "}
+                        {creditNote.currency}
                     </p>
                     <p className="text-lg">
-                        <strong>Total VAT:</strong> {creditNote.summaryVat} {creditNote.currency}
+                        <strong>Total VAT:</strong> {creditNote.summaryVat}{" "}
+                        {creditNote.currency}
                     </p>
                     <p className="text-lg font-bold text-purple-700">
                         <strong>Total Gross:</strong> {creditNote.summaryBrutto}{" "}
@@ -213,4 +165,4 @@ const CreditNoteDetails: React.FC = () => {
     );
 };
 
-export default CreditNoteDetails;
+export default selectCreditNote;
