@@ -5,11 +5,11 @@ import { useInvoice } from "../../../../hooks/context/invoiceContext";
 import { CreditNoteData, CreditNoteItemData } from "../../../../types/typesInvoice";
 import { fetchInvoiceData, sendCreditNote } from "../../../../service/invoiceList/invoiceListService";
 import Modal from "../../../../components/modal/modal_popup";
-import InvoiceDetailView from "../../../../components/invoiceDetail/selectInvoice";
+import SelectInvoice from "../../../../components/invoiceDetail/selectInvoice";
 import CorrectionModal from "../../../../components/correctInvoice/correctInvoice";
 import ConfirmationOverlay from "../../../../components/modal/confirmationOverlay";
 
-const InvoiceDetailManager: React.FC = () => {
+const InvoiceDetail: React.FC = () => {
 
   const {
     selectedInvoice: invoice,
@@ -263,7 +263,7 @@ const InvoiceDetailManager: React.FC = () => {
           </button>
         </div>
 
-        <InvoiceDetailView invoice={invoice} />
+        <SelectInvoice invoice={invoice} />
 
       </div>
 
@@ -283,4 +283,4 @@ const InvoiceDetailManager: React.FC = () => {
   );
 };
 
-export default InvoiceDetailManager;
+export default InvoiceDetail;

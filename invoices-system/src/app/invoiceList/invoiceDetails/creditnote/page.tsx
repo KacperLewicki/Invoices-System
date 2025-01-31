@@ -3,7 +3,7 @@
 import React from "react";
 import { useInvoice } from "../../../../hooks/context/invoiceContext";
 import "../../../../globalCSS/globals.css";
-import CreditNoteDetailsView from "../../../../components/invoiceDetail/selectCreditNote";
+import SelectCreditNote from "../../../../components/invoiceDetail/selectCreditNote";
 import { CreditNoteData } from "../../../../types/typesInvoice";
 
 
@@ -97,7 +97,7 @@ const CreditNoteDetails: React.FC = () => {
 
   return (
 
-    <CreditNoteDetailsView
+    <SelectCreditNote
       creditNote={creditNote}
       onGeneratePDF={handleGeneratePDF}
     />

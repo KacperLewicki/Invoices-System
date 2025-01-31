@@ -16,7 +16,7 @@ interface selectCreditNoteProps {
     onGeneratePDF: () => void;
 }
 
-const selectCreditNote: React.FC<selectCreditNoteProps> = ({
+const SelectCreditNote: React.FC<selectCreditNoteProps> = ({
 
     creditNote,
     onGeneratePDF,
@@ -165,4 +165,4 @@ const selectCreditNote: React.FC<selectCreditNoteProps> = ({
     );
 };
 
-export default selectCreditNote;
+export default SelectCreditNote;

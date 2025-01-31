@@ -18,7 +18,7 @@ interface selectInvoiceViewProps {
     invoice: InvoiceDataWithItems;
 }
 
-const selectInvoice: React.FC<selectInvoiceViewProps> = ({ invoice }) => {
+const SelectInvoice: React.FC<selectInvoiceViewProps> = ({ invoice }) => {
     return (
         <div className="w-full max-w-7xl bg-white p-8 shadow-lg rounded-lg border border-gray-200">
             <header className="border-b border-gray-300 pb-4 mb-4 flex justify-between items-center">
@@ -163,4 +163,4 @@ const selectInvoice: React.FC<selectInvoiceViewProps> = ({ invoice }) => {
     );
 };
 
-export default selectInvoice;
+export default SelectInvoice;
