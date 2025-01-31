@@ -1,9 +1,9 @@
 'use client';
 
 import React, { useState } from 'react';
-import Modal from '../components/modal/modal_popup';
-import { changePassword } from '../service/userSettings/settingsService';
-import { ChangePasswordProps } from '../types/typesInvoice';
+import Modal from '../modal/modal_popup';
+import { changePassword } from '../../service/userSettings/settingsService';
+import { ChangePasswordProps } from '../../types/typesInvoice';
 
 const ChangePassword: React.FC<ChangePasswordProps> = ({ isOpen, onClose }) => {
 

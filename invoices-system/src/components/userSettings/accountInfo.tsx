@@ -1,8 +1,8 @@
 'use client';
 
 import React from 'react';
-import Modal from '../components/modal/modal_popup';
-import { User } from '../types/typesInvoice';
+import Modal from '../modal/modal_popup';
+import { User } from '../../types/typesInvoice';
 
 interface AccountInfoModalProps {
   isOpen: boolean;

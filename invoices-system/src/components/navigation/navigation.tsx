@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import Link from 'next/link';
 import AccountInfoModal from '../userSettings/accountInfo';
 import Settings from '../userSettings/settings';
-import { useAuth } from '../hooks/context/authContext';
+import { useAuth } from '../../hooks/context/authContext';
 import { usePathname } from 'next/navigation';
 
 const Navigation = () => {
