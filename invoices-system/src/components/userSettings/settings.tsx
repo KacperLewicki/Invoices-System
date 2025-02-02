@@ -5,6 +5,7 @@ import Modal from '../modal/modal_popup';
 import ChangePassword from './changePassword';
 
 interface SettingsModalProps {
+
     isOpen: boolean;
     onClose: () => void;
 }

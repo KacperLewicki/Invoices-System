@@ -5,6 +5,7 @@ import Modal from '../modal/modal_popup';
 import { User } from '../../types/typesInvoice';
 
 interface AccountInfoModalProps {
+  
   isOpen: boolean;
   onClose: () => void;
   user: User | null;

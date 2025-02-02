@@ -22,14 +22,7 @@ export default function Navigation({ isCollapsed, setIsCollapsed }: NavigationPr
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   const pathname = usePathname();
 
-  const initials =
-    user && typeof user.name === 'string'
-      ? user.name
-        .split(' ')
-        .map((n) => n[0])
-        .join('')
-        .toUpperCase()
-      : 'IS';
+  const initials = user && typeof user.name === 'string' ? user.name.split(' ').map((n) => n[0]).join('').toUpperCase() : 'IS';
 
   const toggleMenu = () => setShowMenu(!showMenu);
 
@@ -159,12 +152,12 @@ export default function Navigation({ isCollapsed, setIsCollapsed }: NavigationPr
         )}
       </nav>
 
-      {user && (  <AccountInfoModal
+      {user && (<AccountInfoModal
         isOpen={isAccountInfoOpen}
         onClose={() => setIsAccountInfoOpen(false)}
         user={user} />
-        )}
-  
+      )}
+
       <Settings isOpen={isSettingsOpen} onClose={() => setIsSettingsOpen(false)} />
     </>
   );

@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import Navigation from '../navigation/navigation';
 
 interface NavigationWrapperProps {
+  
   children: React.ReactNode;
 }
 
