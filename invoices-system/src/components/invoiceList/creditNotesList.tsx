@@ -16,12 +16,7 @@ interface CreditNotesListProps {
 
 }
 
-const CreditNotesList: React.FC<CreditNotesListProps> = ({
-
-  localCreditNotes = [],
-  onRowClick,
-
-}) => {
+const CreditNotesList: React.FC<CreditNotesListProps> = ({ localCreditNotes = [], onRowClick, }) => {
 
   return (
 
@@ -48,33 +43,15 @@ const CreditNotesList: React.FC<CreditNotesListProps> = ({
                 key={creditNote.id}
                 onClick={() => onRowClick(creditNote)}
                 className="cursor-pointer hover:bg-purple-100 transition duration-200 ease-in-out">
-                <td className="px-4 py-4 text-sm text-center border border-gray-200">
-                  {index + 1}
-                </td>
-                <td className="px-4 py-4 text-sm font-medium border border-gray-200">
-                  {creditNote.creditNote}
-                </td>
-                <td className="px-4 py-4 text-sm font-medium border border-gray-200">
-                  {creditNote.invoiceName}
-                </td>
-                <td className="px-4 py-4 text-sm border border-gray-200">
-                  {creditNote.customerName}
-                </td>
-                <td className="px-4 py-4 text-sm text-right border border-gray-200">
-                  {creditNote.summaryBrutto}
-                </td>
-                <td className="px-4 py-4 text-sm text-center border border-gray-200">
-                  {creditNote.currency}
-                </td>
-                <td className="px-4 py-4 text-sm border border-gray-200">
-                  {new Date(creditNote.dataInvoiceSell).toLocaleDateString()}
-                </td>
-                <td className="px-4 py-4 text-sm border border-gray-200">
-                  {new Date(creditNote.dueDate).toLocaleDateString()}
-                </td>
-                <td className="px-4 py-4 text-sm border border-gray-200">
-                  {creditNote.effectiveMonth}
-                </td>
+                <td className="px-4 py-4 text-sm text-center border border-gray-200">{index + 1} </td>
+                <td className="px-4 py-4 text-sm font-medium border border-gray-200"> {creditNote.creditNote} </td>
+                <td className="px-4 py-4 text-sm font-medium border border-gray-200"> {creditNote.invoiceName} </td>
+                <td className="px-4 py-4 text-sm border border-gray-200"> {creditNote.customerName} </td>
+                <td className="px-4 py-4 text-sm text-right border border-gray-200"> {creditNote.summaryBrutto} </td>
+                <td className="px-4 py-4 text-sm text-center border border-gray-200"> {creditNote.currency} </td>
+                <td className="px-4 py-4 text-sm border border-gray-200"> {new Date(creditNote.dataInvoiceSell).toLocaleDateString()} </td>
+                <td className="px-4 py-4 text-sm border border-gray-200"> {new Date(creditNote.dueDate).toLocaleDateString()} </td>
+                <td className="px-4 py-4 text-sm border border-gray-200"> {creditNote.effectiveMonth} </td>
                 <td className="px-4 py-4 text-sm border border-gray-200 text-center">
                   <span
                     className={`px-3 py-1 inline-flex text-xs font-semibold rounded-full ${creditNote.documentStatus === 'Correction Approved - Paid - Final Invoice'
@@ -88,9 +65,7 @@ const CreditNotesList: React.FC<CreditNotesListProps> = ({
             ))
           ) : (
             <tr>
-              <td colSpan={10} className="px-4 py-4 text-center text-sm text-gray-600">
-                No available credit notes to display.
-              </td>
+              <td colSpan={10} className="px-4 py-4 text-center text-sm text-gray-600"> No available credit notes to display. </td>
             </tr>
           )}
         </tbody>

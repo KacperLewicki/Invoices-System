@@ -1,3 +1,11 @@
+export interface Message {
+
+    id: number;
+    content: string;
+    timestamp: string;
+    sender: 'Admin' | 'System';
+}
+
 export interface ItemData {
 
     nameItem: string;

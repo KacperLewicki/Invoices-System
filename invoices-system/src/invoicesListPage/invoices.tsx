@@ -49,19 +49,16 @@ const Invoices: React.FC = () => {
   if (loading) {
 
     return (
-      <p className="text-center mt-10 text-lg text-gray-600">
-        Data loading...
-      </p>
+      <p className="text-center mt-10 text-lg text-gray-600"> Data loading... </p>
     );
   }
 
   return (
 
-    <div className="flex justify-center items-center bg-white p-6">
+    <div className="flex justify-center items-center p-6">
       <InvoicesList
         localInvoices={localInvoices}
-        onRowClick={handleRowClick}
-      />
+        onRowClick={handleRowClick} />
     </div>
     
   );

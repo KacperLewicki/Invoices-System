@@ -20,9 +20,7 @@ const ConfirmationOverlay: React.FC<ConfirmationOverlayProps> = ({
     
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 backdrop-blur-sm">
       <div className="bg-white rounded-lg shadow-lg p-6">
-        <h2 className="text-2xl mb-4 font-semibold text-center">
-          Data has been sent
-        </h2>
+        <h2 className="text-2xl mb-4 font-semibold text-center"> Data has been sent </h2>
         <p className="mb-4 text-center">{message}</p>
         <div className="flex justify-center">
           <button

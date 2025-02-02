@@ -88,19 +88,14 @@ const CreditNoteDetails: React.FC = () => {
 
   if (!creditNote) {
 
-    return (
-      <p className="text-center mt-10 text-lg text-gray-600">
-        The credit note was not found.
-      </p>
-    );
+    return ( <p className="text-center mt-10 text-lg text-gray-600"> The credit note was not found.</p> );
   }
 
   return (
 
     <SelectCreditNote
       creditNote={creditNote}
-      onGeneratePDF={handleGeneratePDF}
-    />
+      onGeneratePDF={handleGeneratePDF} />
   );
 };
 

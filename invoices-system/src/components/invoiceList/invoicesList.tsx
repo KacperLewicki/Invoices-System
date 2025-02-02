@@ -21,12 +21,7 @@ interface InvoicesListProps {
 
 }
 
-const InvoicesList: React.FC<InvoicesListProps> = ({
-
-  localInvoices = [],
-  onRowClick,
-
-}) => {
+const InvoicesList: React.FC<InvoicesListProps> = ({ localInvoices = [], onRowClick }) => {
 
   return (
 
@@ -52,30 +47,14 @@ const InvoicesList: React.FC<InvoicesListProps> = ({
                 key={invoice.id}
                 onClick={() => onRowClick(invoice)}
                 className="cursor-pointer hover:bg-purple-100 transition duration-200 ease-in-out">
-                <td className="px-4 py-4 text-sm text-center border border-gray-200">
-                  {index + 1}
-                </td>
-                <td className="px-4 py-4 text-sm font-medium border border-gray-200">
-                  {invoice.nameInvoice}
-                </td>
-                <td className="px-4 py-4 text-sm border border-gray-200">
-                  {invoice.customerName}
-                </td>
-                <td className="px-4 py-4 text-sm text-right border border-gray-200">
-                  {invoice.summaryBrutto}
-                </td>
-                <td className="px-4 py-4 text-sm text-center border border-gray-200">
-                  {invoice.currency}
-                </td>
-                <td className="px-4 py-4 text-sm border border-gray-200">
-                  {new Date(invoice.dataInvoiceSell).toLocaleDateString()}
-                </td>
-                <td className="px-4 py-4 text-sm border border-gray-200">
-                  {new Date(invoice.dueDate).toLocaleDateString()}
-                </td>
-                <td className="px-4 py-4 text-sm border border-gray-200">
-                  {invoice.effectiveMonth}
-                </td>
+                <td className="px-4 py-4 text-sm text-center border border-gray-200"> {index + 1} </td>
+                <td className="px-4 py-4 text-sm font-medium border border-gray-200"> {invoice.nameInvoice} </td>
+                <td className="px-4 py-4 text-sm border border-gray-200"> {invoice.customerName} </td>
+                <td className="px-4 py-4 text-sm text-right border border-gray-200"> {invoice.summaryBrutto} </td>
+                <td className="px-4 py-4 text-sm text-center border border-gray-200"> {invoice.currency} </td>
+                <td className="px-4 py-4 text-sm border border-gray-200"> {new Date(invoice.dataInvoiceSell).toLocaleDateString()} </td>
+                <td className="px-4 py-4 text-sm border border-gray-200"> {new Date(invoice.dueDate).toLocaleDateString()} </td>
+                <td className="px-4 py-4 text-sm border border-gray-200"> {invoice.effectiveMonth} </td>
                 <td className="px-4 py-4 text-sm border border-gray-200 text-center">
                   <span
                     className={`px-3 py-1 inline-flex text-xs font-semibold rounded-full ${invoice.documentStatus === 'Paid - Final Invoice'
@@ -93,11 +72,7 @@ const InvoicesList: React.FC<InvoicesListProps> = ({
             ))
           ) : (
             <tr>
-              <td
-                colSpan={9}
-                className="px-4 py-4 text-center text-sm text-gray-600">
-                No available invoices to display.
-              </td>
+              <td colSpan={9} className="px-4 py-4 text-center text-sm text-gray-600"> No available invoices to display. </td>
             </tr>
           )}
         </tbody>

@@ -26,12 +26,7 @@ interface InvoicesApprovedListProps {
 
 }
 
-const InvoicesApprovedList: React.FC<InvoicesApprovedListProps> = ({
-
-  combinedData = [],
-  onRowClick,
-
-}) => {
+const InvoicesApprovedList: React.FC<InvoicesApprovedListProps> = ({ combinedData = [], onRowClick }) => {
 
   return (
 
@@ -57,46 +52,20 @@ const InvoicesApprovedList: React.FC<InvoicesApprovedListProps> = ({
                 key={`${item.type}-${item.id}`}
                 onClick={() => onRowClick(item)}
                 className="cursor-pointer hover:bg-purple-100 transition duration-200 ease-in-out">
-                <td className="px-4 py-4 text-sm text-center border border-gray-200">
-                  {index + 1}
-                </td>
-                <td className="px-4 py-4 text-sm font-medium border border-gray-200">
-                  {item.type === 'invoice'
-                    ? item.nameInvoice
-                    : item.creditNote}
-                </td>
-                <td className="px-4 py-4 text-sm border border-gray-200">
-                  {item.customerName}
-                </td>
-                <td className="px-4 py-4 text-sm text-right border border-gray-200">
-                  {item.summaryBrutto}
-                </td>
-                <td className="px-4 py-4 text-sm text-center border border-gray-200">
-                  {item.currency}
-                </td>
-                <td className="px-4 py-4 text-sm border border-gray-200">
-                  {new Date(item.dataInvoiceSell).toLocaleDateString()}
-                </td>
-                <td className="px-4 py-4 text-sm border border-gray-200">
-                  {new Date(item.dueDate).toLocaleDateString()}
-                </td>
-                <td className="px-4 py-4 text-sm text-center border border-gray-200">
-                  {item.type === 'invoice' ? 'Invoice' : 'Credit Note'}
-                </td>
-                <td className="px-4 py-4 text-sm border border-gray-200 text-center">
-                  <span className="px-3 py-1 inline-flex text-xs font-semibold rounded-full bg-green-200 text-green-800">
-                    {item.documentStatus}
-                  </span>
-                </td>
+                <td className="px-4 py-4 text-sm text-center border border-gray-200"> {index + 1} </td>
+                <td className="px-4 py-4 text-sm font-medium border border-gray-200"> {item.type === 'invoice' ? item.nameInvoice : item.creditNote} </td>
+                <td className="px-4 py-4 text-sm border border-gray-200"> {item.customerName} </td>
+                <td className="px-4 py-4 text-sm text-right border border-gray-200"> {item.summaryBrutto} </td>
+                <td className="px-4 py-4 text-sm text-center border border-gray-200"> {item.currency} </td>
+                <td className="px-4 py-4 text-sm border border-gray-200"> {new Date(item.dataInvoiceSell).toLocaleDateString()} </td>
+                <td className="px-4 py-4 text-sm border border-gray-200"> {new Date(item.dueDate).toLocaleDateString()} </td>
+                <td className="px-4 py-4 text-sm text-center border border-gray-200"> {item.type === 'invoice' ? 'Invoice' : 'Credit Note'} </td>
+                <td className="px-4 py-4 text-sm border border-gray-200 text-center"> <span className="px-3 py-1 inline-flex text-xs font-semibold rounded-full bg-green-200 text-green-800"> {item.documentStatus} </span> </td>
               </tr>
             ))
           ) : (
             <tr>
-              <td
-                colSpan={9}
-                className="px-4 py-4 text-center text-sm text-gray-600">
-                No available invoices or credit notes to display.
-              </td>
+              <td colSpan={9} className="px-4 py-4 text-center text-sm text-gray-600"> No available invoices or credit notes to display. </td>
             </tr>
           )}
         </tbody>

@@ -45,19 +45,16 @@ const CreditNotes: React.FC = () => {
   if (loadingCreditNotes) {
 
     return (
-      <p className="text-center mt-10 text-lg text-gray-600">
-        Data loading...
-      </p>
+      <p className="text-center mt-10 text-lg text-gray-600"> Data loading... </p>
     );
   }
 
   return (
 
-    <div className="flex justify-center items-center bg-white p-6">
+    <div className="flex justify-center items-center p-6">
       <CreditNotesList
         localCreditNotes={localCreditNotes}
-        onRowClick={handleRowClick}
-      />
+        onRowClick={handleRowClick} />
     </div>
 
   );

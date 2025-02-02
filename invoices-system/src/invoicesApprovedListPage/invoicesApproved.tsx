@@ -22,14 +22,7 @@ interface CreditNoteWithType extends CreditNoteData {
 
 const InvoicesApproved: React.FC = () => {
 
-    const {
-        invoices,
-        creditNotes,
-        loading,
-        loadingCreditNotes,
-        setSelectedInvoice,
-        setSelectedCreditNote
-    } = useInvoice();
+    const { invoices, creditNotes, loading, loadingCreditNotes, setSelectedInvoice, setSelectedCreditNote } = useInvoice();
 
     const router = useRouter();
 
@@ -99,11 +92,10 @@ const InvoicesApproved: React.FC = () => {
 
     return (
 
-        <div className="flex justify-center items-center bg-white p-6">
+        <div className="flex justify-center items-center p-6">
             <InvoicesApprovedList
                 combinedData={combinedData}
-                onRowClick={handleRowClick}
-            />
+                onRowClick={handleRowClick} />
         </div>
     );
 };

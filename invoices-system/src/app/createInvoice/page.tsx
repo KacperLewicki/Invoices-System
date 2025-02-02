@@ -179,7 +179,8 @@ const Invoice: React.FC = () => {
   const isFormDisabled = !!formData.nameInvoice;
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-white p-6">
+
+    <div className="flex items-center justify-center min-h-screen p-6">
       <div className="bg-white shadow-xl rounded-lg p-8 w-full max-w-7xl border border-gray-200 transform transition-all duration-300 hover:shadow-2xl">
         <h1 className="text-3xl font-bold text-purple-700 text-center mb-6">Invoice KL</h1>
 

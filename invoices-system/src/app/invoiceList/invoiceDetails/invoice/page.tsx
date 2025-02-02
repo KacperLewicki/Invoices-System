@@ -11,11 +11,7 @@ import ConfirmationOverlay from "../../../../components/modal/confirmationOverla
 
 const InvoiceDetail: React.FC = () => {
 
-  const {
-    selectedInvoice: invoice,
-    fetchInvoices,
-    fetchCreditNotes
-  } = useInvoice();
+  const { selectedInvoice: invoice, fetchInvoices, fetchCreditNotes } = useInvoice();
 
   const [showComment, setShowComment] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -102,16 +98,7 @@ const InvoiceDetail: React.FC = () => {
 
       if (creditNoteData) {
 
-        const itemsToSend = creditNoteItems.map(
-
-          ({ itemName, quantity, nettoItem, vatItem, bruttoItem }) => ({
-            itemName,
-            quantity,
-            nettoItem,
-            vatItem,
-            bruttoItem,
-          })
-        );
+        const itemsToSend = creditNoteItems.map(({ itemName, quantity, nettoItem, vatItem, bruttoItem }) => ({ itemName, quantity, nettoItem, vatItem, bruttoItem, }));
 
         await sendCreditNote({
 
@@ -225,12 +212,10 @@ const InvoiceDetail: React.FC = () => {
 
   return (
     <>
-
       {showConfirmation && (
         <ConfirmationOverlay
           onBackToInvoiceList={handleBackToInvoiceList}
-          message="Your corrected invoice is in the Corrected Invoices tab and awaits administrator approval"
-        />
+          message="Your corrected invoice is in the Corrected Invoices tab and awaits administrator approval" />
       )}
 
       {showComment && (

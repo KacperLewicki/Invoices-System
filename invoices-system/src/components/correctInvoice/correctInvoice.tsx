@@ -105,9 +105,7 @@ const CorrectionModal: React.FC<CorrectionModalProps> = ({
     return (
 
         <div className="bg-white rounded-lg p-6 max-h-[80vh] overflow-y-auto">
-            <h2 className="text-2xl mb-6 font-semibold text-center">
-                Correct Invoice
-            </h2>
+            <h2 className="text-2xl mb-6 font-semibold text-center"> Correct Invoice </h2>
 
             <div className="grid grid-cols-3 gap-4 w-full">
                 <div>
@@ -208,20 +206,12 @@ const CorrectionModal: React.FC<CorrectionModalProps> = ({
             <table className="w-full text-left border-collapse bg-white mt-4">
                 <thead>
                     <tr className="bg-purple-800 text-white">
-                        <th className="px-4 py-2 border border-gray-200">Name</th>
-                        <th className="px-4 py-2 border border-gray-200 text-right">
-                            Quantity
-                        </th>
-                        <th className="px-4 py-2 border border-gray-200 text-right">Net</th>
-                        <th className="px-4 py-2 border border-gray-200 text-right">
-                            VAT (%)
-                        </th>
-                        <th className="px-4 py-2 border border-gray-200 text-right">
-                            Gross
-                        </th>
-                        <th className="px-4 py-2 border border-gray-200 text-right">
-                            Actions
-                        </th>
+                        <th className="px-4 py-2 border border-gray-200"> Name </th>
+                        <th className="px-4 py-2 border border-gray-200 text-right"> Quantity </th>
+                        <th className="px-4 py-2 border border-gray-200 text-right"> Net </th>
+                        <th className="px-4 py-2 border border-gray-200 text-right"> VAT (%) </th>
+                        <th className="px-4 py-2 border border-gray-200 text-right"> Gross </th>
+                        <th className="px-4 py-2 border border-gray-200 text-right"> Actions </th>
                     </tr>
                 </thead>
                 <tbody>
