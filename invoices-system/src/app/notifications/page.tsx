@@ -8,7 +8,7 @@ import { InvoiceListChat } from '../../components/chat/invoiceListChat';
 
 export default function Notifications() {
 
-  const { invoices, selectedInvoice, setSelectedInvoice, loading, error } = useInvoice();
+  const { invoices = [], selectedInvoice, setSelectedInvoice, loading, error } = useInvoice();
   const [searchTerm, setSearchTerm] = useState('');
 
   const mockMessages: Message[] = [

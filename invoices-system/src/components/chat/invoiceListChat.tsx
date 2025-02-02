@@ -19,7 +19,7 @@ export const InvoiceListChat = ({ invoices, selectedInvoice, handleSelectInvoice
             {loading && <p className="text-white">Loading...</p>}
             {error && <p className="text-red-300">Error: {error}</p>}
 
-            {invoices.map((inv: any) => (
+            {Array.isArray(invoices) && invoices.map((inv: any) => (
                 <motion.div
                     key={inv.id}
                     whileHover={{ scale: 1.05 }}
