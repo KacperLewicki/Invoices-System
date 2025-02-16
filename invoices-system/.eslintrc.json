@@ -16,6 +16,7 @@
     "src/pages/api/invoiceCreditNotePDF.js",
     "src/pages/api/invoicePDF.js",
     "middleware.js",
-    "src/pages/api/getCreditNoteInvoiceData.ts"
+    "src/pages/api/getCreditNoteInvoiceData.ts",
+    "src/pages/api/auditLogs.ts"
   ]
 }

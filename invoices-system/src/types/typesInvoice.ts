@@ -1,3 +1,16 @@
+export interface AuditLog {
+
+    id: number;
+    table_name: string;
+    row_id: number;
+    action: 'INSERT' | 'UPDATE' | 'DELETE';
+    old_data: any;
+    new_data: any;
+    changed_at: string;
+    changed_by?: string;
+
+}
+
 export interface Message {
 
     id: number;

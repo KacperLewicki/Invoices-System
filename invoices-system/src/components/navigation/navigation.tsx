@@ -103,7 +103,7 @@ export default function Navigation({ isCollapsed, setIsCollapsed }: NavigationPr
                     href="/notifications"
                     className="flex items-center px-2 py-2 rounded-md hover:bg-purple-600 transition">
                     <FaBell className="mr-2" />
-                    {!isCollapsed && <span>Notifications</span>}
+                    {!isCollapsed && <span>AuditLogs</span>}
                   </Link>
                 </li>
                 <li>
