@@ -33,7 +33,7 @@ function InvoiceRow ({
                         <span className="font-medium text-gray-800"> {invoice.nameInvoice} </span>
                     </div>
                 </td>
-                <td className="py-3 px-4">{invoice.dataInvoice}</td>
+                <td className="py-3 px-4">{new Date(invoice.dataInvoice).toLocaleDateString()}</td>
                 <td className="py-3 px-4">{invoice.customerName}</td>
                 <td className="py-3 px-4"> {invoice.summaryNetto} {invoice.currency} </td>
                 <td className="py-3 px-4">{invoice.documentStatus}</td>

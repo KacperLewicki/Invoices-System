@@ -33,7 +33,7 @@ function CreditNoteRow ({
                         <span className="font-medium text-gray-800"> {creditNote.creditNote} </span>
                     </div>
                 </td>
-                <td className="py-3 px-4">{creditNote.dataInvoice}</td>
+                <td className="py-3 px-4">{new Date(creditNote.dataInvoice).toLocaleDateString()}</td>
                 <td className="py-3 px-4">{creditNote.customerName}</td>
                 <td className="py-3 px-4"> {creditNote.summaryNetto} {creditNote.currency} </td>
                 <td className="py-3 px-4">{creditNote.documentStatus}</td>
