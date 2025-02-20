@@ -2,7 +2,7 @@
 
 Invoice System is an web application designed for invoice management. It has been developed using modern technologies such as **Next.js**, **React.js**, and **TypeScript** to ensure high performance, intuitive usage, and scalability for future enhancements. The project is currently in the pre-production phase and is being actively developed following best practices.
 
-## Problems can occur with the database, because there are very high limitations when it comes to contact
+(Database currently inactive)
 
 ## Work on the structure of the project is still in progress - the project is in pre-production - demo stage
 
