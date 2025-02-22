@@ -20,7 +20,7 @@ function TimelineLogItem ({
     if (log.action === 'UPDATE') IconComponent = FaEdit;
     if (log.action === 'DELETE') IconComponent = FaTrash;
 
-    const timeStr = new Date(log.changed_at).toLocaleTimeString();
+    const timeStr = new Date(log.changed_at).toLocaleDateString() + ' ' + new Date(log.changed_at).toLocaleTimeString();
     const label = `${log.action} — ${timeStr}`;
 
     return (
