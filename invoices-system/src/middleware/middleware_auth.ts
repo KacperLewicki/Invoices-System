@@ -7,7 +7,7 @@ export default async function middleware_Auth(request: NextRequest) {
   const NEXT_PUBLIC_SECRET_KEY_ADMINISTRATOR: any = new TextEncoder().encode(process.env.NEXT_PUBLIC_SECRET_KEY_ADMINISTRATOR);
   const token = request.cookies.get('token')?.value;
 
-  if (request.nextUrl.pathname === '/login' || request.nextUrl.pathname === '/home' || request.nextUrl.pathname === '/register') {
+  if (request.nextUrl.pathname === '/login' ||  request.nextUrl.pathname === '/register') {
 
     return NextResponse.next();
   }
